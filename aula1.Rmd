@@ -1,0 +1,73 @@
+---
+title: "aula1"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Atalho
+
+# R como calculadora
+
+```{r}
+5 + 2 #soma
+
+5 * 2 #multiplicação
+
+8 / 2 #divisão
+
+10 - 8 #subtração
+
+5 ** 3 #elevado ao cubo
+
+sqrt(81) #raiz quadrada
+
+5 + (3 *5 / 2)
+```
+
+
+# Criar variáveis
+
+```{r}
+myNumber = 5
+myNumber
+
+myNumber = 7
+
+calculo = 5 + (3 * 5 / 2)
+myNumber * calculo
+
+myWord = geologia #erro
+myWord = "geologia"
+myWord
+
+mySentence = "esta é a minha frase"
+mySentence
+
+#O R também trabalha com classes lógicas, TRUE or FALSE
+myTRUE = TRUE
+4 == 4 #4 é igual a 4?
+
+#Qual a estrutura dessas variáveis?
+class(myNumber)
+class(myWord)
+class(mySentence)
+class(myTRUE)
+
+myNumbers = c(1, 2, 3, 4, 5)
+myNumbers = 1:5
+
+myWords = c("geoquímica", "estrutural", "estratigrafia")
+myWords
+myWords[3]
+```
+
+
+
+
+
+
+
+
+
+
