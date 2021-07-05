@@ -1,0 +1,226 @@
+---
+title: "Intensivão de programação funcional em R aplicado à Geologia"
+subtitle: "⚒<br/>Aplicações e Exemplos"
+author: "Bárbara Malcorra"
+institute: "PUCRS"
+date: '`r Sys.Date()`'
+encoding: "UTF-8"
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r xaringan-themer, include = FALSE, warning = FALSE}
+library(xaringanthemer)
+
+style_mono_accent(
+  base_color = "#1c5253",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono")
+)
+```
+
+
+```{r, include = FALSE}
+library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = "",
+                      cache = FALSE)
+```
+
+
+# R como calculadora
+
+```{r}
+5 + 2
+
+5 * 2
+
+8 / 2
+
+10 - 8
+```
+
+---
+# Criando variáveis
+
+```{r}
+MyVariable = 2 + 9
+
+MyVariable
+```
+
+
+---
+# Estabelecendo um diretório de trabalho
+
+```{r}
+#setwd()
+```
+
+# Importando os dados
+
+- de um arquivo .csv
+
+```{r}
+#dados = read.csv()
+```
+
+- de um arquivo excel
+
+```{r}
+# install.packages("readxl")
+# library(readxl)
+# 
+# dados.ex = read_excel()
+```
+
+---
+# Inspecionando os dados
+
+```{r}
+# View(dados) # não muito útil para data frames grandes
+# names(dados)
+# head(dados)
+# str(dados)
+# summary(dados)
+```
+
+---
+# Tidyverse
+
+```{r}
+# install.packages("tidyverse")
+library(tidyverse)
+```
+
+
+```{r, echo = FALSE, fig.align = 'center', out.width = "30%"}
+knitr::include_graphics("https://www.business-science.io/assets/2020-10-15-must-know-tidyverse-features/tidyverse-icons.png")
+```
+
+---
+# Pipe %>%
+
+- Atalho Ctrl + Shift + M
+
+- Analisa o código do lado esquerdo e passa o resultado como o primeiro argumento do código do lado direito
+
+```{r, echo = FALSE, fig.align = 'center', out.width = "30%"}
+knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
+```
+
+---
+# Dados
+
+- "Tidy Tuesday live screencast: Analyzing volcano eruptions in R" by David Robinson
+
+<https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-12/readme.md>
+
+```{r, message = FALSE, warning = FALSE}
+volcano <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
+eruptions <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/eruptions.csv')
+events <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/events.csv')
+tree_rings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/tree_rings.csv')
+sulfur <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/sulfur.csv')
+```
+
+---
+# dplyr()
+
+- Pacote para a manipulação de dados
+- Flexibilidade para transformar dados
+
+```{r}
+# install.packages("dplyr")
+library(dplyr)
+```
+
+```{r, echo = FALSE, fig.align = 'center', out.width = "40%"}
+knitr::include_graphics("https://didatica.tech/wp-content/uploads/2019/10/dplyr.png")
+```
+
+---
+# select()
+
+```{r}
+volcano %>% 
+  select(volcano_name, country, latitude:elevation) %>% 
+  head()
+```
+
+---
+# select()
+
+```{r, results = FALSE}
+volcano %>% 
+  select(-tectonic_settings) %>% 
+  head()
+```
+
+---
+# filter()
+
+```{r, results = FALSE}
+volcano %>% 
+  filter(country == "Antarctica")
+
+volcano %>% 
+  filter(!country == "Antarctica")
+
+volcano %>% 
+  filter(country == "Antarctica" & population_within_100_km > 0)
+```
+
+---
+# mutate()
+
+- Modifica e cria colunas
+
+```{r}
+
+```
+
+---
+# case_when
+
+```{r}
+volcano %>% 
+  mutate()
+```
+
+
+
+
+
+# ggplot
+
+`r chunk_reveal("teste")`
+
+```{r teste, warning=FALSE, message=FALSE}
+volcano %>% 
+  filter(country == "Antarctica") %>% 
+  ggplot(aes(elevation, longitude, color = primary_volcano_type)) +
+  geom_point()
+```
+
+
+
+
+
+
+
+
+
+
