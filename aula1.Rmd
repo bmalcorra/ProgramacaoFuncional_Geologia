@@ -5,7 +5,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-Atalho
+Atalho Chunk: Ctrl + Alt + I
 
 # R como calculadora
 
@@ -22,7 +22,7 @@ Atalho
 
 sqrt(81) #raiz quadrada
 
-5 + (3 *5 / 2)
+5 + (3 * 5 / 2) #operações mais elaboradas
 ```
 
 
@@ -60,6 +60,7 @@ myNumbers = 1:5
 myWords = c("geoquímica", "estrutural", "estratigrafia")
 myWords
 myWords[3]
+myWords[4]
 ```
 
 
