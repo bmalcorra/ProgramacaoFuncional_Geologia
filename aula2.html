@@ -4,7 +4,7 @@
     <title>Intensivão de programação funcional em R aplicado à Geologia</title>
     <meta charset="utf-8" />
     <meta name="author" content="Bárbara Malcorra" />
-    <meta name="date" content="2021-07-06" />
+    <meta name="date" content="2021-07-07" />
     <script src="libs/header-attrs-2.9/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -13,10 +13,10 @@
 class: center, middle, inverse, title-slide
 
 # Intensivão de programação funcional em R aplicado à Geologia
-## ⚒<br/>Aplicações e Exemplos
+## ⚒<br/>Aula 2 - programação funcional
 ### Bárbara Malcorra
 ### PUCRS
-### 2021-07-06
+### 2021-07-07
 
 ---
 
@@ -26,56 +26,22 @@ class: center, middle, inverse, title-slide
 
 
 
----
-# Estabelecendo um diretório de trabalho
 
-
-```r
-#setwd()
-```
-
-# Importando os dados
-
-- de um arquivo .csv
-
-
-```r
-#dados = read.csv()
-```
-
-- de um arquivo excel
-
-
-```r
-# install.packages("readxl")
-# library(readxl)
-# 
-# dados.ex = read_excel()
-```
-
----
-# Inspecionando os dados
-
-
-```r
-# View(dados) # não muito útil para data frames grandes
-# names(dados)
-# head(dados)
-# str(dados)
-# summary(dados)
-```
-
----
 # Tidyverse
 
 
 ```r
-# install.packages("tidyverse")
 library(tidyverse)
 ```
 
+.pull-left[
+&lt;img src="https://tidyverse.tidyverse.org/articles/tidyverse-logo.png" width="70%" style="display: block; margin: auto;" /&gt;
 
-&lt;img src="https://www.business-science.io/assets/2020-10-15-must-know-tidyverse-features/tidyverse-icons.png" width="30%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="https://education.rstudio.com/blog/2020/07/teaching-the-tidyverse-in-2020-part-1-getting-started/img/tidyverse-packages.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
 
 ---
 # Pipe %&gt;%
@@ -85,6 +51,20 @@ library(tidyverse)
 - Analisa o código do lado esquerdo e passa o resultado como o primeiro argumento do código do lado direito
 
 &lt;img src="https://magrittr.tidyverse.org/logo.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+---
+# Comandos lógicos
+
+**&lt;** menor que  
+**&gt;** maior que  
+**&lt;=** menor igual a  
+**&gt;=** maior igual a  
+**==** igual a  
+**%in%** faz parte de um grupo  
+**is.na()** é NA  
+**&amp;** e  
+**|** ou  
+**!** diferente de  
 
 ---
 # Dados
@@ -100,6 +80,17 @@ eruptions &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascien
 events &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/events.csv')
 tree_rings &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/tree_rings.csv')
 sulfur &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/sulfur.csv')
+
+tuesdata &lt;- tidytuesdayR::tt_load('2020-05-12')
+```
+
+```
+
+	Downloading file 1 of 5: `eruptions.csv`
+	Downloading file 2 of 5: `events.csv`
+	Downloading file 3 of 5: `sulfur.csv`
+	Downloading file 4 of 5: `tree_rings.csv`
+	Downloading file 5 of 5: `volcano.csv`
 ```
 
 ---
@@ -110,7 +101,6 @@ sulfur &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/
 
 
 ```r
-# install.packages("dplyr")
 library(dplyr)
 ```
 
@@ -149,6 +139,38 @@ volcano %&gt;%
 ```
 
 ---
+# funções que auxiliam na seleção das variáveis:
+
+- **stars_with()**: colunas que começam com um prefixo
+- **ends_with()**: colunas que terminam com um sufixo
+- **contains()**: colunas que contêm uma string
+- **last_col()**: última coluna
+
+
+```r
+volcano %&gt;% 
+  select(starts_with("population"))
+```
+
+```
+# A tibble: 958 x 4
+   population_within_~ population_within_~ population_within~ population_within~
+                 &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
+ 1                3597                9594             117805            4071152
+ 2                   0                   7                294               9092
+ 3                4329               60730            1042836            7634778
+ 4              127863              127863             218469            2253483
+ 5                   0                  70               4019             393303
+ 6                 428                3936             717078            5024654
+ 7                 101                 485              18645            1242922
+ 8                  51                6042               8611             161009
+ 9                   0                   0                  0                  0
+10                9890              114404            2530449            7441660
+# ... with 948 more rows
+```
+
+
+---
 # filter()
 
 
@@ -174,26 +196,26 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
+  select(volcano_name, country, last_eruption_year) %&gt;% 
   filter(!country == "Antarctica") %&gt;% 
   mutate(last_eruption_year = as.numeric(last_eruption_year),
          years_ago = 2020 - last_eruption_year)
 ```
 
 ```
-# A tibble: 941 x 7
-   volcano_name  country latitude longitude elevation last_eruption_y~ years_ago
-   &lt;chr&gt;         &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;            &lt;dbl&gt;     &lt;dbl&gt;
- 1 Abu           Japan       34.5     132.        641            -6850      8870
- 2 Acamarachi    Chile      -23.3     -67.6      6023               NA        NA
- 3 Acatenango    Guatem~     14.5     -90.9      3976             1972        48
- 4 Acigol-Nevse~ Turkey      38.5      34.6      1683            -2080      4100
- 5 Adams         United~     46.2    -121.       3742              950      1070
- 6 Adatarayama   Japan       37.6     140.       1728             1996        24
- 7 Adwa          Ethiop~     10.1      40.8      1733               NA        NA
- 8 Afdera        Ethiop~     13.1      40.9      1250               NA        NA
- 9 Agrigan       United~     18.8     146.        965             1917       103
-10 Agua          Guatem~     14.5     -90.7      3760               NA        NA
+# A tibble: 941 x 4
+   volcano_name    country       last_eruption_year years_ago
+   &lt;chr&gt;           &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Abu             Japan                      -6850      8870
+ 2 Acamarachi      Chile                         NA        NA
+ 3 Acatenango      Guatemala                   1972        48
+ 4 Acigol-Nevsehir Turkey                     -2080      4100
+ 5 Adams           United States                950      1070
+ 6 Adatarayama     Japan                       1996        24
+ 7 Adwa            Ethiopia                      NA        NA
+ 8 Afdera          Ethiopia                      NA        NA
+ 9 Agrigan         United States               1917       103
+10 Agua            Guatemala                     NA        NA
 # ... with 931 more rows
 ```
 
@@ -281,24 +303,26 @@ volcano %&gt;%
   group_by(country) %&gt;% 
   summarise(n = n(),
             media_lat = mean(elevation),
-            sd_lat = sd(elevation)) %&gt;% 
+            sd_lat = sd(elevation),
+            min = min(elevation, na.rm = TRUE),
+            max = max(elevation, na.rm = TRUE)) %&gt;% 
   ungroup()
 ```
 
 ```
-# A tibble: 88 x 4
-   country                n media_lat sd_lat
-   &lt;chr&gt;              &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt;
- 1 Algeria                1     1672     NA 
- 2 Argentina             14     3608.  1490.
- 3 Armenia                3     3422.   775.
- 4 Armenia-Azerbaijan     1     3029     NA 
- 5 Australia              2     1878   1226.
- 6 Bolivia                3     4877   1064.
- 7 Burma (Myanmar)        1     1518     NA 
- 8 Cameroon               3     2535.  1844.
- 9 Canada                18     1954.  1182.
-10 Cape Verde             1     2829     NA 
+# A tibble: 88 x 6
+   country                n media_lat sd_lat   min   max
+   &lt;chr&gt;              &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 Algeria                1     1672     NA   1672  1672
+ 2 Argentina             14     3608.  1490.  1344  6095
+ 3 Armenia                3     3422.   775.  2575  4095
+ 4 Armenia-Azerbaijan     1     3029     NA   3029  3029
+ 5 Australia              2     1878   1226.  1011  2745
+ 6 Bolivia                3     4877   1064.  3650  5543
+ 7 Burma (Myanmar)        1     1518     NA   1518  1518
+ 8 Cameroon               3     2535.  1844.   500  4095
+ 9 Canada                18     1954.  1182. -2050  3160
+10 Cape Verde             1     2829     NA   2829  2829
 # ... with 78 more rows
 ```
 
@@ -306,51 +330,64 @@ volcano %&gt;%
 ---
 # Perguntas: 
 
-- Em qual região existem mais vulcões?
+- Em qual país existem mais vulcões?
 
 
 ```r
 volcano %&gt;% 
-  count(region, sort = TRUE)
+  group_by(country) %&gt;% 
+  count(country, sort = TRUE)
 ```
 
-```
-# A tibble: 19 x 2
-   region                             n
-   &lt;chr&gt;                          &lt;int&gt;
- 1 South America                    117
- 2 Japan, Taiwan, Marianas          102
- 3 Indonesia                         95
- 4 México and Central America        93
- 5 Africa and Red Sea                79
- 6 Kamchatka and Mainland Asia       78
- 7 Canada and Western USA            60
- 8 Melanesia and Australia           45
- 9 Alaska                            38
-10 Mediterranean and Western Asia    35
-11 Philippines and SE Asia           33
-12 Iceland and Arctic Ocean          29
-13 New Zealand to Fiji               29
-14 Middle East and Indian Ocean      27
-15 Antarctica                        25
-16 Kuril Islands                     25
-17 Atlantic Ocean                    21
-18 West Indies                       16
-19 Hawaii and Pacific Ocean          11
-```
-
-- 
+- Nesse país, qual o tipo de vulcão mais comum?
 
 
 ```r
 volcano %&gt;% 
-  mutate(last_eruption_year = as.numeric(last_eruption_year)) %&gt;% 
-  ggplot(aes(last_eruption_year, fill = evidence_category)) +
-  geom_histogram()
+  filter(country == "United States") %&gt;% 
+  count(primary_volcano_type, sort = TRUE)
 ```
 
-![](aula2_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+- Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?
 
+
+```r
+volcano %&gt;% 
+  select(region, volcano_name, last_eruption_year) %&gt;% 
+  filter(region == "South America",
+         last_eruption_year == "2020") %&gt;% 
+  count(volcano_name, last_eruption_year)
+```
+
+- Quais os tipos de vulcões presentes em cada país?
+
+
+```r
+volcano %&gt;% 
+  select(country, primary_volcano_type, major_rock_1) %&gt;% 
+  mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
+         primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
+         primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),
+         primary_volcano_type = str_replace(primary_volcano_type, "[:punct:]", "")) %&gt;% 
+  count(country, primary_volcano_type, sort = TRUE) %&gt;% 
+  pivot_wider(names_from = "primary_volcano_type",
+              values_from = "n")
+```
+
+- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?
+
+
+```r
+volcano %&gt;% 
+  select(country, population_within_5_km) %&gt;% 
+  group_by(country) %&gt;% 
+  summarise(n = n(),
+            media_pop = mean(population_within_5_km),
+            sd_pop = sd(population_within_5_km),
+            max_pop = max(population_within_5_km)) %&gt;% 
+  filter(n &gt; 2) %&gt;% #mais de 2 vulcões no país
+  arrange(desc(media_pop))
+```
 
 
 ---
@@ -358,11 +395,10 @@ volcano %&gt;%
 
 
 ```r
-# install.packages("tidyr")
 library(tidyr)
 ```
 
-&lt;img src="https://www.dadosaleatorios.com.br/post/introducao-ao-tidyr/featured.png" width="40%" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://www.dadosaleatorios.com.br/post/introducao-ao-tidyr/featured.png" width="30%" style="display: block; margin: auto;" /&gt;
 
 - O pacote possui funções para deixar os dados em formato *tidy*
 
@@ -551,167 +587,6 @@ volcano_nest %&gt;%
 #   population_within_10_km &lt;dbl&gt;, population_within_30_km &lt;dbl&gt;,
 #   population_within_100_km &lt;dbl&gt;
 ```
-
-
----
-# ggplot
-
-count: false
- 
-
-.panel1-teste-auto[
-
-```r
-*volcano
-```
-]
- 
-.panel2-teste-auto[
-
-```
-# A tibble: 958 x 26
-   volcano_number volcano_name  primary_volcano~ last_eruption_y~ country region
-            &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt; 
- 1         283001 Abu           Shield(s)        -6850            Japan   Japan~
- 2         355096 Acamarachi    Stratovolcano    Unknown          Chile   South~
- 3         342080 Acatenango    Stratovolcano(e~ 1972             Guatem~ Méxic~
- 4         213004 Acigol-Nevse~ Caldera          -2080            Turkey  Medit~
- 5         321040 Adams         Stratovolcano    950              United~ Canad~
- 6         283170 Adatarayama   Stratovolcano(e~ 1996             Japan   Japan~
- 7         221170 Adwa          Stratovolcano    Unknown          Ethiop~ Afric~
- 8         221110 Afdera        Stratovolcano    Unknown          Ethiop~ Afric~
- 9         284160 Agrigan       Stratovolcano    1917             United~ Japan~
-10         342100 Agua          Stratovolcano    Unknown          Guatem~ Méxic~
-# ... with 948 more rows, and 20 more variables: subregion &lt;chr&gt;,
-#   latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, elevation &lt;dbl&gt;, tectonic_settings &lt;chr&gt;,
-#   evidence_category &lt;chr&gt;, major_rock_1 &lt;chr&gt;, major_rock_2 &lt;chr&gt;,
-#   major_rock_3 &lt;chr&gt;, major_rock_4 &lt;chr&gt;, major_rock_5 &lt;chr&gt;,
-#   minor_rock_1 &lt;chr&gt;, minor_rock_2 &lt;chr&gt;, minor_rock_3 &lt;chr&gt;,
-#   minor_rock_4 &lt;chr&gt;, minor_rock_5 &lt;chr&gt;, population_within_5_km &lt;dbl&gt;,
-#   population_within_10_km &lt;dbl&gt;, population_within_30_km &lt;dbl&gt;,
-#   population_within_100_km &lt;dbl&gt;
-```
-]
-
----
-count: false
- 
-
-.panel1-teste-auto[
-
-```r
-volcano %&gt;%
-* filter(country == "Antarctica")
-```
-]
- 
-.panel2-teste-auto[
-
-```
-# A tibble: 17 x 26
-   volcano_number volcano_name  primary_volcano~ last_eruption_y~ country region
-            &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt; 
- 1         390023 Andrus        Shield(s)        Unknown          Antarc~ Antar~
- 2         390022 Berlin        Shield(s)        -8350            Antarc~ Antar~
- 3         390010 Buckle Island Stratovolcano    1899             Antarc~ Antar~
- 4         390030 Deception Is~ Caldera          1970             Antarc~ Antar~
- 5         390020 Erebus        Stratovolcano    2020             Antarc~ Antar~
- 6         390028 Hudson Mount~ Stratovolcano(e~ -210             Antarc~ Antar~
- 7         390829 James Ross I~ Shield           Unknown          Antarc~ Antar~
- 8         390015 Melbourne     Stratovolcano    1892             Antarc~ Antar~
- 9         390017 Morning       Shield           Unknown          Antarc~ Antar~
-10         390031 Penguin Isla~ Stratovolcano    1905             Antarc~ Antar~
-11         390013 Pleiades, The Stratovolcano    -1050            Antarc~ Antar~
-12         390021 Royal Societ~ Pyroclastic con~ Unknown          Antarc~ Antar~
-13         390050 Seal Nunatak~ Pyroclastic con~ Unknown          Antarc~ Antar~
-14         390025 Siple         Shield           Unknown          Antarc~ Antar~
-15         390027 Takahe        Shield           -5550            Antarc~ Antar~
-16         390026 Toney Mounta~ Shield           Unknown          Antarc~ Antar~
-17         390024 Waesche       Shield(s)        Unknown          Antarc~ Antar~
-# ... with 20 more variables: subregion &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;,
-#   elevation &lt;dbl&gt;, tectonic_settings &lt;chr&gt;, evidence_category &lt;chr&gt;,
-#   major_rock_1 &lt;chr&gt;, major_rock_2 &lt;chr&gt;, major_rock_3 &lt;chr&gt;,
-#   major_rock_4 &lt;chr&gt;, major_rock_5 &lt;chr&gt;, minor_rock_1 &lt;chr&gt;,
-#   minor_rock_2 &lt;chr&gt;, minor_rock_3 &lt;chr&gt;, minor_rock_4 &lt;chr&gt;,
-#   minor_rock_5 &lt;chr&gt;, population_within_5_km &lt;dbl&gt;,
-#   population_within_10_km &lt;dbl&gt;, population_within_30_km &lt;dbl&gt;,
-#   population_within_100_km &lt;dbl&gt;
-```
-]
-
----
-count: false
- 
-
-.panel1-teste-auto[
-
-```r
-volcano %&gt;%
-  filter(country == "Antarctica") %&gt;%
-* ggplot(aes(elevation, longitude, color = primary_volcano_type))
-```
-]
- 
-.panel2-teste-auto[
-![](aula2_files/figure-html/teste_auto_03_output-1.png)&lt;!-- --&gt;
-]
-
----
-count: false
- 
-
-.panel1-teste-auto[
-
-```r
-volcano %&gt;%
-  filter(country == "Antarctica") %&gt;%
-  ggplot(aes(elevation, longitude, color = primary_volcano_type)) +
-* geom_point()
-```
-]
- 
-.panel2-teste-auto[
-![](aula2_files/figure-html/teste_auto_04_output-1.png)&lt;!-- --&gt;
-]
-
-&lt;style&gt;
-.panel1-teste-auto {
-  color: black;
-  width: 38.6060606060606%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel2-teste-auto {
-  color: black;
-  width: 59.3939393939394%;
-  hight: 32%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-.panel3-teste-auto {
-  color: black;
-  width: NA%;
-  hight: 33%;
-  float: left;
-  padding-left: 1%;
-  font-size: 80%
-}
-&lt;/style&gt;
-
-
-
-
-```r
-volcano %&gt;% 
-  filter(country == "Antarctica") %&gt;% 
-  ggplot(aes(elevation, longitude, color = primary_volcano_type)) +
-  geom_point()
-```
-
-![](aula2_files/figure-html/teste-1.png)&lt;!-- --&gt;
 
 
     </textarea>

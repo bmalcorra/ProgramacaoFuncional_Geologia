@@ -1,6 +1,6 @@
 ---
 title: "Intensivão de programação funcional em R aplicado à Geologia"
-subtitle: "⚒<br/>Aplicações e Exemplos"
+subtitle: "⚒<br/>Aula 2 - programação funcional"
 author: "Bárbara Malcorra"
 institute: "PUCRS"
 date: '`r Sys.Date()`'
@@ -39,53 +39,25 @@ knitr::opts_chunk$set(fig.width = 6,
                       cache = FALSE)
 ```
 
----
-# Estabelecendo um diretório de trabalho
 
-```{r}
-#setwd()
-```
-
-# Importando os dados
-
-- de um arquivo .csv
-
-```{r}
-#dados = read.csv()
-```
-
-- de um arquivo excel
-
-```{r}
-# install.packages("readxl")
-# library(readxl)
-# 
-# dados.ex = read_excel()
-```
-
----
-# Inspecionando os dados
-
-```{r}
-# View(dados) # não muito útil para data frames grandes
-# names(dados)
-# head(dados)
-# str(dados)
-# summary(dados)
-```
-
----
 # Tidyverse
 
 ```{r}
-# install.packages("tidyverse")
 library(tidyverse)
 ```
 
-
-```{r, echo = FALSE, fig.align = 'center', out.width = "30%"}
-knitr::include_graphics("https://www.business-science.io/assets/2020-10-15-must-know-tidyverse-features/tidyverse-icons.png")
+.pull-left[
+```{r, echo = FALSE, fig.align = 'center', out.width = "70%"}
+knitr::include_graphics("https://tidyverse.tidyverse.org/articles/tidyverse-logo.png")
 ```
+
+]
+
+.pull-right[
+```{r, echo = FALSE, fig.align = 'center', out.width = "100%"}
+knitr::include_graphics("https://education.rstudio.com/blog/2020/07/teaching-the-tidyverse-in-2020-part-1-getting-started/img/tidyverse-packages.png")
+```
+]
 
 ---
 # Pipe %>%
@@ -97,6 +69,20 @@ knitr::include_graphics("https://www.business-science.io/assets/2020-10-15-must-
 ```{r, echo = FALSE, fig.align = 'center', out.width = "30%"}
 knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
 ```
+
+---
+# Comandos lógicos
+
+**<** menor que  
+**>** maior que  
+**<=** menor igual a  
+**>=** maior igual a  
+**==** igual a  
+**%in%** faz parte de um grupo  
+**is.na()** é NA  
+**&** e  
+**|** ou  
+**!** diferente de  
 
 ---
 # Dados
@@ -111,6 +97,8 @@ eruptions <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/
 events <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/events.csv')
 tree_rings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/tree_rings.csv')
 sulfur <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/sulfur.csv')
+
+tuesdata <- tidytuesdayR::tt_load('2020-05-12')
 ```
 
 ---
@@ -120,7 +108,6 @@ sulfur <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tid
 - Flexibilidade para transformar dados
 
 ```{r}
-# install.packages("dplyr")
 library(dplyr)
 ```
 
@@ -147,6 +134,20 @@ volcano %>%
 ```
 
 ---
+# funções que auxiliam na seleção das variáveis:
+
+- **stars_with()**: colunas que começam com um prefixo
+- **ends_with()**: colunas que terminam com um sufixo
+- **contains()**: colunas que contêm uma string
+- **last_col()**: última coluna
+
+```{r}
+volcano %>% 
+  select(starts_with("population"))
+```
+
+
+---
 # filter()
 
 ```{r, results = FALSE}
@@ -170,7 +171,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, latitude:elevation, last_eruption_year) %>% 
+  select(volcano_name, country, last_eruption_year) %>% 
   filter(!country == "Antarctica") %>% 
   mutate(last_eruption_year = as.numeric(last_eruption_year),
          years_ago = 2020 - last_eruption_year)
@@ -238,7 +239,9 @@ volcano %>%
   group_by(country) %>% 
   summarise(n = n(),
             media_lat = mean(elevation),
-            sd_lat = sd(elevation)) %>% 
+            sd_lat = sd(elevation),
+            min = min(elevation, na.rm = TRUE),
+            max = max(elevation, na.rm = TRUE)) %>% 
   ungroup()
 ```
 
@@ -246,29 +249,65 @@ volcano %>%
 ---
 # Perguntas: 
 
-- Em qual região existem mais vulcões?
+- Em qual país existem mais vulcões?
 
-```{r}
+```{r, results = FALSE}
 volcano %>% 
-  count(region, sort = TRUE)
+  group_by(country) %>% 
+  count(country, sort = TRUE)
 ```
 
-- 
+- Nesse país, qual o tipo de vulcão mais comum?
 
-```{r}
+```{r, results = FALSE}
 volcano %>% 
-  mutate(last_eruption_year = as.numeric(last_eruption_year)) %>% 
-  ggplot(aes(last_eruption_year, fill = evidence_category)) +
-  geom_histogram()
+  filter(country == "United States") %>% 
+  count(primary_volcano_type, sort = TRUE)
 ```
 
+- Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?
+
+```{r, results = FALSE}
+volcano %>% 
+  select(region, volcano_name, last_eruption_year) %>% 
+  filter(region == "South America",
+         last_eruption_year == "2020") %>% 
+  count(volcano_name, last_eruption_year)
+```
+
+- Quais os tipos de vulcões presentes em cada país?
+
+```{r, results = FALSE}
+volcano %>% 
+  select(country, primary_volcano_type, major_rock_1) %>% 
+  mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
+         primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
+         primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),
+         primary_volcano_type = str_replace(primary_volcano_type, "[:punct:]", "")) %>% 
+  count(country, primary_volcano_type, sort = TRUE) %>% 
+  pivot_wider(names_from = "primary_volcano_type",
+              values_from = "n")
+```
+
+- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?
+
+```{r, results = FALSE}
+volcano %>% 
+  select(country, population_within_5_km) %>% 
+  group_by(country) %>% 
+  summarise(n = n(),
+            media_pop = mean(population_within_5_km),
+            sd_pop = sd(population_within_5_km),
+            max_pop = max(population_within_5_km)) %>% 
+  filter(n > 2) %>% #mais de 2 vulcões no país
+  arrange(desc(media_pop))
+```
 
 
 ---
 # tidyr()
 
 ```{r}
-# install.packages("tidyr")
 library(tidyr)
 ```
 
@@ -363,19 +402,6 @@ volcano_nest = volcano %>%
 ```{r}
 volcano_nest %>% 
   unnest()
-```
-
-
----
-# ggplot
-
-`r chunk_reveal("teste")`
-
-```{r teste, warning=FALSE, message=FALSE}
-volcano %>% 
-  filter(country == "Antarctica") %>% 
-  ggplot(aes(elevation, longitude, color = primary_volcano_type)) +
-  geom_point()
 ```
 
 

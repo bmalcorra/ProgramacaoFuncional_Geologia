@@ -1,5 +1,5 @@
 ---
-title: "aula1"
+title: "aula1 - funcionalidades básicas"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -14,7 +14,7 @@ Atalho Chunk: Ctrl + Alt + I
 
 5 * 2 #multiplicação
 
-8 / 2 #divisão
+8.2 / 2 #divisão
 
 10 - 8 #subtração
 
@@ -26,7 +26,7 @@ sqrt(81) #raiz quadrada
 ```
 
 
-# Criar variáveis
+# Variáveis - tipos e atribuição
 
 ```{r}
 myNumber = 5
@@ -37,7 +37,7 @@ myNumber = 7
 calculo = 5 + (3 * 5 / 2)
 myNumber * calculo
 
-myWord = geologia #erro
+#myWord = geologia #erro
 myWord = "geologia"
 myWord
 
@@ -53,22 +53,117 @@ class(myNumber)
 class(myWord)
 class(mySentence)
 class(myTRUE)
+```
 
-myNumbers = c(1, 2, 3, 4, 5)
+
+# Vetores
+
+```{r}
+myNumbers = c(1, 2, 3, 4, 5) #vetor
 myNumbers = 1:5
 
-myWords = c("geoquímica", "estrutural", "estratigrafia")
+myWords = c("geoquímica", "estrutural", "estratigrafia") #character vetor
 myWords
 myWords[3]
 myWords[4]
 ```
 
 
+# Matrix
+
+```{r}
+y = seq(1, 10, by = 2)
+
+myMatrix = matrix(1:6, nrow = 2, ncol = 3)
+myMatrix
+
+myMatrix2 = matrix(y, nrow = 3, ncol = 2)
+
+#juntar colunas de dois vetores para formar uma matrix
+x = 1:4
+y = 10:13
+
+cbind(x, y) #as colunas devem ter o mesmo número de linhas
+
+rbind(x, y) #juntar linhas
+
+df = as.data.frame(cbind(x, y))
+df
+
+str(df)
+length(df)
+```
 
 
+# Funções
+
+```{r}
+maior = function(parametro1, parametro2) {
+  if (parametro1 < parametro2) {
+    return(parametro2)
+    } else {
+      return(parametro1)
+      }
+}
+
+a = 4
+b = 10
+
+maior(b, a)
+```
 
 
+# Pacotes
+
+```{r}
+#install.packages("tidyverse")
+library(tidyverse)
+```
 
 
+# Estabelecendo um diretório de trabalho
+
+```{r}
+setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
+```
+
+
+# Importando os dados
+
+- de um arquivo .csv
+
+```{r}
+dados = read.csv("geoquim_granite.csv", header = TRUE, sep = ";") %>% 
+  as_tibble()
+
+dados
+```
+
+- de um arquivo excel
+
+```{r}
+# install.packages("readxl")
+# library(readxl)
+# 
+# dados.ex = read_excel()
+```
+
+---
+# Inspecionando os dados
+
+```{r}
+# View(dados) # não muito útil para data frames grandes
+# names(dados)
+# head(dados)
+# str(dados)
+# summary(dados)
+```
+
+
+# Exercícios
+
+```{r}
+
+```
 
 

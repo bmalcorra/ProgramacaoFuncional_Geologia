@@ -1,0 +1,96 @@
+---
+title: "aula3 - ggplot2"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
+
+dados.ex = read_excel("dados_santos2009.xlsx") %>% 
+  rename(distance = `Distance from contact (m)`) %>% 
+  mutate(distance = replace_na(distance, "0"),
+         litho = case_when(Rock == c("sill", "Sill") ~ "volcanic",
+                           Rock == "Black shale" ~ "shale",
+                           TRUE ~ "carbonate")) %>% 
+  separate(distance,
+           into = c("lower", "upper"),
+           sep = "–") %>% 
+  relocate(litho, upper, lower, .before = Co) %>% 
+  mutate(across(upper:Tm, as.double))
+
+dados.ex
+```
+
+
+# Correlação
+
+```{r}
+library(corrplot)
+
+dados.ex %>% 
+  select(lower, Co:Tm) %>% 
+  cor() %>% 
+  corrplot(method = "ellipse",
+           type = "upper")
+```
+
+
+```{r}
+library(GGally)
+
+dados.ex %>% 
+  select(Co:Tm, lower) %>% 
+  ggcorr()
+```
+
+
+```{r}
+dados.ex %>% 
+  select(lower, Co:Tm) %>% 
+  correlation::correlation()
+```
+
+
+
+
+# Exercícios
+
+Chumbo e Tório - explorando a relação
+
+```{r}
+dados.ex %>% 
+  ggplot(aes(x = lower, y = Th)) +
+  geom_point(alpha = 0.7, size = 2) +
+  geom_smooth(method = "lm", se = TRUE) +
+  labs(x = "distance to sill (m)",
+       y = "Pb (ppm)",
+       title = "Título",
+       subtitle = "Subtítulo",
+       caption = "referência") +
+  facet_wrap(~litho, scales = "free")
+```
+
+
+- Faça um histograma da variável *last_eruption_year*
+
+```{r}
+volcano %>% 
+  mutate(last_eruption_year = as.numeric(last_eruption_year)) %>% 
+  ggplot(aes(last_eruption_year, fill = evidence_category)) +
+  geom_histogram()
+```
+
+
+
+
+`r chunk_reveal("teste")`
+
+```{r teste, warning=FALSE, message=FALSE}
+volcano %>% 
+  filter(country == "Antarctica") %>% 
+  ggplot(aes(elevation, longitude, color = primary_volcano_type)) +
+  geom_point()
+```
+
