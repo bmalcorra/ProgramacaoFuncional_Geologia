@@ -39,29 +39,6 @@ knitr::opts_chunk$set(fig.width = 6,
                       cache = FALSE)
 ```
 
-
-# R como calculadora
-
-```{r}
-5 + 2
-
-5 * 2
-
-8 / 2
-
-10 - 8
-```
-
----
-# Criando variáveis
-
-```{r}
-MyVariable = 2 + 9
-
-MyVariable
-```
-
-
 ---
 # Estabelecendo um diretório de trabalho
 
@@ -174,13 +151,16 @@ volcano %>%
 
 ```{r, results = FALSE}
 volcano %>% 
+  select(volcano_name, country, latitude:elevation) %>% 
   filter(country == "Antarctica")
 
 volcano %>% 
+  select(volcano_name, country, latitude:elevation) %>% 
   filter(!country == "Antarctica")
 
 volcano %>% 
-  filter(country == "Antarctica" & population_within_100_km > 0)
+  select(volcano_name, country, latitude:elevation) %>% 
+  filter(country == "Antarctica" | latitude > 10)
 ```
 
 ---
@@ -189,21 +169,204 @@ volcano %>%
 - Modifica e cria colunas
 
 ```{r}
-
+volcano %>% 
+  select(volcano_name, country, latitude:elevation, last_eruption_year) %>% 
+  filter(!country == "Antarctica") %>% 
+  mutate(last_eruption_year = as.numeric(last_eruption_year),
+         years_ago = 2020 - last_eruption_year)
 ```
 
 ---
-# case_when
+# if_else()
+
+- retorna um valor dependendo de um teste lógico
 
 ```{r}
 volcano %>% 
-  mutate()
+  mutate(new_variable = if_else(last_eruption_year <= 2000, "2000-", "2000+")) %>% 
+  count(new_variable)
+```
+
+---
+# case_when()
+
+- generalização do if_else()
+
+```{r}
+volcano %>% 
+  mutate(new_variable = case_when(last_eruption_year <= 2000 ~ "até 2000",
+                                  last_eruption_year <= 2010 ~ "até 2010",
+                                  last_eruption_year <= 2020 ~ "até 2020",
+                                  TRUE ~ "outros")) %>% 
+  count(new_variable)
+```
+
+- O TRUE significa que caso as observações não entrem nas condições anteriores a função retorna o valor do lado direito
+
+---
+# n() e n_distinct()
+
+- n(): retorna o tamanho do grupo
+- n_distinct(): retorna o número de tamanhos distintos
+
+```{r, results = FALSE}
+volcano %>% 
+  select(volcano_name, country, latitude:elevation, last_eruption_year) %>% 
+  mutate(var = n(),
+         var1 = n_distinct(last_eruption_year))
+```
+
+---
+# group_by()
+
+- sozinho não faz nenhuma alteração notável na base
+- quando usado junto com funções como mutate() ou summarise() muda o escopo da função:
+  - executa o código separadamente para cada grupo
+  - trata de cada grupo como se fossem banco de dados distintos
+
+# summarise()
+
+- calcula medidas como:
+  - média
+  - desvio padrão
+  - entre outras
+  
+```{r}
+volcano %>% 
+  select(volcano_name, country, latitude:elevation, last_eruption_year) %>% 
+  filter(!country == "Antarctica") %>% 
+  group_by(country) %>% 
+  summarise(n = n(),
+            media_lat = mean(elevation),
+            sd_lat = sd(elevation)) %>% 
+  ungroup()
+```
+
+
+---
+# Perguntas: 
+
+- Em qual região existem mais vulcões?
+
+```{r}
+volcano %>% 
+  count(region, sort = TRUE)
+```
+
+- 
+
+```{r}
+volcano %>% 
+  mutate(last_eruption_year = as.numeric(last_eruption_year)) %>% 
+  ggplot(aes(last_eruption_year, fill = evidence_category)) +
+  geom_histogram()
 ```
 
 
 
+---
+# tidyr()
+
+```{r}
+# install.packages("tidyr")
+library(tidyr)
+```
+
+```{r, echo = FALSE, fig.align = 'center', out.width = "30%"}
+knitr::include_graphics("https://www.dadosaleatorios.com.br/post/introducao-ao-tidyr/featured.png")
+```
+
+- O pacote possui funções para deixar os dados em formato *tidy*
+
+- Dados **tidy** estão organizados de forma que:
+  - cada linha é uma observação
+  - cada coluna é uma variável 
+  - cada célula representa um único valor
+
+---
+# pivot_longer()
+
+- alonga os dados
+
+```{r}
+volcano_long = volcano %>% 
+  select(volcano_name, latitude, longitude) %>% 
+  pivot_longer(cols = c(latitude, longitude),
+               names_to = "variable",
+               values_to = "value")
+
+volcano_long
+```
 
 
+---
+# pivot_wider()
+
+- alarga os dados
+
+```{r}
+volcano %>% 
+  select(volcano_name, latitude, longitude, last_eruption_year) %>% 
+  mutate(last_eruption_year = case_when(last_eruption_year <= 2000 ~ "before_2000",
+                                        last_eruption_year > 2000 ~ "after_2000")) %>% 
+  pivot_wider(names_from = last_eruption_year,
+              values_from = latitude)
+```
+
+
+---
+# separate()
+
+- separa uma coluna em várias usando um separador
+
+```{r}
+volcano %>% 
+  select(volcano_name, tectonic_settings) %>% 
+  separate(tectonic_settings,
+           into = c("zone", "crust"),
+           sep = " / ")
+```
+
+
+---
+# unite()
+
+- junta várias colunas em uma usando um separador
+
+```{r}
+volcano %>% 
+  select(volcano_name, volcano_number) %>% 
+  unite(col = volcano_name, 
+        volcano_number,
+        volcano_name,
+        sep = "_")
+```
+
+
+---
+# nest()
+
+- cria uma coluna de lista
+
+```{r}
+volcano_nest = volcano %>% 
+  group_by(country) %>% 
+  nest()
+```
+
+
+---
+# unnest()
+
+- desfaz a coluna de lista
+
+```{r}
+volcano_nest %>% 
+  unnest()
+```
+
+
+---
 # ggplot
 
 `r chunk_reveal("teste")`
@@ -214,13 +377,5 @@ volcano %>%
   ggplot(aes(elevation, longitude, color = primary_volcano_type)) +
   geom_point()
 ```
-
-
-
-
-
-
-
-
 
 

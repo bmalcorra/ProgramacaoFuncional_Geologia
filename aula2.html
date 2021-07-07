@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Intensivão de programação funcional em R aplicado à Geologia</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Bárbara Malcorra" />
+    <meta name="date" content="2021-07-06" />
+    <script src="libs/header-attrs-2.9/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Intensivão de programação funcional em R aplicado à Geologia
+## ⚒<br/>Aplicações e Exemplos
+### Bárbara Malcorra
+### PUCRS
+### 2021-07-06
+
+---
+
+
+
+
+
+
+
+---
+# Estabelecendo um diretório de trabalho
+
+
+```r
+#setwd()
+```
+
+# Importando os dados
+
+- de um arquivo .csv
+
+
+```r
+#dados = read.csv()
+```
+
+- de um arquivo excel
+
+
+```r
+# install.packages("readxl")
+# library(readxl)
+# 
+# dados.ex = read_excel()
+```
+
+---
+# Inspecionando os dados
+
+
+```r
+# View(dados) # não muito útil para data frames grandes
+# names(dados)
+# head(dados)
+# str(dados)
+# summary(dados)
+```
+
+---
+# Tidyverse
+
+
+```r
+# install.packages("tidyverse")
+library(tidyverse)
+```
+
+
+&lt;img src="https://www.business-science.io/assets/2020-10-15-must-know-tidyverse-features/tidyverse-icons.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+---
+# Pipe %&gt;%
+
+- Atalho Ctrl + Shift + M
+
+- Analisa o código do lado esquerdo e passa o resultado como o primeiro argumento do código do lado direito
+
+&lt;img src="https://magrittr.tidyverse.org/logo.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+---
+# Dados
+
+- "Tidy Tuesday live screencast: Analyzing volcano eruptions in R" by David Robinson
+
+&lt;https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-12/readme.md&gt;
+
+
+```r
+volcano &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
+eruptions &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/eruptions.csv')
+events &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/events.csv')
+tree_rings &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/tree_rings.csv')
+sulfur &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/sulfur.csv')
+```
+
+---
+# dplyr()
+
+- Pacote para a manipulação de dados
+- Flexibilidade para transformar dados
+
+
+```r
+# install.packages("dplyr")
+library(dplyr)
+```
+
+&lt;img src="https://didatica.tech/wp-content/uploads/2019/10/dplyr.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+# select()
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation) %&gt;% 
+  head()
+```
+
+```
+# A tibble: 6 x 5
+  volcano_name    country       latitude longitude elevation
+  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 Abu             Japan             34.5     132.        641
+2 Acamarachi      Chile            -23.3     -67.6      6023
+3 Acatenango      Guatemala         14.5     -90.9      3976
+4 Acigol-Nevsehir Turkey            38.5      34.6      1683
+5 Adams           United States     46.2    -121.       3742
+6 Adatarayama     Japan             37.6     140.       1728
+```
+
+---
+# select()
+
+
+```r
+volcano %&gt;% 
+  select(-tectonic_settings) %&gt;% 
+  head()
+```
+
+---
+# filter()
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation) %&gt;% 
+  filter(country == "Antarctica")
+
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation) %&gt;% 
+  filter(!country == "Antarctica")
+
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation) %&gt;% 
+  filter(country == "Antarctica" | latitude &gt; 10)
+```
+
+---
+# mutate()
+
+- Modifica e cria colunas
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
+  filter(!country == "Antarctica") %&gt;% 
+  mutate(last_eruption_year = as.numeric(last_eruption_year),
+         years_ago = 2020 - last_eruption_year)
+```
+
+```
+# A tibble: 941 x 7
+   volcano_name  country latitude longitude elevation last_eruption_y~ years_ago
+   &lt;chr&gt;         &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;            &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Abu           Japan       34.5     132.        641            -6850      8870
+ 2 Acamarachi    Chile      -23.3     -67.6      6023               NA        NA
+ 3 Acatenango    Guatem~     14.5     -90.9      3976             1972        48
+ 4 Acigol-Nevse~ Turkey      38.5      34.6      1683            -2080      4100
+ 5 Adams         United~     46.2    -121.       3742              950      1070
+ 6 Adatarayama   Japan       37.6     140.       1728             1996        24
+ 7 Adwa          Ethiop~     10.1      40.8      1733               NA        NA
+ 8 Afdera        Ethiop~     13.1      40.9      1250               NA        NA
+ 9 Agrigan       United~     18.8     146.        965             1917       103
+10 Agua          Guatem~     14.5     -90.7      3760               NA        NA
+# ... with 931 more rows
+```
+
+---
+# if_else()
+
+- retorna um valor dependendo de um teste lógico
+
+
+```r
+volcano %&gt;% 
+  mutate(new_variable = if_else(last_eruption_year &lt;= 2000, "2000-", "2000+")) %&gt;% 
+  count(new_variable)
+```
+
+```
+# A tibble: 2 x 2
+  new_variable     n
+  &lt;chr&gt;        &lt;int&gt;
+1 2000-          456
+2 2000+          502
+```
+
+---
+# case_when()
+
+- generalização do if_else()
+
+
+```r
+volcano %&gt;% 
+  mutate(new_variable = case_when(last_eruption_year &lt;= 2000 ~ "até 2000",
+                                  last_eruption_year &lt;= 2010 ~ "até 2010",
+                                  last_eruption_year &lt;= 2020 ~ "até 2020",
+                                  TRUE ~ "outros")) %&gt;% 
+  count(new_variable)
+```
+
+```
+# A tibble: 4 x 2
+  new_variable     n
+  &lt;chr&gt;        &lt;int&gt;
+1 até 2000       456
+2 até 2010        42
+3 até 2020       119
+4 outros         341
+```
+
+- O TRUE significa que caso as observações não entrem nas condições anteriores a função retorna o valor do lado direito
+
+---
+# n() e n_distinct()
+
+- n(): retorna o tamanho do grupo
+- n_distinct(): retorna o número de tamanhos distintos
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
+  mutate(var = n(),
+         var1 = n_distinct(last_eruption_year))
+```
+
+---
+# group_by()
+
+- sozinho não faz nenhuma alteração notável na base
+- quando usado junto com funções como mutate() ou summarise() muda o escopo da função:
+  - executa o código separadamente para cada grupo
+  - trata de cada grupo como se fossem banco de dados distintos
+
+# summarise()
+
+- calcula medidas como:
+  - média
+  - desvio padrão
+  - entre outras
+  
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
+  filter(!country == "Antarctica") %&gt;% 
+  group_by(country) %&gt;% 
+  summarise(n = n(),
+            media_lat = mean(elevation),
+            sd_lat = sd(elevation)) %&gt;% 
+  ungroup()
+```
+
+```
+# A tibble: 88 x 4
+   country                n media_lat sd_lat
+   &lt;chr&gt;              &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Algeria                1     1672     NA 
+ 2 Argentina             14     3608.  1490.
+ 3 Armenia                3     3422.   775.
+ 4 Armenia-Azerbaijan     1     3029     NA 
+ 5 Australia              2     1878   1226.
+ 6 Bolivia                3     4877   1064.
+ 7 Burma (Myanmar)        1     1518     NA 
+ 8 Cameroon               3     2535.  1844.
+ 9 Canada                18     1954.  1182.
+10 Cape Verde             1     2829     NA 
+# ... with 78 more rows
+```
+
+
+---
+# Perguntas: 
+
+- Em qual região existem mais vulcões?
+
+
+```r
+volcano %&gt;% 
+  count(region, sort = TRUE)
+```
+
+```
+# A tibble: 19 x 2
+   region                             n
+   &lt;chr&gt;                          &lt;int&gt;
+ 1 South America                    117
+ 2 Japan, Taiwan, Marianas          102
+ 3 Indonesia                         95
+ 4 México and Central America        93
+ 5 Africa and Red Sea                79
+ 6 Kamchatka and Mainland Asia       78
+ 7 Canada and Western USA            60
+ 8 Melanesia and Australia           45
+ 9 Alaska                            38
+10 Mediterranean and Western Asia    35
+11 Philippines and SE Asia           33
+12 Iceland and Arctic Ocean          29
+13 New Zealand to Fiji               29
+14 Middle East and Indian Ocean      27
+15 Antarctica                        25
+16 Kuril Islands                     25
+17 Atlantic Ocean                    21
+18 West Indies                       16
+19 Hawaii and Pacific Ocean          11
+```
+
+- 
+
+
+```r
+volcano %&gt;% 
+  mutate(last_eruption_year = as.numeric(last_eruption_year)) %&gt;% 
+  ggplot(aes(last_eruption_year, fill = evidence_category)) +
+  geom_histogram()
+```
+
+![](aula2_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+
+
+---
+# tidyr()
+
+
+```r
+# install.packages("tidyr")
+library(tidyr)
+```
+
+&lt;img src="https://www.dadosaleatorios.com.br/post/introducao-ao-tidyr/featured.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+- O pacote possui funções para deixar os dados em formato *tidy*
+
+- Dados **tidy** estão organizados de forma que:
+  - cada linha é uma observação
+  - cada coluna é uma variável 
+  - cada célula representa um único valor
+
+---
+# pivot_longer()
+
+- alonga os dados
+
+
+```r
+volcano_long = volcano %&gt;% 
+  select(volcano_name, latitude, longitude) %&gt;% 
+  pivot_longer(cols = c(latitude, longitude),
+               names_to = "variable",
+               values_to = "value")
+
+volcano_long
+```
+
+```
+# A tibble: 1,916 x 3
+   volcano_name    variable   value
+   &lt;chr&gt;           &lt;chr&gt;      &lt;dbl&gt;
+ 1 Abu             latitude    34.5
+ 2 Abu             longitude  132. 
+ 3 Acamarachi      latitude   -23.3
+ 4 Acamarachi      longitude  -67.6
+ 5 Acatenango      latitude    14.5
+ 6 Acatenango      longitude  -90.9
+ 7 Acigol-Nevsehir latitude    38.5
+ 8 Acigol-Nevsehir longitude   34.6
+ 9 Adams           latitude    46.2
+10 Adams           longitude -121. 
+# ... with 1,906 more rows
+```
+
+
+---
+# pivot_wider()
+
+- alarga os dados
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, latitude, longitude, last_eruption_year) %&gt;% 
+  mutate(last_eruption_year = case_when(last_eruption_year &lt;= 2000 ~ "before_2000",
+                                        last_eruption_year &gt; 2000 ~ "after_2000")) %&gt;% 
+  pivot_wider(names_from = last_eruption_year,
+              values_from = latitude)
+```
+
+```
+# A tibble: 958 x 4
+   volcano_name    longitude before_2000 after_2000
+   &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+ 1 Abu                 132.         34.5       NA  
+ 2 Acamarachi          -67.6        NA        -23.3
+ 3 Acatenango          -90.9        14.5       NA  
+ 4 Acigol-Nevsehir      34.6        38.5       NA  
+ 5 Adams              -121.         NA         46.2
+ 6 Adatarayama         140.         37.6       NA  
+ 7 Adwa                 40.8        NA         10.1
+ 8 Afdera               40.9        NA         13.1
+ 9 Agrigan             146.         18.8       NA  
+10 Agua                -90.7        NA         14.5
+# ... with 948 more rows
+```
+
+
+---
+# separate()
+
+- separa uma coluna em várias usando um separador
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, tectonic_settings) %&gt;% 
+  separate(tectonic_settings,
+           into = c("zone", "crust"),
+           sep = " / ")
+```
+
+```
+# A tibble: 958 x 3
+   volcano_name    zone            crust                        
+   &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;                        
+ 1 Abu             Subduction zone Continental crust (&gt;25 km)   
+ 2 Acamarachi      Subduction zone Continental crust (&gt;25 km)   
+ 3 Acatenango      Subduction zone Continental crust (&gt;25 km)   
+ 4 Acigol-Nevsehir Intraplate      Continental crust (&gt;25 km)   
+ 5 Adams           Subduction zone Continental crust (&gt;25 km)   
+ 6 Adatarayama     Subduction zone Continental crust (&gt;25 km)   
+ 7 Adwa            Rift zone       Intermediate crust (15-25 km)
+ 8 Afdera          Rift zone       Intermediate crust (15-25 km)
+ 9 Agrigan         Subduction zone Crustal thickness unknown    
+10 Agua            Subduction zone Continental crust (&gt;25 km)   
+# ... with 948 more rows
+```
+
+
+---
+# unite()
+
+- junta várias colunas em uma usando um separador
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, volcano_number) %&gt;% 
+  unite(col = volcano_name, 
+        volcano_number,
+        volcano_name,
+        sep = "_")
+```
+
+```
+# A tibble: 958 x 1
+   volcano_name          
+   &lt;chr&gt;                 
+ 1 283001_Abu            
+ 2 355096_Acamarachi     
+ 3 342080_Acatenango     
+ 4 213004_Acigol-Nevsehir
+ 5 321040_Adams          
+ 6 283170_Adatarayama    
+ 7 221170_Adwa           
+ 8 221110_Afdera         
+ 9 284160_Agrigan        
+10 342100_Agua           
+# ... with 948 more rows
+```
+
+
+---
+# nest()
+
+- cria uma coluna de lista
+
+
+```r
+volcano_nest = volcano %&gt;% 
+  group_by(country) %&gt;% 
+  nest()
+```
+
+
+---
+# unnest()
+
+- desfaz a coluna de lista
+
+
+```r
+volcano_nest %&gt;% 
+  unnest()
+```
+
+```
+# A tibble: 958 x 26
+# Groups:   country [89]
+   country volcano_number volcano_name  primary_volcano~ last_eruption_y~ region
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt; 
+ 1 Japan           283001 Abu           Shield(s)        -6850            Japan~
+ 2 Japan           283170 Adatarayama   Stratovolcano(e~ 1996             Japan~
+ 3 Japan           282080 Aira          Caldera          2020             Japan~
+ 4 Japan           283130 Akagisan      Stratovolcano    Unknown          Japan~
+ 5 Japan           285070 Akan          Caldera          2008             Japan~
+ 6 Japan           283230 Akita-Komaga~ Stratovolcano(e~ 1971             Japan~
+ 7 Japan           283260 Akita-Yakeya~ Stratovolcano    1997             Japan~
+ 8 Japan           282022 Akusekijima   Stratovolcano(e~ Unknown          Japan~
+ 9 Japan           284060 Aogashima     Stratovolcano    1785             Japan~
+10 Japan           283110 Asamayama     Complex          2019             Japan~
+# ... with 948 more rows, and 20 more variables: subregion &lt;chr&gt;,
+#   latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, elevation &lt;dbl&gt;, tectonic_settings &lt;chr&gt;,
+#   evidence_category &lt;chr&gt;, major_rock_1 &lt;chr&gt;, major_rock_2 &lt;chr&gt;,
+#   major_rock_3 &lt;chr&gt;, major_rock_4 &lt;chr&gt;, major_rock_5 &lt;chr&gt;,
+#   minor_rock_1 &lt;chr&gt;, minor_rock_2 &lt;chr&gt;, minor_rock_3 &lt;chr&gt;,
+#   minor_rock_4 &lt;chr&gt;, minor_rock_5 &lt;chr&gt;, population_within_5_km &lt;dbl&gt;,
+#   population_within_10_km &lt;dbl&gt;, population_within_30_km &lt;dbl&gt;,
+#   population_within_100_km &lt;dbl&gt;
+```
+
+
+---
+# ggplot
+
+count: false
+ 
+
+.panel1-teste-auto[
+
+```r
+*volcano
+```
+]
+ 
+.panel2-teste-auto[
+
+```
+# A tibble: 958 x 26
+   volcano_number volcano_name  primary_volcano~ last_eruption_y~ country region
+            &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt; 
+ 1         283001 Abu           Shield(s)        -6850            Japan   Japan~
+ 2         355096 Acamarachi    Stratovolcano    Unknown          Chile   South~
+ 3         342080 Acatenango    Stratovolcano(e~ 1972             Guatem~ Méxic~
+ 4         213004 Acigol-Nevse~ Caldera          -2080            Turkey  Medit~
+ 5         321040 Adams         Stratovolcano    950              United~ Canad~
+ 6         283170 Adatarayama   Stratovolcano(e~ 1996             Japan   Japan~
+ 7         221170 Adwa          Stratovolcano    Unknown          Ethiop~ Afric~
+ 8         221110 Afdera        Stratovolcano    Unknown          Ethiop~ Afric~
+ 9         284160 Agrigan       Stratovolcano    1917             United~ Japan~
+10         342100 Agua          Stratovolcano    Unknown          Guatem~ Méxic~
+# ... with 948 more rows, and 20 more variables: subregion &lt;chr&gt;,
+#   latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, elevation &lt;dbl&gt;, tectonic_settings &lt;chr&gt;,
+#   evidence_category &lt;chr&gt;, major_rock_1 &lt;chr&gt;, major_rock_2 &lt;chr&gt;,
+#   major_rock_3 &lt;chr&gt;, major_rock_4 &lt;chr&gt;, major_rock_5 &lt;chr&gt;,
+#   minor_rock_1 &lt;chr&gt;, minor_rock_2 &lt;chr&gt;, minor_rock_3 &lt;chr&gt;,
+#   minor_rock_4 &lt;chr&gt;, minor_rock_5 &lt;chr&gt;, population_within_5_km &lt;dbl&gt;,
+#   population_within_10_km &lt;dbl&gt;, population_within_30_km &lt;dbl&gt;,
+#   population_within_100_km &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-teste-auto[
+
+```r
+volcano %&gt;%
+* filter(country == "Antarctica")
+```
+]
+ 
+.panel2-teste-auto[
+
+```
+# A tibble: 17 x 26
+   volcano_number volcano_name  primary_volcano~ last_eruption_y~ country region
+            &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt; 
+ 1         390023 Andrus        Shield(s)        Unknown          Antarc~ Antar~
+ 2         390022 Berlin        Shield(s)        -8350            Antarc~ Antar~
+ 3         390010 Buckle Island Stratovolcano    1899             Antarc~ Antar~
+ 4         390030 Deception Is~ Caldera          1970             Antarc~ Antar~
+ 5         390020 Erebus        Stratovolcano    2020             Antarc~ Antar~
+ 6         390028 Hudson Mount~ Stratovolcano(e~ -210             Antarc~ Antar~
+ 7         390829 James Ross I~ Shield           Unknown          Antarc~ Antar~
+ 8         390015 Melbourne     Stratovolcano    1892             Antarc~ Antar~
+ 9         390017 Morning       Shield           Unknown          Antarc~ Antar~
+10         390031 Penguin Isla~ Stratovolcano    1905             Antarc~ Antar~
+11         390013 Pleiades, The Stratovolcano    -1050            Antarc~ Antar~
+12         390021 Royal Societ~ Pyroclastic con~ Unknown          Antarc~ Antar~
+13         390050 Seal Nunatak~ Pyroclastic con~ Unknown          Antarc~ Antar~
+14         390025 Siple         Shield           Unknown          Antarc~ Antar~
+15         390027 Takahe        Shield           -5550            Antarc~ Antar~
+16         390026 Toney Mounta~ Shield           Unknown          Antarc~ Antar~
+17         390024 Waesche       Shield(s)        Unknown          Antarc~ Antar~
+# ... with 20 more variables: subregion &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;,
+#   elevation &lt;dbl&gt;, tectonic_settings &lt;chr&gt;, evidence_category &lt;chr&gt;,
+#   major_rock_1 &lt;chr&gt;, major_rock_2 &lt;chr&gt;, major_rock_3 &lt;chr&gt;,
+#   major_rock_4 &lt;chr&gt;, major_rock_5 &lt;chr&gt;, minor_rock_1 &lt;chr&gt;,
+#   minor_rock_2 &lt;chr&gt;, minor_rock_3 &lt;chr&gt;, minor_rock_4 &lt;chr&gt;,
+#   minor_rock_5 &lt;chr&gt;, population_within_5_km &lt;dbl&gt;,
+#   population_within_10_km &lt;dbl&gt;, population_within_30_km &lt;dbl&gt;,
+#   population_within_100_km &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-teste-auto[
+
+```r
+volcano %&gt;%
+  filter(country == "Antarctica") %&gt;%
+* ggplot(aes(elevation, longitude, color = primary_volcano_type))
+```
+]
+ 
+.panel2-teste-auto[
+![](aula2_files/figure-html/teste_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-teste-auto[
+
+```r
+volcano %&gt;%
+  filter(country == "Antarctica") %&gt;%
+  ggplot(aes(elevation, longitude, color = primary_volcano_type)) +
+* geom_point()
+```
+]
+ 
+.panel2-teste-auto[
+![](aula2_files/figure-html/teste_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-teste-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-teste-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-teste-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+```r
+volcano %&gt;% 
+  filter(country == "Antarctica") %&gt;% 
+  ggplot(aes(elevation, longitude, color = primary_volcano_type)) +
+  geom_point()
+```
+
+![](aula2_files/figure-html/teste-1.png)&lt;!-- --&gt;
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
