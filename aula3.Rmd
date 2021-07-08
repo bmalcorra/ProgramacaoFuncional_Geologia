@@ -38,10 +38,8 @@ dados.ex %>%
   ggplot(aes(x = litho, y = Pb, fill = litho)) +
   geom_boxplot() +
   stat_summary(color = "red") + #calcula o erro padrão (SE)
-  geom_jitter(alpha = 0.5, size = 2)
+  geom_jitter(alpha = 0.5, size = 3)
 ```
-
-
 
 
 # Bar plot - error bars
@@ -62,19 +60,41 @@ dados.ex %>%
 
 ```{r}
 dados.ex %>% 
-  ggplot(aes(x = Co, y = Pb, color = litho)) +
+  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
   geom_point(size = 3) + #aes aqui também
-  geom_smooth(method = "lm", aes(color = litho))
+  geom_smooth(method = "lm", aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman") +
+  theme(legend.position = "right") +
+  scale_x_log10() + #altera a escala
+  labs(x = "distance to sill (m)")
 ```
+
+
+```{r}
+dados.ex %>% 
+  ggplot(aes(x = lower, y = La/Tm)) +
+  geom_point(size = 3) + #aes aqui também
+  geom_smooth(method = "lm") +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman") +
+  theme(legend.position = "right") +
+  scale_x_log10() + #altera a escala
+  labs(x = "distance to sill (m)")
+```
+
 
 
 # Histograma
 
 ```{r}
 dados.ex %>% 
-  ggplot(aes(x = Tm)) +
+  ggplot(aes(x = Pb)) +
   geom_histogram(color = "white")
 ```
+
+
+# 
 
 
 # Ajustes estéticos
@@ -106,7 +126,7 @@ dados.ex %>%
 library(corrplot)
 
 dados.ex %>% 
-  select(lower, Co:Tm) %>% 
+  dplyr::select(lower, Co:Tm) %>% 
   cor() %>% 
   corrplot(method = "ellipse",
            type = "upper")
@@ -117,18 +137,16 @@ dados.ex %>%
 library(GGally)
 
 dados.ex %>% 
-  select(Co:Tm, lower) %>% 
+  dplyr::select(Co:Tm, lower) %>% 
   ggcorr()
 ```
 
 
 ```{r}
 dados.ex %>% 
-  select(lower, Co:Tm) %>% 
+  dplyr::select(lower, Co:Tm) %>% 
   correlation::correlation()
 ```
-
-
 
 
 # Exercícios
@@ -149,7 +167,7 @@ dados.ex %>%
 ```
 
 
-- Faça um histograma da variável *last_eruption_year*
+- Faça um histograma da variável **last_eruption_year**
 
 ```{r}
 volcano %>% 

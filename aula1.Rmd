@@ -79,6 +79,15 @@ myWords = c("geoquímica", "estrutural", "estratigrafia") #character vetor
 myWords
 myWords[3]
 myWords[4]
+
+
+meuVetor = c(1, 2, 3, 4, 5)
+
+dp = sd(meuVetor)
+n = length(meuVetor)
+
+SE = dp / sqrt(n)
+SE
 ```
 
 
