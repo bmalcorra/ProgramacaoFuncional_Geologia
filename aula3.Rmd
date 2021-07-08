@@ -1,9 +1,16 @@
 ---
-title: "aula3 - ggplot2"
+title: "aula3 - visualização de dados usando ggplot"
 output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+
 
 ```{r}
 setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
@@ -21,6 +28,75 @@ dados.ex = read_excel("dados_santos2009.xlsx") %>%
   mutate(across(upper:Tm, as.double))
 
 dados.ex
+```
+
+
+# Box plot
+
+```{r}
+dados.ex %>% 
+  ggplot(aes(x = litho, y = Pb, fill = litho)) +
+  geom_boxplot() +
+  stat_summary(color = "red") + #calcula o erro padrão (SE)
+  geom_jitter(alpha = 0.5, size = 2)
+```
+
+
+
+
+# Bar plot - error bars
+
+```{r}
+dados.ex %>% 
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %>% 
+  ggplot(aes(x = litho, y = value, fill = litho)) +
+  stat_summary(geom = "bar") +
+  stat_summary() +
+  facet_wrap(~variable, scales = "free")
+```
+
+
+# Scatter plot
+
+```{r}
+dados.ex %>% 
+  ggplot(aes(x = Co, y = Pb, color = litho)) +
+  geom_point(size = 3) + #aes aqui também
+  geom_smooth(method = "lm", aes(color = litho))
+```
+
+
+# Histograma
+
+```{r}
+dados.ex %>% 
+  ggplot(aes(x = Tm)) +
+  geom_histogram(color = "white")
+```
+
+
+# Ajustes estéticos
+
+```{r}
+dados.ex %>% 
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %>% 
+  ggplot(aes(x = litho, y = value, fill = litho)) +
+  stat_summary(geom = "bar") +
+  stat_summary() +
+  facet_wrap(~variable, scales = "free") +
+  labs(x = "Litho",
+       y = "",
+       title = "Título",
+       subtitle = "Subtítulo",
+       caption = "by ...",
+       fill = "Litho") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, face = "italic"))
 ```
 
 

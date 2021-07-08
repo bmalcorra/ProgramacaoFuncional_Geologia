@@ -19,8 +19,17 @@ Atalho Chunk: Ctrl + Alt + I
 10 - 8 #subtração
 
 5 ** 3 #elevado ao cubo
+5 ^ 3
+
+pi
 
 sqrt(81) #raiz quadrada
+
+exp() 
+
+log(5)
+
+log10(5)
 
 5 + (3 * 5 / 2) #operações mais elaboradas
 ```
@@ -61,6 +70,10 @@ class(myTRUE)
 ```{r}
 myNumbers = c(1, 2, 3, 4, 5) #vetor
 myNumbers = 1:5
+
+myNumbers[myNumbers > 3]
+myNumbers[myNumbers >= 3]
+myNumbers[myNumbers!= 3]
 
 myWords = c("geoquímica", "estrutural", "estratigrafia") #character vetor
 myWords
@@ -142,21 +155,23 @@ dados
 - de um arquivo excel
 
 ```{r}
-# install.packages("readxl")
-# library(readxl)
-# 
-# dados.ex = read_excel()
+#install.packages("readxl")
+library(readxl)
+
+dados.ex = read_excel("dados_santos2009.xlsx")
+
+dados.ex
 ```
 
 ---
 # Inspecionando os dados
 
 ```{r}
-# View(dados) # não muito útil para data frames grandes
-# names(dados)
-# head(dados)
-# str(dados)
-# summary(dados)
+View(dados)
+names(dados)
+head(dados)
+str(dados)
+summary(dados)
 ```
 
 
