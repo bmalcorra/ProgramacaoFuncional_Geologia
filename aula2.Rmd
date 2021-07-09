@@ -44,6 +44,8 @@ knitr::opts_chunk$set(fig.width = 6,
 
 ```{r}
 library(tidyverse)
+#complicado
+
 ```
 
 .pull-left[
