@@ -1,0 +1,26 @@
+---
+title: "Aula 4"
+author: "Gabriel Bertolini"
+date: "05/07/2021"
+output: html_document
+---
+# Reproduzindo Ciencia
+## Estudo de caso 1
+
+```{r}
+library(ggtern)
+```
+
+```{r}
+Feldspar
+ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
+    geom_point(aes(color=T.C,
+                   shape=Feldspar,
+                   size=P.Gpa))+
+  
+
+
+??runif
+
+```
+
