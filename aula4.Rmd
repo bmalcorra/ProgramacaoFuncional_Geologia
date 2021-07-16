@@ -1,0 +1,86 @@
+---
+title: "Aula 4"
+subtitle: "Pacotes úteis para geologia"
+author: "Gabriel Bertolini, Julho 2021"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+- Pacote ggtern 
+-- plots de diagramas ternários
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+---
+
+
+- Pacote tidypaleo
+-- plots estratigráficos
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+--- 
+
+- Pacote sf
+-- plots dados espaciais
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+---
+
+- Pacote tidymodels
+-- Modelamento estatístico
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+---
+
+- Outros pacotes que podem ser úteis
+-- 

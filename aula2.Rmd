@@ -49,6 +49,8 @@ Boa parte da programação está em:
 
 ```{r}
 library(tidyverse)
+#complicado
+
 ```
 
 .pull-left[
