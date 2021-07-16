@@ -42,17 +42,21 @@ editor_options:
 ## Respostas- Estudo de caso 1
 
 ```{r}
-library(tidyverse)
+library(dplyr)
 library(tidypaleo)
-
+library(ggtern)
+library(ggplot2)
+library(tidyr)
+library(readr)
+library(readxl)
 ```
 
 ```{r}
 #1 - Explorar 
-Feldspar
 data(Feldspar)
+Feldspar
 
-view (Feldspar)  # Abre janela estilo excel ou então, selecionar objeto-banco de dados e apertar F2
+View(Feldspar)  # Abre janela estilo excel ou então, selecionar objeto-banco de dados e apertar F2
 
 Feldspar %>% str()
 
@@ -65,18 +69,18 @@ Feldspar %>%
 
 #2a - Tipos de Feldspato
 
-ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
-    geom_point(aes(color=Feldspar))
+ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) +
+  ggplot2::geom_point(aes(color=Feldspar))
 
 #2b - Temperatura?
 
 ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
-    geom_point(aes(color=T.C))+
+    ggplot2::geom_point(aes(color=T.C))+
     facet_wrap(~Feldspar)
 
 #2c - Pressão?
-ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
-    geom_point(aes(color=P.Gpa))+
+ggtern::ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
+    ggplot2::geom_point(aes(color=P.Gpa))+
     facet_wrap(~Feldspar)
 
 #3 - Modelo
@@ -92,9 +96,15 @@ ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) +
 
 # Estudo de caso 2
 ```{r}
+#install_version("ggplot2", version = "3.3.0", repos = "http://cran.us.r-project.org")
+
 library(readxl)
+
 setwd("D:/Documentos Drive/Academicos/Aulas/ProgramacaoFuncional_Geologia")
-lv<-read_csv("petrophysics_bertolini_2020.csv") %>% unite(sample,c("Sample", "a"),sep = "-")
+
+lv<-read_csv("petrophysics_bertolini_2020.csv") %>% 
+  unite(sample,c("Sample", "a"),sep = "-")
+
 sd_1<-read_excel("petrography_bertolini_2020.xlsx",sheet=1)
 
 lvsd<-left_join(lv,sd_1,by="sample")
