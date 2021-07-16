@@ -87,6 +87,8 @@ dados.ex %>%
 
 # Histograma
 
+Gráfico de distribuição de frequências
+
 ```{r}
 dados.ex %>% 
   ggplot(aes(x = Pb)) +
@@ -147,6 +149,28 @@ dados.ex %>%
   dplyr::select(lower, Co:Tm) %>% 
   correlation::correlation()
 ```
+
+
+
+# Tidypaleo
+
+```{r}
+library(tidypaleo)
+
+dados.ex %>% 
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %>% 
+  ggplot(aes(x = value, y = lower)) +
+  geom_lineh() +
+  geom_point(aes(color = variable),
+             show.legend = FALSE) +
+  scale_y_reverse() +
+  facet_wrap(~variable, scales = "free") +
+  labs(x = "",
+       y = "Depth (metros)")
+```
+
 
 
 # Exercícios

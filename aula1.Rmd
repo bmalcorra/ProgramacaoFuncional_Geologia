@@ -5,7 +5,12 @@ editor_options:
   chunk_output_type: console
 ---
 
-Atalho Chunk: Ctrl + Alt + I
+Comentários "##"
+
+Script file
+Rmarkdown file
+  Chunk
+  Atalho: Ctrl + Alt + I
 
 # R como calculadora
 
@@ -25,7 +30,7 @@ pi
 
 sqrt(81) #raiz quadrada
 
-exp() 
+exp(8) 
 
 log(5)
 
@@ -54,6 +59,8 @@ mySentence = "esta é a minha frase"
 mySentence
 
 #O R também trabalha com classes lógicas, TRUE or FALSE
+#variável boleana (binária, lógica)
+
 myTRUE = TRUE
 4 == 4 #4 é igual a 4?
 
@@ -65,7 +72,7 @@ class(myTRUE)
 ```
 
 
-# Vetores
+# Vetores: objetos que contêm uma sequência de elementos/variáveis
 
 ```{r}
 myNumbers = c(1, 2, 3, 4, 5) #vetor
@@ -136,6 +143,9 @@ maior(b, a)
 
 
 # Pacotes
+
+Compilado de funções especiais
+Nos ajudam a desevolver códigos mais robustos, além de facilitarem resoluções de problemas
 
 ```{r}
 #install.packages("tidyverse")

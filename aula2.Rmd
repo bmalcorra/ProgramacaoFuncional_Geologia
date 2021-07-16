@@ -40,6 +40,11 @@ knitr::opts_chunk$set(fig.width = 6,
 ```
 
 
+Boa parte da programação está em:
+1) consertar erros de sintaxe do seu código;
+2) pesquisar por soluções no Google (você vai cair no StackOverflow)
+
+
 # Tidyverse
 
 ```{r}
