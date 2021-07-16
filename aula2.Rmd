@@ -92,6 +92,75 @@ knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
 **!** diferente de  
 
 ---
+# Pacotes
+
+Compilado de funções especiais
+Nos ajudam a desevolver códigos mais robustos, além de facilitarem resoluções de problemas
+
+
+```{r}
+#install.packages("tidyverse")
+library(tidyverse)
+??tidyverse
+```
+
+---
+# Estabelecendo um diretório de trabalho
+
+```{r}
+setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
+```
+
+---
+# Importando os dados
+
+- de um arquivo .csv
+
+```{r}
+dados = read.csv("geoquim_granite.csv", header = TRUE, sep = ";") %>% 
+  as_tibble()
+
+dados
+```
+
+- de um arquivo excel
+
+```{r}
+#install.packages("readxl")
+library(readxl)
+
+dados.ex = read_excel("dados_santos2009.xlsx")
+
+dados.ex
+```
+
+---
+# Inspecionando os dados
+
+```{r}
+View(dados)
+names(dados)
+head(dados)
+str(dados)
+summary(dados)
+```
+
+
+---
+# Exercício 1
+
+- Explorar banco de dados dos vulcões (volcano)
+-- Importar
+-- Inspecionar colunas
+-- Inspecionar tipos de variáveis
+
+---
+```{r}
+volcano <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
+```
+
+
+---
 # Dados
 
 - "Tidy Tuesday live screencast: Analyzing volcano eruptions in R" by David Robinson
@@ -169,6 +238,10 @@ volcano %>%
 volcano %>% 
   select(volcano_name, country, latitude:elevation) %>% 
   filter(country == "Antarctica" | latitude > 10)
+
+volcano %>% 
+  select(volcano_name, country, latitude:elevation) %>% 
+  filter(country %in% c("Antarctica", "Japan"))
 ```
 
 ---
@@ -217,7 +290,7 @@ volcano %>%
 - n(): retorna o tamanho do grupo
 - n_distinct(): retorna o número de tamanhos distintos
 
-```{r, results = FALSE}
+```{r}
 volcano %>% 
   select(volcano_name, country, latitude:elevation, last_eruption_year) %>% 
   mutate(var = n(),
@@ -232,6 +305,8 @@ volcano %>%
   - executa o código separadamente para cada grupo
   - trata de cada grupo como se fossem banco de dados distintos
 
+
+---
 # summarise()
 
 - calcula medidas como:
@@ -254,6 +329,22 @@ volcano %>%
 
 
 ---
+# Pausa para exercícios
+- Resolvendo problemas..
+-- Em qual país existem mais vulcões?
+-- Nesse país, qual o tipo de vulcão mais comum?
+-- Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?
+-- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?
+
+- Funcões ()
+-- select
+-- filter
+-- mutate
+-- group_by
+-- count
+-- summarise
+-- arrange
+---
 # Perguntas: 
 
 - Em qual país existem mais vulcões?
@@ -264,6 +355,7 @@ volcano %>%
   count(country, sort = TRUE)
 ```
 
+---
 - Nesse país, qual o tipo de vulcão mais comum?
 
 ```{r, results = FALSE}
@@ -272,6 +364,7 @@ volcano %>%
   count(primary_volcano_type, sort = TRUE)
 ```
 
+---
 - Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?
 
 ```{r, results = FALSE}
@@ -282,20 +375,7 @@ volcano %>%
   count(volcano_name, last_eruption_year)
 ```
 
-- Quais os tipos de vulcões presentes em cada país?
-
-```{r, results = FALSE}
-volcano %>% 
-  select(country, primary_volcano_type, major_rock_1) %>% 
-  mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
-         primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
-         primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),
-         primary_volcano_type = str_replace(primary_volcano_type, "[:punct:]", "")) %>% 
-  count(country, primary_volcano_type, sort = TRUE) %>% 
-  pivot_wider(names_from = "primary_volcano_type",
-              values_from = "n")
-```
-
+---
 - Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?
 
 ```{r, results = FALSE}
@@ -411,4 +491,17 @@ volcano_nest %>%
   unnest()
 ```
 
+# Exercícios 2
+
+```{r, results = FALSE}
+volcano %>% 
+  select(country, primary_volcano_type, major_rock_1) %>% 
+  mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
+         primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
+         primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),
+         primary_volcano_type = str_replace(primary_volcano_type, "[:punct:]", "")) %>% 
+  count(country, primary_volcano_type, sort = TRUE) %>% 
+  pivot_wider(names_from = "primary_volcano_type",
+              values_from = "n")
+```
 

@@ -5,12 +5,18 @@ editor_options:
   chunk_output_type: console
 ---
 
-Comentários "##"
+Como trabalhar no Rstudio
+  - abrir R normal
+  - Console vs. Rstudio
+  - Criando projeto "Intensivão R"
+  - Script file
+    - Comentários "##"
+  - Rmarkdown file
+      Chunk
+      Atalho: Ctrl + Alt + I
+      Atalho <- : Alt-
+      Knit
 
-Script file
-Rmarkdown file
-  Chunk
-  Atalho: Ctrl + Alt + I
 
 # R como calculadora
 
@@ -40,7 +46,7 @@ log10(5)
 ```
 
 
-# Variáveis - tipos e atribuição
+# Objetos - tipos e atribuição
 
 ```{r}
 myNumber = 5
@@ -48,12 +54,18 @@ myNumber
 
 myNumber = 7
 
+myInteger = as.integer(myNumber)
+myInteger
+
 calculo = 5 + (3 * 5 / 2)
 myNumber * calculo
 
 #myWord = geologia #erro
 myWord = "geologia"
 myWord
+
+myFactor = factor(myWord)
+myFactor
 
 mySentence = "esta é a minha frase"
 mySentence
@@ -66,7 +78,9 @@ myTRUE = TRUE
 
 #Qual a estrutura dessas variáveis?
 class(myNumber)
+class(myInteger)
 class(myWord)
+class(myFactor)
 class(mySentence)
 class(myTRUE)
 ```
@@ -77,12 +91,13 @@ class(myTRUE)
 ```{r}
 myNumbers = c(1, 2, 3, 4, 5) #vetor
 myNumbers = 1:5
+myNumbers = seq(1, 5, by = 1)
 
 myNumbers[myNumbers > 3]
 myNumbers[myNumbers >= 3]
 myNumbers[myNumbers!= 3]
 
-myWords = c("geoquímica", "estrutural", "estratigrafia") #character vetor
+myWords = c("geoquímica", "estrutural", "estratigrafia") #strings - fator
 myWords
 myWords[3]
 myWords[4]
@@ -90,7 +105,7 @@ myWords[4]
 
 meuVetor = c(1, 2, 3, 4, 5)
 
-dp = sd(meuVetor)
+dp = sd(meuVetor) #
 n = length(meuVetor)
 
 SE = dp / sqrt(n)
@@ -98,29 +113,49 @@ SE
 ```
 
 
-# Matrix
+# Matrix - dataframes
 
 ```{r}
-y = seq(1, 10, by = 2)
-
-myMatrix = matrix(1:6, nrow = 2, ncol = 3)
+myMatrix = matrix(1:6, nrow = 2, ncol = 3) 
 myMatrix
 
+# mostrar indexação [,1] e [1,]
+
+y = seq(1, 10, by = 2)
 myMatrix2 = matrix(y, nrow = 3, ncol = 2)
+myMatrix2
 
 #juntar colunas de dois vetores para formar uma matrix
 x = 1:4
 y = 10:13
 
 cbind(x, y) #as colunas devem ter o mesmo número de linhas
+#cbind = Column Bind
 
 rbind(x, y) #juntar linhas
+#rbind = Row Bind
 
-df = as.data.frame(cbind(x, y))
-df
+matriz=cbind(x, y)
+df = as.data.frame(matriz)
+
+matriz # matrix matematica
+df # banco de dados
+
+class(matriz)
+class(df)
+
 
 str(df)
 length(df)
+
+# matrix 3D, matrizes empilhadas - LISTA
+z <- 2:7
+myList = list(x,y,z)
+myList[[2]]
+myList[[3]][2]
+
+myLists <- list(matriz,z)
+myLists[[1]][3,2]
 ```
 
 
@@ -138,60 +173,12 @@ maior = function(parametro1, parametro2) {
 a = 4
 b = 10
 
+maior(parametro1=b, parametro2=a)
 maior(b, a)
 ```
 
 
-# Pacotes
-
-Compilado de funções especiais
-Nos ajudam a desevolver códigos mais robustos, além de facilitarem resoluções de problemas
-
-```{r}
-#install.packages("tidyverse")
-library(tidyverse)
-```
-
-
-# Estabelecendo um diretório de trabalho
-
-```{r}
-setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
-```
-
-
-# Importando os dados
-
-- de um arquivo .csv
-
-```{r}
-dados = read.csv("geoquim_granite.csv", header = TRUE, sep = ";") %>% 
-  as_tibble()
-
-dados
-```
-
-- de um arquivo excel
-
-```{r}
-#install.packages("readxl")
-library(readxl)
-
-dados.ex = read_excel("dados_santos2009.xlsx")
-
-dados.ex
-```
-
----
-# Inspecionando os dados
-
-```{r}
-View(dados)
-names(dados)
-head(dados)
-str(dados)
-summary(dados)
-```
+---------------PAUSA----------------
 
 
 # Exercícios

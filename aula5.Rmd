@@ -96,7 +96,10 @@ ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) +
 
 # Estudo de caso 2
 ```{r}
+#library(devtools)
 #install_version("ggplot2", version = "3.3.0", repos = "http://cran.us.r-project.org")
+
+library(ggplot2)
 
 library(readxl)
 
@@ -126,7 +129,7 @@ lvsd %>% group_by(well) %>%
 
 
 lvsd %>% 
-  drop_na(s_wave) %>% 
+  #drop_na(s_wave) %>% 
   ggplot(aes(x=p_wave,y=s_wave))+
   geom_point()+
   geom_smooth(method = "lm")+

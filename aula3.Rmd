@@ -1,5 +1,5 @@
 ---
-title: "aula3 - visualização de dados usando ggplot"
+title: "aula3 - visualização de dados usando o ggplot2"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -58,20 +58,10 @@ dados.ex %>%
 
 # Scatter plot
 
-```{r}
-dados.ex %>% 
-  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
-  geom_point(size = 3) + #aes aqui também
-  geom_smooth(method = "lm", aes(color = litho)) +
-  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
-           method = "spearman") +
-  theme(legend.position = "right") +
-  scale_x_log10() + #altera a escala
-  labs(x = "distance to sill (m)")
-```
-
 
 ```{r}
+library(ggpubr)
+
 dados.ex %>% 
   ggplot(aes(x = lower, y = La/Tm)) +
   geom_point(size = 3) + #aes aqui também
@@ -85,6 +75,23 @@ dados.ex %>%
 
 
 
+```{r}
+dados.ex %>% 
+  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
+  geom_point(size = 3) + #aes aqui também
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman",
+           label.x.npc = "left",
+           label.y.npc = "top") +
+  theme(legend.position = "bottom") +
+  scale_x_log10() + #altera a escala
+  labs(x = "distance to sill (m)",
+       title = "Razão LREE e MREE em sedimentos em função da distância até o sill")
+```
+
+
+
 # Histograma
 
 Gráfico de distribuição de frequências
@@ -92,7 +99,8 @@ Gráfico de distribuição de frequências
 ```{r}
 dados.ex %>% 
   ggplot(aes(x = Pb)) +
-  geom_histogram(color = "white")
+  geom_histogram(color = "white") +
+  labs(title = "Histograma")
 ```
 
 
@@ -168,8 +176,12 @@ dados.ex %>%
   scale_y_reverse() +
   facet_wrap(~variable, scales = "free") +
   labs(x = "",
-       y = "Depth (metros)")
+       y = "Depth (metros)") + 
+  theme_classic()
 ```
+
+
+
 
 
 
