@@ -1,0 +1,2593 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Intensivão de programação funcional em R aplicado à Geologia</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Bárbara Malcorra" />
+    <meta name="date" content="2021-07-17" />
+    <script src="libs/header-attrs-2.9/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Intensivão de programação funcional em R aplicado à Geologia
+## ⚒<br/>Aula 3 - visualização de dados com o ggplot2
+### Bárbara Malcorra
+### PUCRS
+### 2021-07-17
+
+---
+
+
+
+
+
+
+
+
+---
+
+```r
+library(tidyverse)
+library(readxl)
+```
+
+
+```r
+setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
+
+#install.packages("readxl")
+library(readxl)
+
+dados.ex &lt;- read_excel("dados_santos2009.xlsx") %&gt;% 
+  as_tibble()
+
+dados.ex
+```
+
+```
+# A tibble: 26 x 29
+   Sample  Rock     `Distance from c~    Co    Ni    Cr     V    Sr    Rb     Ba
+   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 SUC I-~ Black s~ 2.3–2.7           19.2   6.47  16.1  23.2  33.5  1.1   49.8 
+ 2 SUC I-~ Black s~ 2.3–2.7            7.23  9.57  17.2  26.2 412.   1.81  25.0 
+ 3 SUC I ~ Limesto~ 2.1                6.65 10.8   16.3  23.2 604.   0.17 101.  
+ 4 SUC I ~ Limesto~ 2.04999999999999~  6.64 10.6   15.7  22.9 576.   0.18  72.6 
+ 5 SUC I ~ Limesto~ 2                  8.5  10.3   18.1  28.0 599.   1.89 139.  
+ 6 SUC I-~ Black s~ 0.6–1.5           10.7  12.5   24.0  37.1  77.6  8.48  43.2 
+ 7 SUC I-9 Stoliti~ 0.4                7.24 10.9   14.9  22.5 535.   0.1  106.  
+ 8 SUC I ~ Limesto~ 0.35–340           2.55  5.4   13.0  20.3  27.0  0.09   4.83
+ 9 SUC I-7 Black s~ 0.2–0.3           10.1   8.11  19.6  29.0  77.1  8.33  24.5 
+10 SUC I-~ Black s~ 0.2–0.3            8.14  7.35  16.6  27.0  63.2 14.3   26.8 
+# ... with 16 more rows, and 19 more variables: Pb &lt;dbl&gt;, Zr &lt;dbl&gt;, Yb &lt;dbl&gt;,
+#   Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;,
+#   Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;,
+#   Er &lt;dbl&gt;, Tm &lt;dbl&gt;
+```
+
+
+```r
+dados.ex = read_excel("dados_santos2009.xlsx") %&gt;% 
+  rename(distance = `Distance from contact (m)`) %&gt;% 
+  mutate(distance = replace_na(distance, "0"),
+         litho = case_when(Rock == c("sill", "Sill") ~ "volcanic",
+                           Rock == "Black shale" ~ "shale",
+                           TRUE ~ "carbonate")) %&gt;% 
+  separate(distance,
+           into = c("lower", "upper"),
+           sep = "–") %&gt;% 
+  relocate(litho, upper, lower, .before = Co) %&gt;% 
+  mutate(across(upper:Tm, as.double))
+
+dados.ex
+```
+
+```
+# A tibble: 26 x 31
+   Sample  Rock     litho upper lower    Co    Ni    Cr     V    Sr    Rb     Ba
+   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 SUC I-~ Black s~ shale   2.7  2.3  19.2   6.47  16.1  23.2  33.5  1.1   49.8 
+ 2 SUC I-~ Black s~ shale   2.7  2.3   7.23  9.57  17.2  26.2 412.   1.81  25.0 
+ 3 SUC I ~ Limesto~ carb~  NA    2.1   6.65 10.8   16.3  23.2 604.   0.17 101.  
+ 4 SUC I ~ Limesto~ carb~  NA    2.05  6.64 10.6   15.7  22.9 576.   0.18  72.6 
+ 5 SUC I ~ Limesto~ carb~  NA    2     8.5  10.3   18.1  28.0 599.   1.89 139.  
+ 6 SUC I-~ Black s~ shale   1.5  0.6  10.7  12.5   24.0  37.1  77.6  8.48  43.2 
+ 7 SUC I-9 Stoliti~ carb~  NA    0.4   7.24 10.9   14.9  22.5 535.   0.1  106.  
+ 8 SUC I ~ Limesto~ carb~ 340    0.35  2.55  5.4   13.0  20.3  27.0  0.09   4.83
+ 9 SUC I-7 Black s~ shale   0.3  0.2  10.1   8.11  19.6  29.0  77.1  8.33  24.5 
+10 SUC I-~ Black s~ shale   0.3  0.2   8.14  7.35  16.6  27.0  63.2 14.3   26.8 
+# ... with 16 more rows, and 19 more variables: Pb &lt;dbl&gt;, Zr &lt;dbl&gt;, Yb &lt;dbl&gt;,
+#   Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;,
+#   Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;,
+#   Er &lt;dbl&gt;, Tm &lt;dbl&gt;
+```
+
+
+
+```r
+volcano &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
+```
+
+
+---
+# Exercícios
+
+1. A partir da base "dados_santos2009", plote um boxplot da variável "Pb" agrupando por "litho". Utilize o pacote ggplot2 e a função "stat_summary".
+
+2. Faça um gráfico de barras dos elementos químicos. Agrupe por litho e adicione barras de erro.
+  - Dica: utilize as funções pivot_longer() e facet_wrap().
+  
+3. Faça um gráfico de pontos (scatter plot) da razão La/Tm por distance. Utilize a função "geom_smooth" para plotar o modelo.
+
+4. Agora, plote uma linha para cada grupo (litho).
+
+5. Faça um histograma de frequência da variável "Pb".
+
+6. Explore a relação entre a distância até o sill e os elementos químicos nas rochas SEDIMENTARES.
+
+---
+# 1: box plot
+
+count: false
+ 
+
+.panel1-box-auto[
+
+```r
+*dados.ex
+```
+]
+ 
+.panel2-box-auto[
+
+```
+# A tibble: 26 x 31
+   Sample  Rock     litho upper lower    Co    Ni    Cr     V    Sr    Rb     Ba
+   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 SUC I-~ Black s~ shale   2.7  2.3  19.2   6.47  16.1  23.2  33.5  1.1   49.8 
+ 2 SUC I-~ Black s~ shale   2.7  2.3   7.23  9.57  17.2  26.2 412.   1.81  25.0 
+ 3 SUC I ~ Limesto~ carb~  NA    2.1   6.65 10.8   16.3  23.2 604.   0.17 101.  
+ 4 SUC I ~ Limesto~ carb~  NA    2.05  6.64 10.6   15.7  22.9 576.   0.18  72.6 
+ 5 SUC I ~ Limesto~ carb~  NA    2     8.5  10.3   18.1  28.0 599.   1.89 139.  
+ 6 SUC I-~ Black s~ shale   1.5  0.6  10.7  12.5   24.0  37.1  77.6  8.48  43.2 
+ 7 SUC I-9 Stoliti~ carb~  NA    0.4   7.24 10.9   14.9  22.5 535.   0.1  106.  
+ 8 SUC I ~ Limesto~ carb~ 340    0.35  2.55  5.4   13.0  20.3  27.0  0.09   4.83
+ 9 SUC I-7 Black s~ shale   0.3  0.2  10.1   8.11  19.6  29.0  77.1  8.33  24.5 
+10 SUC I-~ Black s~ shale   0.3  0.2   8.14  7.35  16.6  27.0  63.2 14.3   26.8 
+# ... with 16 more rows, and 19 more variables: Pb &lt;dbl&gt;, Zr &lt;dbl&gt;, Yb &lt;dbl&gt;,
+#   Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;,
+#   Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;,
+#   Er &lt;dbl&gt;, Tm &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-box-auto[
+
+```r
+dados.ex %&gt;%
+* dplyr::select(litho, Pb)
+```
+]
+ 
+.panel2-box-auto[
+
+```
+# A tibble: 26 x 2
+   litho        Pb
+   &lt;chr&gt;     &lt;dbl&gt;
+ 1 shale      2.73
+ 2 shale      2.8 
+ 3 carbonate  2.46
+ 4 carbonate  2.04
+ 5 carbonate  2.48
+ 6 shale      7.13
+ 7 carbonate  1.72
+ 8 carbonate  1.53
+ 9 shale      1.69
+10 shale      4.56
+# ... with 16 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-box-auto[
+
+```r
+dados.ex %&gt;%
+  dplyr::select(litho, Pb) %&gt;%
+* ggplot(aes(x = litho, y = Pb, fill = litho))
+```
+]
+ 
+.panel2-box-auto[
+![](aula3_presentation_files/figure-html/box_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-box-auto[
+
+```r
+dados.ex %&gt;%
+  dplyr::select(litho, Pb) %&gt;%
+  ggplot(aes(x = litho, y = Pb, fill = litho)) +
+* geom_boxplot()
+```
+]
+ 
+.panel2-box-auto[
+![](aula3_presentation_files/figure-html/box_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-box-auto[
+
+```r
+dados.ex %&gt;%
+  dplyr::select(litho, Pb) %&gt;%
+  ggplot(aes(x = litho, y = Pb, fill = litho)) +
+  geom_boxplot() +
+* stat_summary(color = "red")   #erro padrão
+```
+]
+ 
+.panel2-box-auto[
+![](aula3_presentation_files/figure-html/box_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-box-auto[
+
+```r
+dados.ex %&gt;%
+  dplyr::select(litho, Pb) %&gt;%
+  ggplot(aes(x = litho, y = Pb, fill = litho)) +
+  geom_boxplot() +
+  stat_summary(color = "red") +  #erro padrão
+* geom_jitter(alpha = 0.5, size = 3)
+```
+]
+ 
+.panel2-box-auto[
+![](aula3_presentation_files/figure-html/box_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-box-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-box-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-box-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+```r
+dados.ex %&gt;% 
+  dplyr::select(litho, Pb) %&gt;% 
+  ggplot(aes(x = litho, y = Pb, fill = litho)) +
+  geom_boxplot() +
+  stat_summary(color = "red") + #erro padrão
+  geom_jitter(alpha = 0.5, size = 3)
+```
+
+![](aula3_presentation_files/figure-html/box-1.png)&lt;!-- --&gt;
+
+
+---
+# 2: bar plot with error bars
+
+count: false
+ 
+
+.panel1-bar-auto[
+
+```r
+*dados.ex
+```
+]
+ 
+.panel2-bar-auto[
+
+```
+# A tibble: 26 x 31
+   Sample  Rock     litho upper lower    Co    Ni    Cr     V    Sr    Rb     Ba
+   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 SUC I-~ Black s~ shale   2.7  2.3  19.2   6.47  16.1  23.2  33.5  1.1   49.8 
+ 2 SUC I-~ Black s~ shale   2.7  2.3   7.23  9.57  17.2  26.2 412.   1.81  25.0 
+ 3 SUC I ~ Limesto~ carb~  NA    2.1   6.65 10.8   16.3  23.2 604.   0.17 101.  
+ 4 SUC I ~ Limesto~ carb~  NA    2.05  6.64 10.6   15.7  22.9 576.   0.18  72.6 
+ 5 SUC I ~ Limesto~ carb~  NA    2     8.5  10.3   18.1  28.0 599.   1.89 139.  
+ 6 SUC I-~ Black s~ shale   1.5  0.6  10.7  12.5   24.0  37.1  77.6  8.48  43.2 
+ 7 SUC I-9 Stoliti~ carb~  NA    0.4   7.24 10.9   14.9  22.5 535.   0.1  106.  
+ 8 SUC I ~ Limesto~ carb~ 340    0.35  2.55  5.4   13.0  20.3  27.0  0.09   4.83
+ 9 SUC I-7 Black s~ shale   0.3  0.2  10.1   8.11  19.6  29.0  77.1  8.33  24.5 
+10 SUC I-~ Black s~ shale   0.3  0.2   8.14  7.35  16.6  27.0  63.2 14.3   26.8 
+# ... with 16 more rows, and 19 more variables: Pb &lt;dbl&gt;, Zr &lt;dbl&gt;, Yb &lt;dbl&gt;,
+#   Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;,
+#   Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;,
+#   Er &lt;dbl&gt;, Tm &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-bar-auto[
+
+```r
+dados.ex %&gt;%
+* dplyr::select(litho, Co:Tm)
+```
+]
+ 
+.panel2-bar-auto[
+
+```
+# A tibble: 26 x 27
+   litho        Co    Ni    Cr     V    Sr    Rb     Ba    Pb    Zr    Yb    Nb
+   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 shale     19.2   6.47  16.1  23.2  33.5  1.1   49.8   2.73  9.47  0.14  0.81
+ 2 shale      7.23  9.57  17.2  26.2 412.   1.81  25.0   2.8  17.2   0.49  2.34
+ 3 carbonate  6.65 10.8   16.3  23.2 604.   0.17 101.    2.46 16.6   0.32  1.1 
+ 4 carbonate  6.64 10.6   15.7  22.9 576.   0.18  72.6   2.04 14.3   0.27  0.99
+ 5 carbonate  8.5  10.3   18.1  28.0 599.   1.89 139.    2.48 27     0.79  2.2 
+ 6 shale     10.7  12.5   24.0  37.1  77.6  8.48  43.2   7.13 48.2   0.84  5.01
+ 7 carbonate  7.24 10.9   14.9  22.5 535.   0.1  106.    1.72 10.5   0.24  0.84
+ 8 carbonate  2.55  5.4   13.0  20.3  27.0  0.09   4.83  1.53  8.8   0.13  0.65
+ 9 shale     10.1   8.11  19.6  29.0  77.1  8.33  24.5   1.69 24.6   0.38  2.72
+10 shale      8.14  7.35  16.6  27.0  63.2 14.3   26.8   4.56 18.0   0.3   1.66
+# ... with 16 more rows, and 15 more variables: Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;,
+#   La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;, Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;,
+#   Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;, Er &lt;dbl&gt;, Tm &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-bar-auto[
+
+```r
+dados.ex %&gt;%
+  dplyr::select(litho, Co:Tm) %&gt;%
+* pivot_longer(cols = Co:Tm,
+*              names_to = "variable",
+*              values_to = "value")
+```
+]
+ 
+.panel2-bar-auto[
+
+```
+# A tibble: 676 x 3
+   litho variable value
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+ 1 shale Co       19.2 
+ 2 shale Ni        6.47
+ 3 shale Cr       16.1 
+ 4 shale V        23.2 
+ 5 shale Sr       33.5 
+ 6 shale Rb        1.1 
+ 7 shale Ba       49.8 
+ 8 shale Pb        2.73
+ 9 shale Zr        9.47
+10 shale Yb        0.14
+# ... with 666 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-bar-auto[
+
+```r
+dados.ex %&gt;%
+  dplyr::select(litho, Co:Tm) %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+* ggplot(aes(x = litho, y = value, fill = litho))
+```
+]
+ 
+.panel2-bar-auto[
+![](aula3_presentation_files/figure-html/bar_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bar-auto[
+
+```r
+dados.ex %&gt;%
+  dplyr::select(litho, Co:Tm) %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = litho, y = value, fill = litho)) +
+* stat_summary(geom = "bar")
+```
+]
+ 
+.panel2-bar-auto[
+![](aula3_presentation_files/figure-html/bar_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bar-auto[
+
+```r
+dados.ex %&gt;%
+  dplyr::select(litho, Co:Tm) %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = litho, y = value, fill = litho)) +
+  stat_summary(geom = "bar") +
+* stat_summary()
+```
+]
+ 
+.panel2-bar-auto[
+![](aula3_presentation_files/figure-html/bar_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-bar-auto[
+
+```r
+dados.ex %&gt;%
+  dplyr::select(litho, Co:Tm) %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = litho, y = value, fill = litho)) +
+  stat_summary(geom = "bar") +
+  stat_summary() +
+* facet_wrap(~variable, scales = "free")
+```
+]
+ 
+.panel2-bar-auto[
+![](aula3_presentation_files/figure-html/bar_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-bar-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-bar-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-bar-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+```r
+dados.ex %&gt;% 
+  dplyr::select(litho, Co:Tm) %&gt;% 
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;% 
+  ggplot(aes(x = litho, y = value, fill = litho)) +
+  stat_summary(geom = "bar") +
+  stat_summary() +
+  facet_wrap(~variable, scales = "free")
+```
+
+![](aula3_presentation_files/figure-html/bar-1.png)&lt;!-- --&gt;
+
+
+---
+# 3: scatter plot 1
+
+count: false
+ 
+
+.panel1-point-auto[
+
+```r
+*library(ggpubr)
+```
+]
+ 
+.panel2-point-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-point-auto[
+
+```r
+library(ggpubr)
+
+*dados.ex
+```
+]
+ 
+.panel2-point-auto[
+
+```
+# A tibble: 26 x 31
+   Sample  Rock     litho upper lower    Co    Ni    Cr     V    Sr    Rb     Ba
+   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 SUC I-~ Black s~ shale   2.7  2.3  19.2   6.47  16.1  23.2  33.5  1.1   49.8 
+ 2 SUC I-~ Black s~ shale   2.7  2.3   7.23  9.57  17.2  26.2 412.   1.81  25.0 
+ 3 SUC I ~ Limesto~ carb~  NA    2.1   6.65 10.8   16.3  23.2 604.   0.17 101.  
+ 4 SUC I ~ Limesto~ carb~  NA    2.05  6.64 10.6   15.7  22.9 576.   0.18  72.6 
+ 5 SUC I ~ Limesto~ carb~  NA    2     8.5  10.3   18.1  28.0 599.   1.89 139.  
+ 6 SUC I-~ Black s~ shale   1.5  0.6  10.7  12.5   24.0  37.1  77.6  8.48  43.2 
+ 7 SUC I-9 Stoliti~ carb~  NA    0.4   7.24 10.9   14.9  22.5 535.   0.1  106.  
+ 8 SUC I ~ Limesto~ carb~ 340    0.35  2.55  5.4   13.0  20.3  27.0  0.09   4.83
+ 9 SUC I-7 Black s~ shale   0.3  0.2  10.1   8.11  19.6  29.0  77.1  8.33  24.5 
+10 SUC I-~ Black s~ shale   0.3  0.2   8.14  7.35  16.6  27.0  63.2 14.3   26.8 
+# ... with 16 more rows, and 19 more variables: Pb &lt;dbl&gt;, Zr &lt;dbl&gt;, Yb &lt;dbl&gt;,
+#   Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;,
+#   Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;,
+#   Er &lt;dbl&gt;, Tm &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-point-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+* dplyr::select(lower, La, Tm)
+```
+]
+ 
+.panel2-point-auto[
+
+```
+# A tibble: 26 x 3
+   lower    La    Tm
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1  2.3   0.66  0.02
+ 2  2.3   8.49  0.08
+ 3  2.1   5.98  0.05
+ 4  2.05  4.09  0.04
+ 5  2     9.56  0.12
+ 6  0.6  11.3   0.13
+ 7  0.4   4.49  0.04
+ 8  0.35  0.54  0.02
+ 9  0.2   5.16  0.06
+10  0.2   3.07  0.05
+# ... with 16 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-point-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  dplyr::select(lower, La, Tm) %&gt;%
+* ggplot(aes(x = lower, y = La/Tm))
+```
+]
+ 
+.panel2-point-auto[
+![](aula3_presentation_files/figure-html/point_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  dplyr::select(lower, La, Tm) %&gt;%
+  ggplot(aes(x = lower, y = La/Tm)) +
+* geom_point(size = 3)   #aes aqui também
+```
+]
+ 
+.panel2-point-auto[
+![](aula3_presentation_files/figure-html/point_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  dplyr::select(lower, La, Tm) %&gt;%
+  ggplot(aes(x = lower, y = La/Tm)) +
+  geom_point(size = 3) +  #aes aqui também
+* geom_smooth(method = "lm")
+```
+]
+ 
+.panel2-point-auto[
+![](aula3_presentation_files/figure-html/point_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  dplyr::select(lower, La, Tm) %&gt;%
+  ggplot(aes(x = lower, y = La/Tm)) +
+  geom_point(size = 3) +  #aes aqui também
+  geom_smooth(method = "lm") +
+* stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+*          method = "spearman")
+```
+]
+ 
+.panel2-point-auto[
+![](aula3_presentation_files/figure-html/point_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  dplyr::select(lower, La, Tm) %&gt;%
+  ggplot(aes(x = lower, y = La/Tm)) +
+  geom_point(size = 3) +  #aes aqui também
+  geom_smooth(method = "lm") +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman") +
+* theme(legend.position = "right")
+```
+]
+ 
+.panel2-point-auto[
+![](aula3_presentation_files/figure-html/point_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  dplyr::select(lower, La, Tm) %&gt;%
+  ggplot(aes(x = lower, y = La/Tm)) +
+  geom_point(size = 3) +  #aes aqui também
+  geom_smooth(method = "lm") +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman") +
+  theme(legend.position = "right") +
+* scale_x_log10()   #altera a escala
+```
+]
+ 
+.panel2-point-auto[
+![](aula3_presentation_files/figure-html/point_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  dplyr::select(lower, La, Tm) %&gt;%
+  ggplot(aes(x = lower, y = La/Tm)) +
+  geom_point(size = 3) +  #aes aqui também
+  geom_smooth(method = "lm") +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman") +
+  theme(legend.position = "right") +
+  scale_x_log10() +  #altera a escala
+* labs(x = "distance to sill (m)")
+```
+]
+ 
+.panel2-point-auto[
+![](aula3_presentation_files/figure-html/point_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-point-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-point-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-point-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;% 
+  dplyr::select(lower, La, Tm) %&gt;% 
+  ggplot(aes(x = lower, y = La/Tm)) +
+  geom_point(size = 3) + #aes aqui também
+  geom_smooth(method = "lm") +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman") +
+  theme(legend.position = "right") +
+  scale_x_log10() + #altera a escala
+  labs(x = "distance to sill (m)")
+```
+
+![](aula3_presentation_files/figure-html/point-1.png)&lt;!-- --&gt;
+
+
+---
+# 4: scatter plot 2
+
+count: false
+ 
+
+.panel1-point2-auto[
+
+```r
+*library(ggpubr)
+```
+]
+ 
+.panel2-point2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-point2-auto[
+
+```r
+library(ggpubr)
+
+*dados.ex
+```
+]
+ 
+.panel2-point2-auto[
+
+```
+# A tibble: 26 x 31
+   Sample  Rock     litho upper lower    Co    Ni    Cr     V    Sr    Rb     Ba
+   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 SUC I-~ Black s~ shale   2.7  2.3  19.2   6.47  16.1  23.2  33.5  1.1   49.8 
+ 2 SUC I-~ Black s~ shale   2.7  2.3   7.23  9.57  17.2  26.2 412.   1.81  25.0 
+ 3 SUC I ~ Limesto~ carb~  NA    2.1   6.65 10.8   16.3  23.2 604.   0.17 101.  
+ 4 SUC I ~ Limesto~ carb~  NA    2.05  6.64 10.6   15.7  22.9 576.   0.18  72.6 
+ 5 SUC I ~ Limesto~ carb~  NA    2     8.5  10.3   18.1  28.0 599.   1.89 139.  
+ 6 SUC I-~ Black s~ shale   1.5  0.6  10.7  12.5   24.0  37.1  77.6  8.48  43.2 
+ 7 SUC I-9 Stoliti~ carb~  NA    0.4   7.24 10.9   14.9  22.5 535.   0.1  106.  
+ 8 SUC I ~ Limesto~ carb~ 340    0.35  2.55  5.4   13.0  20.3  27.0  0.09   4.83
+ 9 SUC I-7 Black s~ shale   0.3  0.2  10.1   8.11  19.6  29.0  77.1  8.33  24.5 
+10 SUC I-~ Black s~ shale   0.3  0.2   8.14  7.35  16.6  27.0  63.2 14.3   26.8 
+# ... with 16 more rows, and 19 more variables: Pb &lt;dbl&gt;, Zr &lt;dbl&gt;, Yb &lt;dbl&gt;,
+#   Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;,
+#   Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;,
+#   Er &lt;dbl&gt;, Tm &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-point2-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+* ggplot(aes(x = lower, y = La/Eu, color = litho))
+```
+]
+ 
+.panel2-point2-auto[
+![](aula3_presentation_files/figure-html/point2_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point2-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
+* geom_point(size = 3)   #aes aqui também
+```
+]
+ 
+.panel2-point2-auto[
+![](aula3_presentation_files/figure-html/point2_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point2-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
+  geom_point(size = 3) +  #aes aqui também
+* geom_smooth(method = "lm", se = FALSE, aes(color = litho))
+```
+]
+ 
+.panel2-point2-auto[
+![](aula3_presentation_files/figure-html/point2_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point2-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
+  geom_point(size = 3) +  #aes aqui também
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+* stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+*          method = "spearman",
+*          label.x.npc = "left",
+*          label.y.npc = "top")
+```
+]
+ 
+.panel2-point2-auto[
+![](aula3_presentation_files/figure-html/point2_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point2-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
+  geom_point(size = 3) +  #aes aqui também
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman",
+           label.x.npc = "left",
+           label.y.npc = "top") +
+* theme(legend.position = "bottom")
+```
+]
+ 
+.panel2-point2-auto[
+![](aula3_presentation_files/figure-html/point2_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point2-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
+  geom_point(size = 3) +  #aes aqui também
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman",
+           label.x.npc = "left",
+           label.y.npc = "top") +
+  theme(legend.position = "bottom") +
+* scale_x_log10()   #altera a escala
+```
+]
+ 
+.panel2-point2-auto[
+![](aula3_presentation_files/figure-html/point2_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-point2-auto[
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;%
+  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
+  geom_point(size = 3) +  #aes aqui também
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman",
+           label.x.npc = "left",
+           label.y.npc = "top") +
+  theme(legend.position = "bottom") +
+  scale_x_log10() +  #altera a escala
+* labs(x = "distance to sill (m)",
+*      title = "Razão LREE e MREE em sedimentos em função da distância até o sill")
+```
+]
+ 
+.panel2-point2-auto[
+![](aula3_presentation_files/figure-html/point2_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-point2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-point2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-point2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+```r
+library(ggpubr)
+
+dados.ex %&gt;% 
+  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
+  geom_point(size = 3) + #aes aqui também
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman",
+           label.x.npc = "left",
+           label.y.npc = "top") +
+  theme(legend.position = "bottom") +
+  scale_x_log10() + #altera a escala
+  labs(x = "distance to sill (m)",
+       title = "Razão LREE e MREE em sedimentos em função da distância até o sill")
+```
+
+![](aula3_presentation_files/figure-html/point2-1.png)&lt;!-- --&gt;
+
+
+---
+# 5. histograma
+
+count: false
+ 
+
+.panel1-hist-auto[
+
+```r
+*dados.ex
+```
+]
+ 
+.panel2-hist-auto[
+
+```
+# A tibble: 26 x 31
+   Sample  Rock     litho upper lower    Co    Ni    Cr     V    Sr    Rb     Ba
+   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 SUC I-~ Black s~ shale   2.7  2.3  19.2   6.47  16.1  23.2  33.5  1.1   49.8 
+ 2 SUC I-~ Black s~ shale   2.7  2.3   7.23  9.57  17.2  26.2 412.   1.81  25.0 
+ 3 SUC I ~ Limesto~ carb~  NA    2.1   6.65 10.8   16.3  23.2 604.   0.17 101.  
+ 4 SUC I ~ Limesto~ carb~  NA    2.05  6.64 10.6   15.7  22.9 576.   0.18  72.6 
+ 5 SUC I ~ Limesto~ carb~  NA    2     8.5  10.3   18.1  28.0 599.   1.89 139.  
+ 6 SUC I-~ Black s~ shale   1.5  0.6  10.7  12.5   24.0  37.1  77.6  8.48  43.2 
+ 7 SUC I-9 Stoliti~ carb~  NA    0.4   7.24 10.9   14.9  22.5 535.   0.1  106.  
+ 8 SUC I ~ Limesto~ carb~ 340    0.35  2.55  5.4   13.0  20.3  27.0  0.09   4.83
+ 9 SUC I-7 Black s~ shale   0.3  0.2  10.1   8.11  19.6  29.0  77.1  8.33  24.5 
+10 SUC I-~ Black s~ shale   0.3  0.2   8.14  7.35  16.6  27.0  63.2 14.3   26.8 
+# ... with 16 more rows, and 19 more variables: Pb &lt;dbl&gt;, Zr &lt;dbl&gt;, Yb &lt;dbl&gt;,
+#   Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;,
+#   Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;,
+#   Er &lt;dbl&gt;, Tm &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-hist-auto[
+
+```r
+dados.ex %&gt;%
+* ggplot(aes(x = Pb))
+```
+]
+ 
+.panel2-hist-auto[
+![](aula3_presentation_files/figure-html/hist_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hist-auto[
+
+```r
+dados.ex %&gt;%
+  ggplot(aes(x = Pb)) +
+* geom_histogram(color = "white")
+```
+]
+ 
+.panel2-hist-auto[
+![](aula3_presentation_files/figure-html/hist_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-hist-auto[
+
+```r
+dados.ex %&gt;%
+  ggplot(aes(x = Pb)) +
+  geom_histogram(color = "white") +
+* labs(title = "Histograma")
+```
+]
+ 
+.panel2-hist-auto[
+![](aula3_presentation_files/figure-html/hist_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-hist-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-hist-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-hist-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+```r
+dados.ex %&gt;% 
+  ggplot(aes(x = Pb)) +
+  geom_histogram(color = "white") +
+  labs(title = "Histograma")
+```
+
+![](aula3_presentation_files/figure-html/hist-1.png)&lt;!-- --&gt;
+
+
+---
+# 6. qual a correlação entre distância até o sill e os elementos químicos nas rochas SEDIMENTARES?
+
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+*dados.ex
+```
+]
+ 
+.panel2-cor-auto[
+
+```
+# A tibble: 26 x 31
+   Sample  Rock     litho upper lower    Co    Ni    Cr     V    Sr    Rb     Ba
+   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 SUC I-~ Black s~ shale   2.7  2.3  19.2   6.47  16.1  23.2  33.5  1.1   49.8 
+ 2 SUC I-~ Black s~ shale   2.7  2.3   7.23  9.57  17.2  26.2 412.   1.81  25.0 
+ 3 SUC I ~ Limesto~ carb~  NA    2.1   6.65 10.8   16.3  23.2 604.   0.17 101.  
+ 4 SUC I ~ Limesto~ carb~  NA    2.05  6.64 10.6   15.7  22.9 576.   0.18  72.6 
+ 5 SUC I ~ Limesto~ carb~  NA    2     8.5  10.3   18.1  28.0 599.   1.89 139.  
+ 6 SUC I-~ Black s~ shale   1.5  0.6  10.7  12.5   24.0  37.1  77.6  8.48  43.2 
+ 7 SUC I-9 Stoliti~ carb~  NA    0.4   7.24 10.9   14.9  22.5 535.   0.1  106.  
+ 8 SUC I ~ Limesto~ carb~ 340    0.35  2.55  5.4   13.0  20.3  27.0  0.09   4.83
+ 9 SUC I-7 Black s~ shale   0.3  0.2  10.1   8.11  19.6  29.0  77.1  8.33  24.5 
+10 SUC I-~ Black s~ shale   0.3  0.2   8.14  7.35  16.6  27.0  63.2 14.3   26.8 
+# ... with 16 more rows, and 19 more variables: Pb &lt;dbl&gt;, Zr &lt;dbl&gt;, Yb &lt;dbl&gt;,
+#   Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;,
+#   Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;,
+#   Er &lt;dbl&gt;, Tm &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+* filter(!litho == "volcanic")
+```
+]
+ 
+.panel2-cor-auto[
+
+```
+# A tibble: 24 x 31
+   Sample  Rock     litho upper lower    Co    Ni    Cr     V    Sr    Rb     Ba
+   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 SUC I-~ Black s~ shale   2.7  2.3  19.2   6.47  16.1  23.2  33.5  1.1   49.8 
+ 2 SUC I-~ Black s~ shale   2.7  2.3   7.23  9.57  17.2  26.2 412.   1.81  25.0 
+ 3 SUC I ~ Limesto~ carb~  NA    2.1   6.65 10.8   16.3  23.2 604.   0.17 101.  
+ 4 SUC I ~ Limesto~ carb~  NA    2.05  6.64 10.6   15.7  22.9 576.   0.18  72.6 
+ 5 SUC I ~ Limesto~ carb~  NA    2     8.5  10.3   18.1  28.0 599.   1.89 139.  
+ 6 SUC I-~ Black s~ shale   1.5  0.6  10.7  12.5   24.0  37.1  77.6  8.48  43.2 
+ 7 SUC I-9 Stoliti~ carb~  NA    0.4   7.24 10.9   14.9  22.5 535.   0.1  106.  
+ 8 SUC I ~ Limesto~ carb~ 340    0.35  2.55  5.4   13.0  20.3  27.0  0.09   4.83
+ 9 SUC I-7 Black s~ shale   0.3  0.2  10.1   8.11  19.6  29.0  77.1  8.33  24.5 
+10 SUC I-~ Black s~ shale   0.3  0.2   8.14  7.35  16.6  27.0  63.2 14.3   26.8 
+# ... with 14 more rows, and 19 more variables: Pb &lt;dbl&gt;, Zr &lt;dbl&gt;, Yb &lt;dbl&gt;,
+#   Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;,
+#   Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;,
+#   Er &lt;dbl&gt;, Tm &lt;dbl&gt;
+```
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+  filter(!litho == "volcanic") %&gt;%
+* pivot_longer(cols = Co:Tm,
+*              names_to = "variable",
+*              values_to = "value")
+```
+]
+ 
+.panel2-cor-auto[
+
+```
+# A tibble: 624 x 7
+   Sample    Rock        litho upper lower variable value
+   &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+ 1 SUC I-16B Black shale shale   2.7   2.3 Co       19.2 
+ 2 SUC I-16B Black shale shale   2.7   2.3 Ni        6.47
+ 3 SUC I-16B Black shale shale   2.7   2.3 Cr       16.1 
+ 4 SUC I-16B Black shale shale   2.7   2.3 V        23.2 
+ 5 SUC I-16B Black shale shale   2.7   2.3 Sr       33.5 
+ 6 SUC I-16B Black shale shale   2.7   2.3 Rb        1.1 
+ 7 SUC I-16B Black shale shale   2.7   2.3 Ba       49.8 
+ 8 SUC I-16B Black shale shale   2.7   2.3 Pb        2.73
+ 9 SUC I-16B Black shale shale   2.7   2.3 Zr        9.47
+10 SUC I-16B Black shale shale   2.7   2.3 Yb        0.14
+# ... with 614 more rows
+```
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+  filter(!litho == "volcanic") %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+* ggplot(aes(x = lower, y = value, color = litho))
+```
+]
+ 
+.panel2-cor-auto[
+![](aula3_presentation_files/figure-html/cor_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+  filter(!litho == "volcanic") %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = lower, y = value, color = litho)) +
+* geom_point(alpha = 0.7, size = 2)
+```
+]
+ 
+.panel2-cor-auto[
+![](aula3_presentation_files/figure-html/cor_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+  filter(!litho == "volcanic") %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = lower, y = value, color = litho)) +
+  geom_point(alpha = 0.7, size = 2) +
+* scale_x_log10()
+```
+]
+ 
+.panel2-cor-auto[
+![](aula3_presentation_files/figure-html/cor_auto_06_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+  filter(!litho == "volcanic") %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = lower, y = value, color = litho)) +
+  geom_point(alpha = 0.7, size = 2) +
+  scale_x_log10() +
+* geom_smooth(method = "lm", se = FALSE, aes(color = litho))
+```
+]
+ 
+.panel2-cor-auto[
+![](aula3_presentation_files/figure-html/cor_auto_07_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+  filter(!litho == "volcanic") %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = lower, y = value, color = litho)) +
+  geom_point(alpha = 0.7, size = 2) +
+  scale_x_log10() +
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+* stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+*          method = "lm")
+```
+]
+ 
+.panel2-cor-auto[
+![](aula3_presentation_files/figure-html/cor_auto_08_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+  filter(!litho == "volcanic") %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = lower, y = value, color = litho)) +
+  geom_point(alpha = 0.7, size = 2) +
+  scale_x_log10() +
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "lm") +
+* labs(x = "distance to sill (m)",
+*      y = "value",
+*      caption = "referência")
+```
+]
+ 
+.panel2-cor-auto[
+![](aula3_presentation_files/figure-html/cor_auto_09_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+  filter(!litho == "volcanic") %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = lower, y = value, color = litho)) +
+  geom_point(alpha = 0.7, size = 2) +
+  scale_x_log10() +
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "lm") +
+  labs(x = "distance to sill (m)",
+       y = "value",
+       caption = "referência") +
+* facet_wrap(~variable, scales = "free")
+```
+]
+ 
+.panel2-cor-auto[
+![](aula3_presentation_files/figure-html/cor_auto_10_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+  filter(!litho == "volcanic") %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = lower, y = value, color = litho)) +
+  geom_point(alpha = 0.7, size = 2) +
+  scale_x_log10() +
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "lm") +
+  labs(x = "distance to sill (m)",
+       y = "value",
+       caption = "referência") +
+  facet_wrap(~variable, scales = "free") +
+* scale_color_manual(values = c("red", "blue"))
+```
+]
+ 
+.panel2-cor-auto[
+![](aula3_presentation_files/figure-html/cor_auto_11_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+
+.panel1-cor-auto[
+
+```r
+dados.ex %&gt;%
+  filter(!litho == "volcanic") %&gt;%
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;%
+  ggplot(aes(x = lower, y = value, color = litho)) +
+  geom_point(alpha = 0.7, size = 2) +
+  scale_x_log10() +
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "lm") +
+  labs(x = "distance to sill (m)",
+       y = "value",
+       caption = "referência") +
+  facet_wrap(~variable, scales = "free") +
+  scale_color_manual(values = c("red", "blue"))
+* theme_bw()
+```
+]
+ 
+.panel2-cor-auto[
+![](aula3_presentation_files/figure-html/cor_auto_12_output-1.png)&lt;!-- --&gt;
+
+```
+List of 93
+ $ line                      :List of 6
+  ..$ colour       : chr "black"
+  ..$ size         : num 0.5
+  ..$ linetype     : num 1
+  ..$ lineend      : chr "butt"
+  ..$ arrow        : logi FALSE
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_line" "element"
+ $ rect                      :List of 5
+  ..$ fill         : chr "white"
+  ..$ colour       : chr "black"
+  ..$ size         : num 0.5
+  ..$ linetype     : num 1
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ text                      :List of 11
+  ..$ family       : chr ""
+  ..$ face         : chr "plain"
+  ..$ colour       : chr "black"
+  ..$ size         : num 11
+  ..$ hjust        : num 0.5
+  ..$ vjust        : num 0.5
+  ..$ angle        : num 0
+  ..$ lineheight   : num 0.9
+  ..$ margin       : 'margin' num [1:4] 0points 0points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : logi FALSE
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ title                     : NULL
+ $ aspect.ratio              : NULL
+ $ axis.title                : NULL
+ $ axis.title.x              :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 1
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 2.75points 0points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.title.x.top          :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 0
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 2.75points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.title.x.bottom       : NULL
+ $ axis.title.y              :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 1
+  ..$ angle        : num 90
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 2.75points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.title.y.left         : NULL
+ $ axis.title.y.right        :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 0
+  ..$ angle        : num -90
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 0points 2.75points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.text                 :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : chr "grey30"
+  ..$ size         : 'rel' num 0.8
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.text.x               :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 1
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 2.2points 0points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.text.x.top           :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 0
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 2.2points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.text.x.bottom        : NULL
+ $ axis.text.y               :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : num 1
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 2.2points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.text.y.left          : NULL
+ $ axis.text.y.right         :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : num 0
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 0points 2.2points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.ticks                :List of 6
+  ..$ colour       : chr "grey20"
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ lineend      : NULL
+  ..$ arrow        : logi FALSE
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_line" "element"
+ $ axis.ticks.x              : NULL
+ $ axis.ticks.x.top          : NULL
+ $ axis.ticks.x.bottom       : NULL
+ $ axis.ticks.y              : NULL
+ $ axis.ticks.y.left         : NULL
+ $ axis.ticks.y.right        : NULL
+ $ axis.ticks.length         : 'simpleUnit' num 2.75points
+  ..- attr(*, "unit")= int 8
+ $ axis.ticks.length.x       : NULL
+ $ axis.ticks.length.x.top   : NULL
+ $ axis.ticks.length.x.bottom: NULL
+ $ axis.ticks.length.y       : NULL
+ $ axis.ticks.length.y.left  : NULL
+ $ axis.ticks.length.y.right : NULL
+ $ axis.line                 : list()
+  ..- attr(*, "class")= chr [1:2] "element_blank" "element"
+ $ axis.line.x               : NULL
+ $ axis.line.x.top           : NULL
+ $ axis.line.x.bottom        : NULL
+ $ axis.line.y               : NULL
+ $ axis.line.y.left          : NULL
+ $ axis.line.y.right         : NULL
+ $ legend.background         :List of 5
+  ..$ fill         : NULL
+  ..$ colour       : logi NA
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ legend.margin             : 'margin' num [1:4] 5.5points 5.5points 5.5points 5.5points
+  ..- attr(*, "unit")= int 8
+ $ legend.spacing            : 'simpleUnit' num 11points
+  ..- attr(*, "unit")= int 8
+ $ legend.spacing.x          : NULL
+ $ legend.spacing.y          : NULL
+ $ legend.key                :List of 5
+  ..$ fill         : chr "white"
+  ..$ colour       : logi NA
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ legend.key.size           : 'simpleUnit' num 1.2lines
+  ..- attr(*, "unit")= int 3
+ $ legend.key.height         : NULL
+ $ legend.key.width          : NULL
+ $ legend.text               :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : 'rel' num 0.8
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ legend.text.align         : NULL
+ $ legend.title              :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : num 0
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ legend.title.align        : NULL
+ $ legend.position           : chr "right"
+ $ legend.direction          : NULL
+ $ legend.justification      : chr "center"
+ $ legend.box                : NULL
+ $ legend.box.just           : NULL
+ $ legend.box.margin         : 'margin' num [1:4] 0cm 0cm 0cm 0cm
+  ..- attr(*, "unit")= int 1
+ $ legend.box.background     : list()
+  ..- attr(*, "class")= chr [1:2] "element_blank" "element"
+ $ legend.box.spacing        : 'simpleUnit' num 11points
+  ..- attr(*, "unit")= int 8
+ $ panel.background          :List of 5
+  ..$ fill         : chr "white"
+  ..$ colour       : logi NA
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ panel.border              :List of 5
+  ..$ fill         : logi NA
+  ..$ colour       : chr "grey20"
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ panel.spacing             : 'simpleUnit' num 5.5points
+  ..- attr(*, "unit")= int 8
+ $ panel.spacing.x           : NULL
+ $ panel.spacing.y           : NULL
+ $ panel.grid                :List of 6
+  ..$ colour       : chr "grey92"
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ lineend      : NULL
+  ..$ arrow        : logi FALSE
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_line" "element"
+ $ panel.grid.major          : NULL
+ $ panel.grid.minor          :List of 6
+  ..$ colour       : NULL
+  ..$ size         : 'rel' num 0.5
+  ..$ linetype     : NULL
+  ..$ lineend      : NULL
+  ..$ arrow        : logi FALSE
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_line" "element"
+ $ panel.grid.major.x        : NULL
+ $ panel.grid.major.y        : NULL
+ $ panel.grid.minor.x        : NULL
+ $ panel.grid.minor.y        : NULL
+ $ panel.ontop               : logi FALSE
+ $ plot.background           :List of 5
+  ..$ fill         : NULL
+  ..$ colour       : chr "white"
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ plot.title                :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : 'rel' num 1.2
+  ..$ hjust        : num 0
+  ..$ vjust        : num 1
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 5.5points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ plot.title.position       : chr "panel"
+ $ plot.subtitle             :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : num 0
+  ..$ vjust        : num 1
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 5.5points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ plot.caption              :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : 'rel' num 0.8
+  ..$ hjust        : num 1
+  ..$ vjust        : num 1
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 5.5points 0points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ plot.caption.position     : chr "panel"
+ $ plot.tag                  :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : 'rel' num 1.2
+  ..$ hjust        : num 0.5
+  ..$ vjust        : num 0.5
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ plot.tag.position         : chr "topleft"
+ $ plot.margin               : 'margin' num [1:4] 5.5points 5.5points 5.5points 5.5points
+  ..- attr(*, "unit")= int 8
+ $ strip.background          :List of 5
+  ..$ fill         : chr "grey85"
+  ..$ colour       : chr "grey20"
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ strip.background.x        : NULL
+ $ strip.background.y        : NULL
+ $ strip.placement           : chr "inside"
+ $ strip.text                :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : chr "grey10"
+  ..$ size         : 'rel' num 0.8
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 4.4points 4.4points 4.4points 4.4points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ strip.text.x              : NULL
+ $ strip.text.y              :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : num -90
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ strip.switch.pad.grid     : 'simpleUnit' num 2.75points
+  ..- attr(*, "unit")= int 8
+ $ strip.switch.pad.wrap     : 'simpleUnit' num 2.75points
+  ..- attr(*, "unit")= int 8
+ $ strip.text.y.left         :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : num 90
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ - attr(*, "class")= chr [1:2] "theme" "gg"
+ - attr(*, "complete")= logi TRUE
+ - attr(*, "validate")= logi TRUE
+```
+]
+
+&lt;style&gt;
+.panel1-cor-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-cor-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-cor-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+```r
+dados.ex %&gt;% 
+  filter(!litho == "volcanic") %&gt;% 
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %&gt;% 
+  ggplot(aes(x = lower, y = value, color = litho)) +
+  geom_point(alpha = 0.7, size = 2) +
+  scale_x_log10() +
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "lm") +
+  labs(x = "distance to sill (m)",
+       y = "value",
+       caption = "referência") +
+  facet_wrap(~variable, scales = "free") +
+  scale_color_manual(values = c("red", "blue"))
+```
+
+![](aula3_presentation_files/figure-html/cor-1.png)&lt;!-- --&gt;
+
+```r
+  theme_bw()
+```
+
+```
+List of 93
+ $ line                      :List of 6
+  ..$ colour       : chr "black"
+  ..$ size         : num 0.5
+  ..$ linetype     : num 1
+  ..$ lineend      : chr "butt"
+  ..$ arrow        : logi FALSE
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_line" "element"
+ $ rect                      :List of 5
+  ..$ fill         : chr "white"
+  ..$ colour       : chr "black"
+  ..$ size         : num 0.5
+  ..$ linetype     : num 1
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ text                      :List of 11
+  ..$ family       : chr ""
+  ..$ face         : chr "plain"
+  ..$ colour       : chr "black"
+  ..$ size         : num 11
+  ..$ hjust        : num 0.5
+  ..$ vjust        : num 0.5
+  ..$ angle        : num 0
+  ..$ lineheight   : num 0.9
+  ..$ margin       : 'margin' num [1:4] 0points 0points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : logi FALSE
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ title                     : NULL
+ $ aspect.ratio              : NULL
+ $ axis.title                : NULL
+ $ axis.title.x              :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 1
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 2.75points 0points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.title.x.top          :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 0
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 2.75points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.title.x.bottom       : NULL
+ $ axis.title.y              :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 1
+  ..$ angle        : num 90
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 2.75points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.title.y.left         : NULL
+ $ axis.title.y.right        :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 0
+  ..$ angle        : num -90
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 0points 2.75points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.text                 :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : chr "grey30"
+  ..$ size         : 'rel' num 0.8
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.text.x               :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 1
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 2.2points 0points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.text.x.top           :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : num 0
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 2.2points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.text.x.bottom        : NULL
+ $ axis.text.y               :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : num 1
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 2.2points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.text.y.left          : NULL
+ $ axis.text.y.right         :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : num 0
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 0points 2.2points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ axis.ticks                :List of 6
+  ..$ colour       : chr "grey20"
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ lineend      : NULL
+  ..$ arrow        : logi FALSE
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_line" "element"
+ $ axis.ticks.x              : NULL
+ $ axis.ticks.x.top          : NULL
+ $ axis.ticks.x.bottom       : NULL
+ $ axis.ticks.y              : NULL
+ $ axis.ticks.y.left         : NULL
+ $ axis.ticks.y.right        : NULL
+ $ axis.ticks.length         : 'simpleUnit' num 2.75points
+  ..- attr(*, "unit")= int 8
+ $ axis.ticks.length.x       : NULL
+ $ axis.ticks.length.x.top   : NULL
+ $ axis.ticks.length.x.bottom: NULL
+ $ axis.ticks.length.y       : NULL
+ $ axis.ticks.length.y.left  : NULL
+ $ axis.ticks.length.y.right : NULL
+ $ axis.line                 : list()
+  ..- attr(*, "class")= chr [1:2] "element_blank" "element"
+ $ axis.line.x               : NULL
+ $ axis.line.x.top           : NULL
+ $ axis.line.x.bottom        : NULL
+ $ axis.line.y               : NULL
+ $ axis.line.y.left          : NULL
+ $ axis.line.y.right         : NULL
+ $ legend.background         :List of 5
+  ..$ fill         : NULL
+  ..$ colour       : logi NA
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ legend.margin             : 'margin' num [1:4] 5.5points 5.5points 5.5points 5.5points
+  ..- attr(*, "unit")= int 8
+ $ legend.spacing            : 'simpleUnit' num 11points
+  ..- attr(*, "unit")= int 8
+ $ legend.spacing.x          : NULL
+ $ legend.spacing.y          : NULL
+ $ legend.key                :List of 5
+  ..$ fill         : chr "white"
+  ..$ colour       : logi NA
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ legend.key.size           : 'simpleUnit' num 1.2lines
+  ..- attr(*, "unit")= int 3
+ $ legend.key.height         : NULL
+ $ legend.key.width          : NULL
+ $ legend.text               :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : 'rel' num 0.8
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ legend.text.align         : NULL
+ $ legend.title              :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : num 0
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ legend.title.align        : NULL
+ $ legend.position           : chr "right"
+ $ legend.direction          : NULL
+ $ legend.justification      : chr "center"
+ $ legend.box                : NULL
+ $ legend.box.just           : NULL
+ $ legend.box.margin         : 'margin' num [1:4] 0cm 0cm 0cm 0cm
+  ..- attr(*, "unit")= int 1
+ $ legend.box.background     : list()
+  ..- attr(*, "class")= chr [1:2] "element_blank" "element"
+ $ legend.box.spacing        : 'simpleUnit' num 11points
+  ..- attr(*, "unit")= int 8
+ $ panel.background          :List of 5
+  ..$ fill         : chr "white"
+  ..$ colour       : logi NA
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ panel.border              :List of 5
+  ..$ fill         : logi NA
+  ..$ colour       : chr "grey20"
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ panel.spacing             : 'simpleUnit' num 5.5points
+  ..- attr(*, "unit")= int 8
+ $ panel.spacing.x           : NULL
+ $ panel.spacing.y           : NULL
+ $ panel.grid                :List of 6
+  ..$ colour       : chr "grey92"
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ lineend      : NULL
+  ..$ arrow        : logi FALSE
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_line" "element"
+ $ panel.grid.major          : NULL
+ $ panel.grid.minor          :List of 6
+  ..$ colour       : NULL
+  ..$ size         : 'rel' num 0.5
+  ..$ linetype     : NULL
+  ..$ lineend      : NULL
+  ..$ arrow        : logi FALSE
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_line" "element"
+ $ panel.grid.major.x        : NULL
+ $ panel.grid.major.y        : NULL
+ $ panel.grid.minor.x        : NULL
+ $ panel.grid.minor.y        : NULL
+ $ panel.ontop               : logi FALSE
+ $ plot.background           :List of 5
+  ..$ fill         : NULL
+  ..$ colour       : chr "white"
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ plot.title                :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : 'rel' num 1.2
+  ..$ hjust        : num 0
+  ..$ vjust        : num 1
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 5.5points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ plot.title.position       : chr "panel"
+ $ plot.subtitle             :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : num 0
+  ..$ vjust        : num 1
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 0points 0points 5.5points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ plot.caption              :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : 'rel' num 0.8
+  ..$ hjust        : num 1
+  ..$ vjust        : num 1
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 5.5points 0points 0points 0points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ plot.caption.position     : chr "panel"
+ $ plot.tag                  :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : 'rel' num 1.2
+  ..$ hjust        : num 0.5
+  ..$ vjust        : num 0.5
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ plot.tag.position         : chr "topleft"
+ $ plot.margin               : 'margin' num [1:4] 5.5points 5.5points 5.5points 5.5points
+  ..- attr(*, "unit")= int 8
+ $ strip.background          :List of 5
+  ..$ fill         : chr "grey85"
+  ..$ colour       : chr "grey20"
+  ..$ size         : NULL
+  ..$ linetype     : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_rect" "element"
+ $ strip.background.x        : NULL
+ $ strip.background.y        : NULL
+ $ strip.placement           : chr "inside"
+ $ strip.text                :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : chr "grey10"
+  ..$ size         : 'rel' num 0.8
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : 'margin' num [1:4] 4.4points 4.4points 4.4points 4.4points
+  .. ..- attr(*, "unit")= int 8
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ strip.text.x              : NULL
+ $ strip.text.y              :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : num -90
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ $ strip.switch.pad.grid     : 'simpleUnit' num 2.75points
+  ..- attr(*, "unit")= int 8
+ $ strip.switch.pad.wrap     : 'simpleUnit' num 2.75points
+  ..- attr(*, "unit")= int 8
+ $ strip.text.y.left         :List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : NULL
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : num 90
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi TRUE
+  ..- attr(*, "class")= chr [1:2] "element_text" "element"
+ - attr(*, "class")= chr [1:2] "theme" "gg"
+ - attr(*, "complete")= logi TRUE
+ - attr(*, "validate")= logi TRUE
+```
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

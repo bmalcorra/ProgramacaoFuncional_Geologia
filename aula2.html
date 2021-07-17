@@ -27,17 +27,11 @@ class: center, middle, inverse, title-slide
 
 
 
-Boa parte da programação está em:
-1) consertar erros de sintaxe do seu código;
-2) pesquisar por soluções no Google (você vai cair no StackOverflow)
-
-
 # Tidyverse
 
 
 ```r
 library(tidyverse)
-#complicado
 ```
 
 .pull-left[
@@ -71,13 +65,17 @@ library(tidyverse)
 **&amp;** e  
 **|** ou  
 **!** diferente de  
+  
+  
+- Boa parte da programação está em:  
+ -- 1) consertar erros de sintaxe do seu código  
+ -- 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
 
 ---
 # Pacotes
 
-Compilado de funções especiais
-Nos ajudam a desevolver códigos mais robustos, além de facilitarem resoluções de problemas
-
+Compilado de funções especiais  
+Nos ajudam a desenvolver códigos mais robustos, além de facilitarem resoluções de problemas  
 
 
 ```r
@@ -92,6 +90,12 @@ library(tidyverse)
 
 ```r
 setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
+
+getwd()
+```
+
+```
+[1] "C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia"
 ```
 
 ---
@@ -101,7 +105,7 @@ setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional
 
 
 ```r
-dados = read.csv("geoquim_granite.csv", header = TRUE, sep = ";") %&gt;% 
+dados &lt;- read.csv("geoquim_granite.csv", header = TRUE, sep = ";") %&gt;% 
   as_tibble()
 
 dados
@@ -141,6 +145,9 @@ dados
 #   Amphibole &lt;dbl&gt;, Corundum &lt;dbl&gt;, Rest &lt;dbl&gt;, ...
 ```
 
+---
+# Importando os dados
+
 - de um arquivo excel
 
 
@@ -148,7 +155,8 @@ dados
 #install.packages("readxl")
 library(readxl)
 
-dados.ex = read_excel("dados_santos2009.xlsx")
+dados.ex &lt;- read_excel("dados_santos2009.xlsx") %&gt;% 
+  as_tibble()
 
 dados.ex
 ```
@@ -178,448 +186,168 @@ dados.ex
 
 
 ```r
-View(dados)
-names(dados)
+summary(dados.ex)
 ```
 
 ```
-  [1] "X"                 "Tectonic_setting"  "Location_notes"   
-  [4] "Pluton"            "Colour"            "Symbol"           
-  [7] "Size_rel"          "Size"              "SubGroup"         
- [10] "Group"             "DebonPQ"           "TASMiddlemostPlut"
- [13] "Villaseca"         "QANOR"             "LaRoche"          
- [16] "Geol_unit_notes"   "Rock_type_notes"   "Ref"              
- [19] "Age"               "Latitude"          "Longitude"        
- [22] "SiO2"              "TiO2"              "Al2O3"            
- [25] "FeOt"              "MnO"               "MgO"              
- [28] "CaO"               "K2O"               "Na2O"             
- [31] "P2O5"              "H2O"               "H2Ot"             
- [34] "H2O.MINUS"         "LOI"               "Li"               
- [37] "Be"                "B"                 "Sc"               
- [40] "V"                 "Cr"                "Ni"               
- [43] "Cu"                "Zn"                "Rb"               
- [46] "Sr"                "Y"                 "Zr"               
- [49] "Nb"                "Cs"                "Ba"               
- [52] "La"                "Ce"                "Pr"               
- [55] "Nd"                "Sm"                "Eu"               
- [58] "Gd"                "Tb"                "Dy"               
- [61] "Ho"                "Er"                "Tm"               
- [64] "Yb"                "Lu"                "Hf"               
- [67] "Ta"                "Pb"                "Th"               
- [70] "U"                 "Co"                "Mo"               
- [73] "W"                 "Ga"                "Ge"               
- [76] "As"                "In"                "Sn"               
- [79] "Sb"                "Cd"                "Q"                
- [82] "C"                 "Or"                "Ab"               
- [85] "An"                "Ne"                "Ns"               
- [88] "Ks"                "Di"                "Wo"               
- [91] "Hy"                "Ol"                "Il"               
- [94] "Tn"                "Pf"                "Ru"               
- [97] "Ap"                "Sum_CIPW"          "Orthoclase"       
-[100] "Albite"            "Anorthite"         "Quartz"           
-[103] "Apatite"           "Ilmenite"          "Biotite"          
-[106] "Amphibole"         "Corundum"          "Rest"             
-[109] "sum_meso"          "P"                 "K"                
-[112] "Ti"                "Cr2O3"             "A.NK"             
-[115] "A.CNK"             "K2O.Na2O"         
+    Sample              Rock           Distance from contact (m)
+ Length:26          Length:26          Length:26                
+ Class :character   Class :character   Class :character         
+ Mode  :character   Mode  :character   Mode  :character         
+                                                                
+                                                                
+                                                                
+       Co               Ni               Cr              V         
+ Min.   : 2.550   Min.   : 5.400   Min.   :12.97   Min.   : 20.26  
+ 1st Qu.: 6.655   1st Qu.: 7.603   1st Qu.:14.82   1st Qu.: 23.24  
+ Median : 8.040   Median : 9.260   Median :16.20   Median : 27.13  
+ Mean   :11.382   Mean   :10.618   Mean   :19.19   Mean   : 54.58  
+ 3rd Qu.:10.805   3rd Qu.:10.770   3rd Qu.:19.46   3rd Qu.: 31.93  
+ Max.   :36.230   Max.   :32.480   Max.   :50.67   Max.   :379.09  
+       Sr               Rb                Ba               Pb       
+ Min.   : 26.88   Min.   : 0.0900   Min.   :  4.83   Min.   :0.580  
+ 1st Qu.: 64.05   1st Qu.: 0.5825   1st Qu.: 21.94   1st Qu.:1.570  
+ Median :149.51   Median : 1.4550   Median : 39.20   Median :2.470  
+ Mean   :229.71   Mean   : 5.2661   Mean   : 77.99   Mean   :2.862  
+ 3rd Qu.:350.89   3rd Qu.: 8.1525   3rd Qu.: 84.97   3rd Qu.:3.760  
+ Max.   :603.64   Max.   :40.7500   Max.   :507.86   Max.   :7.830  
+       Zr               Yb              Nb               Hf        
+ Min.   :  8.69   Min.   :0.130   Min.   : 0.650   Min.   :0.2700  
+ 1st Qu.: 10.76   1st Qu.:0.195   1st Qu.: 0.975   1st Qu.:0.3125  
+ Median : 17.23   Median :0.305   Median : 1.090   Median :0.4450  
+ Mean   : 35.33   Mean   :0.515   Mean   : 3.161   Mean   :0.8962  
+ 3rd Qu.: 24.78   3rd Qu.:0.590   3rd Qu.: 2.703   3rd Qu.:0.6675  
+ Max.   :279.60   Max.   :2.930   Max.   :26.910   Max.   :6.5300  
+       Th               U                La               Ce       
+ Min.   :0.0400   Min.   :0.0200   Min.   : 0.480   Min.   : 1.26  
+ 1st Qu.:0.1225   1st Qu.:0.1225   1st Qu.: 2.353   1st Qu.: 3.38  
+ Median :0.2500   Median :0.2900   Median : 4.290   Median : 5.42  
+ Mean   :0.6812   Mean   :0.3762   Mean   : 6.648   Mean   :11.99  
+ 3rd Qu.:0.9975   3rd Qu.:0.5275   3rd Qu.: 8.312   3rd Qu.:11.22  
+ Max.   :3.0100   Max.   :1.4000   Max.   :35.890   Max.   :78.36  
+       Pr               Nd               Sm               Eu        
+ Min.   : 0.160   Min.   : 0.700   Min.   : 0.190   Min.   :0.0500  
+ 1st Qu.: 0.440   1st Qu.: 1.788   1st Qu.: 0.385   1st Qu.:0.1100  
+ Median : 0.805   Median : 3.115   Median : 0.600   Median :0.1550  
+ Mean   : 1.575   Mean   : 6.351   Mean   : 1.352   Mean   :0.3615  
+ 3rd Qu.: 1.490   3rd Qu.: 5.838   3rd Qu.: 1.183   3rd Qu.:0.2650  
+ Max.   :11.100   Max.   :45.660   Max.   :10.160   Max.   :3.0400  
+       Gd              Tb               Dy               Ho        
+ Min.   :0.210   Min.   :0.0400   Min.   :0.1700   Min.   :0.0400  
+ 1st Qu.:0.445   1st Qu.:0.0625   1st Qu.:0.3375   1st Qu.:0.0825  
+ Median :0.665   Median :0.1000   Median :0.4950   Median :0.1150  
+ Mean   :1.368   Mean   :0.2019   Mean   :1.0519   Mean   :0.2185  
+ 3rd Qu.:1.258   3rd Qu.:0.1875   3rd Qu.:1.0175   3rd Qu.:0.2425  
+ Max.   :9.680   Max.   :1.4300   Max.   :7.4800   Max.   :1.3800  
+       Er               Tm         
+ Min.   :0.1100   Min.   :0.02000  
+ 1st Qu.:0.2225   1st Qu.:0.03000  
+ Median :0.3050   Median :0.05000  
+ Mean   :0.5558   Mean   :0.08192  
+ 3rd Qu.:0.6525   3rd Qu.:0.09500  
+ Max.   :3.3400   Max.   :0.46000  
 ```
 
-```r
-head(dados)
-```
-
-```
-# A tibble: 6 x 116
-  X     Tectonic_setting Location_notes    Pluton   Colour Symbol Size_rel  Size
-  &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt;             &lt;chr&gt;    &lt;chr&gt;   &lt;int&gt;    &lt;dbl&gt; &lt;dbl&gt;
-1 CR03  OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-2 BB202 OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-3 CB02  OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-4 HB02  OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-5 CR01  OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-6 LL01  OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-# ... with 108 more variables: SubGroup &lt;chr&gt;, Group &lt;chr&gt;, DebonPQ &lt;chr&gt;,
-#   TASMiddlemostPlut &lt;chr&gt;, Villaseca &lt;chr&gt;, QANOR &lt;chr&gt;, LaRoche &lt;chr&gt;,
-#   Geol_unit_notes &lt;chr&gt;, Rock_type_notes &lt;chr&gt;, Ref &lt;chr&gt;, Age &lt;chr&gt;,
-#   Latitude &lt;dbl&gt;, Longitude &lt;dbl&gt;, SiO2 &lt;dbl&gt;, TiO2 &lt;dbl&gt;, Al2O3 &lt;dbl&gt;,
-#   FeOt &lt;dbl&gt;, MnO &lt;dbl&gt;, MgO &lt;dbl&gt;, CaO &lt;dbl&gt;, K2O &lt;dbl&gt;, Na2O &lt;dbl&gt;,
-#   P2O5 &lt;chr&gt;, H2O &lt;dbl&gt;, H2Ot &lt;dbl&gt;, H2O.MINUS &lt;dbl&gt;, LOI &lt;chr&gt;, Li &lt;dbl&gt;,
-#   Be &lt;dbl&gt;, B &lt;dbl&gt;, Sc &lt;dbl&gt;, V &lt;chr&gt;, Cr &lt;dbl&gt;, Ni &lt;dbl&gt;, Cu &lt;dbl&gt;,
-#   Zn &lt;dbl&gt;, Rb &lt;dbl&gt;, Sr &lt;dbl&gt;, Y &lt;dbl&gt;, Zr &lt;dbl&gt;, Nb &lt;dbl&gt;, Cs &lt;dbl&gt;,
-#   Ba &lt;dbl&gt;, La &lt;chr&gt;, Ce &lt;dbl&gt;, Pr &lt;chr&gt;, Nd &lt;chr&gt;, Sm &lt;chr&gt;, Eu &lt;chr&gt;,
-#   Gd &lt;chr&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;, Er &lt;dbl&gt;, Tm &lt;dbl&gt;, Yb &lt;dbl&gt;,
-#   Lu &lt;dbl&gt;, Hf &lt;dbl&gt;, Ta &lt;dbl&gt;, Pb &lt;dbl&gt;, Th &lt;chr&gt;, U &lt;dbl&gt;, Co &lt;dbl&gt;,
-#   Mo &lt;chr&gt;, W &lt;dbl&gt;, Ga &lt;dbl&gt;, Ge &lt;dbl&gt;, As &lt;chr&gt;, In &lt;dbl&gt;, Sn &lt;chr&gt;,
-#   Sb &lt;chr&gt;, Cd &lt;chr&gt;, Q &lt;dbl&gt;, C &lt;dbl&gt;, Or &lt;dbl&gt;, Ab &lt;dbl&gt;, An &lt;dbl&gt;,
-#   Ne &lt;dbl&gt;, Ns &lt;dbl&gt;, Ks &lt;int&gt;, Di &lt;dbl&gt;, Wo &lt;dbl&gt;, Hy &lt;dbl&gt;, Ol &lt;dbl&gt;,
-#   Il &lt;dbl&gt;, Tn &lt;dbl&gt;, Pf &lt;dbl&gt;, Ru &lt;dbl&gt;, Ap &lt;dbl&gt;, Sum_CIPW &lt;dbl&gt;,
-#   Orthoclase &lt;dbl&gt;, Albite &lt;dbl&gt;, Anorthite &lt;dbl&gt;, Quartz &lt;dbl&gt;,
-#   Apatite &lt;dbl&gt;, Ilmenite &lt;dbl&gt;, Biotite &lt;dbl&gt;, Amphibole &lt;dbl&gt;,
-#   Corundum &lt;dbl&gt;, Rest &lt;dbl&gt;, ...
-```
+---
+# Inspecionando os dados
 
 ```r
-str(dados)
+str(dados.ex)
 ```
 
 ```
-tibble [3,050 x 116] (S3: tbl_df/tbl/data.frame)
- $ X                : chr [1:3050] "CR03" "BB202" "CB02" "HB02" ...
- $ Tectonic_setting : chr [1:3050] "OROGENIC BELT" "OROGENIC BELT" "OROGENIC BELT" "OROGENIC BELT" ...
- $ Location_notes   : chr [1:3050] "////////Peninsula//////" "////////Peninsula//////" "////////Peninsula//////" "////////Peninsula//////" ...
- $ Pluton           : chr [1:3050] "Cape Peninsula" "Cape Peninsula" "Cape Peninsula" "Cape Peninsula" ...
- $ Colour           : chr [1:3050] "brown4" "brown4" "brown4" "brown4" ...
- $ Symbol           : int [1:3050] 16 16 16 16 16 16 16 16 16 16 ...
- $ Size_rel         : num [1:3050] 1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 ...
- $ Size             : num [1:3050] 1.28 1.28 1.28 1.28 1.28 1.28 1.28 1.28 1.28 1.28 ...
- $ SubGroup         : chr [1:3050] "Mafic S-types" "Mafic S-types" "Mafic S-types" "Mafic S-types" ...
- $ Group            : chr [1:3050] "1- CPG &amp; MPG" "1- CPG &amp; MPG" "1- CPG &amp; MPG" "1- CPG &amp; MPG" ...
- $ DebonPQ          : chr [1:3050] "gr" "gr" "gr" "gr" ...
- $ TASMiddlemostPlut: chr [1:3050] "quartz monzonite" "granodiorite" "granite" "granite" ...
- $ Villaseca        : chr [1:3050] "h-P" "h-P" "h-P" "h-P" ...
- $ QANOR            : chr [1:3050] "3b granite" "3b granite" "3b granite" "3b granite" ...
- $ LaRoche          : chr [1:3050] "granodiorite" "granodiorite" "granite" "granite" ...
- $ Geol_unit_notes  : chr [1:3050] "//////////" "//////////" "//////////" "//////////" ...
- $ Rock_type_notes  : chr [1:3050] "//////" "//////" "//////" "//////" ...
- $ Ref              : chr [1:3050] "Unpub. Data, A.Villaros, G. Stevens, R. Scheepers (Villaros et al. 2009)" "Unpub. Data, A.Villaros, G. Stevens, R. Scheepers (Villaros et al. 2009)" "Unpub. Data, A.Villaros, G. Stevens, R. Scheepers (Villaros et al. 2009)" "Unpub. Data, A.Villaros, G. Stevens, R. Scheepers (Villaros et al. 2009)" ...
- $ Age              : chr [1:3050] "" "" "" "" ...
- $ Latitude         : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Longitude        : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ SiO2             : num [1:3050] 65.4 69.6 70.6 70.6 70.7 ...
- $ TiO2             : num [1:3050] 0.827 0.709 0.571 0.478 0.532 ...
- $ Al2O3            : num [1:3050] 17.1 14.9 15.3 15.7 15.3 ...
- $ FeOt             : num [1:3050] 4.91 4.19 2.82 2.51 2.54 ...
- $ MnO              : num [1:3050] 0.0771 0.054 0.0532 0.0407 0.0609 ...
- $ MgO              : num [1:3050] 1.796 1.629 1.331 0.978 1.207 ...
- $ CaO              : num [1:3050] 1.81 1.44 1.2 1.31 1.24 ...
- $ K2O              : num [1:3050] 5.13 5.02 5.6 5.28 5.57 ...
- $ Na2O             : num [1:3050] 2.66 2.22 2.33 2.88 2.64 ...
- $ P2O5             : chr [1:3050] "0.2880228" "0.22098" "0.197212" "0.2001758" ...
- $ H2O              : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ H2Ot             : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ H2O.MINUS        : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ LOI              : chr [1:3050] "" "" "" "" ...
- $ Li               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Be               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ B                : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Sc               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ V                : chr [1:3050] "" "" "" "" ...
- $ Cr               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Ni               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Cu               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Zn               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Rb               : num [1:3050] 269 214 239 254 234 ...
- $ Sr               : num [1:3050] 97.2 99 90.4 116.3 91.3 ...
- $ Y                : num [1:3050] 52.2 38.3 30 36.9 39 ...
- $ Zr               : num [1:3050] 305 260 186 182 173 ...
- $ Nb               : num [1:3050] 25.4 19.9 15.1 15.2 14.6 ...
- $ Cs               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Ba               : num [1:3050] 390 416 548 499 408 ...
- $ La               : chr [1:3050] "56.40085" "44.29357" "32.36167" "34.12151" ...
- $ Ce               : num [1:3050] 112.2 90 63.9 70.4 62.9 ...
- $ Pr               : chr [1:3050] "13.223848" "10.382656" "7.248746" "8.06835" ...
- $ Nd               : chr [1:3050] "52.34722" "39.39793" "28.7628" "30.55275" ...
- $ Sm               : chr [1:3050] "11.393739" "7.655565" "6.040634" "6.613892" ...
- $ Eu               : chr [1:3050] "1.2494124" "1.0286014" "1.076092" "1.2179917" ...
- $ Gd               : chr [1:3050] "10.838077" "8.160105" "5.3337" "6.696204" ...
- $ Tb               : num [1:3050] 1.627 1.136 0.858 1.096 1.044 ...
- $ Dy               : num [1:3050] 9.84 8.07 5.57 7.27 6.88 ...
- $ Ho               : num [1:3050] 2.02 1.52 1.09 1.32 1.27 ...
- $ Er               : num [1:3050] 6.21 3.95 3.17 3.77 3.82 ...
- $ Tm               : num [1:3050] 0.898 0.544 0.445 0.531 0.49 ...
- $ Yb               : num [1:3050] 6.08 3.74 2.76 3.35 3.01 ...
- $ Lu               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Hf               : num [1:3050] 8.75 7.34 5.43 5.15 4.65 ...
- $ Ta               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Pb               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Th               : chr [1:3050] "26.782157" "19.492634" "14.798949" "15.483984" ...
- $ U                : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Co               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Mo               : chr [1:3050] "" "" "" "" ...
- $ W                : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Ga               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Ge               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ As               : chr [1:3050] "" "" "" "" ...
- $ In               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
- $ Sn               : chr [1:3050] "" "" "" "" ...
- $ Sb               : chr [1:3050] "" "" "" "" ...
- $ Cd               : chr [1:3050] "" "" "" "" ...
- $ Q                : num [1:3050] 24.5 32.7 31.6 30 30.2 ...
- $ C                : num [1:3050] 4.55 3.73 3.67 3.35 3.2 ...
- $ Or               : num [1:3050] 30.3 29.7 33.1 31.2 32.9 ...
- $ Ab               : num [1:3050] 22.5 18.8 19.7 24.3 22.4 ...
- $ An               : num [1:3050] 7.12 5.68 4.69 5.2 4.65 ...
- $ Ne               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
- $ Ns               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
- $ Ks               : int [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
- $ Di               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
- $ Wo               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
- $ Hy               : num [1:3050] 4.47 4.06 3.31 2.44 3.01 ...
- $ Ol               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
- $ Il               : num [1:3050] 0.165 0.115 0.114 0.087 0.13 ...
- $ Tn               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
- $ Pf               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
- $ Ru               : num [1:3050] 0.741 0.648 0.511 0.432 0.464 ...
- $ Ap               : num [1:3050] 0.682 0.523 0.467 0.474 0.537 ...
- $ Sum_CIPW         : num [1:3050] 95.1 95.8 97.2 97.5 97.5 ...
- $ Orthoclase       : num [1:3050] 25.6 25.4 29.6 28.6 29.8 ...
-  [list output truncated]
+tibble [26 x 29] (S3: tbl_df/tbl/data.frame)
+ $ Sample                   : chr [1:26] "SUC I-16B" "SUC I-15" "SUC I -13C" "SUC I -13B" ...
+ $ Rock                     : chr [1:26] "Black shale" "Black shale" "Limestone" "Limestone" ...
+ $ Distance from contact (m): chr [1:26] "2.3–2.7" "2.3–2.7" "2.1" "2.0499999999999998" ...
+ $ Co                       : num [1:26] 19.16 7.23 6.65 6.64 8.5 ...
+ $ Ni                       : num [1:26] 6.47 9.57 10.83 10.59 10.33 ...
+ $ Cr                       : num [1:26] 16.1 17.1 16.3 15.7 18.1 ...
+ $ V                        : num [1:26] 23.2 26.2 23.1 22.9 28 ...
+ $ Sr                       : num [1:26] 33.5 411.6 603.6 575.6 598.6 ...
+ $ Rb                       : num [1:26] 1.1 1.81 0.17 0.18 1.89 ...
+ $ Ba                       : num [1:26] 49.8 25 101.2 72.5 138.7 ...
+ $ Pb                       : num [1:26] 2.73 2.8 2.46 2.04 2.48 7.13 1.72 1.53 1.69 4.56 ...
+ $ Zr                       : num [1:26] 9.47 17.15 16.56 14.33 27 ...
+ $ Yb                       : num [1:26] 0.14 0.49 0.32 0.27 0.79 0.84 0.24 0.13 0.38 0.3 ...
+ $ Nb                       : num [1:26] 0.81 2.34 1.1 0.99 2.2 5.01 0.84 0.65 2.72 1.66 ...
+ $ Hf                       : num [1:26] 0.28 0.48 0.47 0.42 0.73 1.36 0.32 0.27 0.66 0.47 ...
+ $ Th                       : num [1:26] 0.08 0.29 0.17 0.21 0.45 2.26 0.16 0.05 0.91 0.46 ...
+ $ U                        : num [1:26] 0.04 0.25 0.14 0.1 0.33 0.8 0.11 0.02 0.39 0.34 ...
+ $ La                       : num [1:26] 0.66 8.49 5.98 4.09 9.56 11.3 4.49 0.54 5.16 3.07 ...
+ $ Ce                       : num [1:26] 1.42 11.1 7.24 4.83 11.26 ...
+ $ Pr                       : num [1:26] 0.19 1.4 0.85 0.56 1.33 2.62 0.53 0.16 1.36 0.76 ...
+ $ Nd                       : num [1:26] 0.81 5.5 3.2 2.17 5.08 ...
+ $ Sm                       : num [1:26] 0.21 1.13 0.58 0.42 0.99 2 0.38 0.19 1.05 0.62 ...
+ $ Eu                       : num [1:26] 0.06 0.27 0.16 0.12 0.25 0.4 0.11 0.05 0.2 0.15 ...
+ $ Gd                       : num [1:26] 0.23 1.3 0.65 0.47 1.12 2.05 0.44 0.21 0.96 0.65 ...
+ $ Tb                       : num [1:26] 0.04 0.19 0.09 0.07 0.18 0.29 0.06 0.04 0.14 0.1 ...
+ $ Dy                       : num [1:26] 0.18 1.01 0.49 0.38 1.02 1.55 0.33 0.17 0.76 0.5 ...
+ $ Ho                       : num [1:26] 0.05 0.22 0.12 0.09 0.25 0.33 0.08 0.04 0.15 0.11 ...
+ $ Er                       : num [1:26] 0.12 0.57 0.32 0.26 0.73 0.86 0.23 0.11 0.39 0.29 ...
+ $ Tm                       : num [1:26] 0.02 0.08 0.05 0.04 0.12 0.13 0.04 0.02 0.06 0.05 ...
 ```
+
+--
+# Inspecionando os dados
 
 ```r
-summary(dados)
+head(dados.ex)
 ```
 
 ```
-      X             Tectonic_setting   Location_notes        Pluton         
- Length:3050        Length:3050        Length:3050        Length:3050       
- Class :character   Class :character   Class :character   Class :character  
- Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-                                                                            
-                                                                            
-                                                                            
-                                                                            
-    Colour              Symbol        Size_rel          Size      
- Length:3050        Min.   : 0.0   Min.   :1.400   Min.   :1.000  
- Class :character   1st Qu.:15.0   1st Qu.:1.420   1st Qu.:1.136  
- Mode  :character   Median :16.0   Median :1.600   Median :1.280  
-                    Mean   :13.4   Mean   :1.623   Mean   :1.280  
-                    3rd Qu.:17.0   3rd Qu.:1.600   3rd Qu.:1.280  
-                    Max.   :18.0   Max.   :2.000   Max.   :1.600  
-                                                                  
-   SubGroup            Group             DebonPQ          TASMiddlemostPlut 
- Length:3050        Length:3050        Length:3050        Length:3050       
- Class :character   Class :character   Class :character   Class :character  
- Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-                                                                            
-                                                                            
-                                                                            
-                                                                            
-  Villaseca            QANOR             LaRoche          Geol_unit_notes   
- Length:3050        Length:3050        Length:3050        Length:3050       
- Class :character   Class :character   Class :character   Class :character  
- Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-                                                                            
-                                                                            
-                                                                            
-                                                                            
- Rock_type_notes        Ref                Age               Latitude     
- Length:3050        Length:3050        Length:3050        Min.   :-49.15  
- Class :character   Class :character   Class :character   1st Qu.:-21.53  
- Mode  :character   Mode  :character   Mode  :character   Median : 36.20  
-                                                          Mean   : 19.72  
-                                                          3rd Qu.: 44.41  
-                                                          Max.   : 64.50  
-                                                          NA's   :1301    
-   Longitude             SiO2            TiO2            Al2O3      
- Min.   :-176.580   Min.   :45.28   Min.   :0.0050   Min.   : 3.91  
- 1st Qu.: -69.900   1st Qu.:65.00   1st Qu.:0.2200   1st Qu.:13.72  
- Median :   4.286   Median :70.25   Median :0.3800   Median :14.90  
- Mean   :   9.132   Mean   :68.62   Mean   :0.4398   Mean   :14.87  
- 3rd Qu.:  69.540   3rd Qu.:73.18   3rd Qu.:0.5900   3rd Qu.:15.89  
- Max.   : 173.500   Max.   :89.27   Max.   :2.9700   Max.   :23.49  
- NA's   :1301                                                       
-      FeOt                MnO               MgO              CaO        
- Min.   : 0.009001   Min.   :0.00317   Min.   : 0.005   Min.   : 0.010  
- 1st Qu.: 1.696189   1st Qu.:0.04000   1st Qu.: 0.360   1st Qu.: 0.910  
- Median : 2.837741   Median :0.06000   Median : 0.820   Median : 1.870  
- Mean   : 3.259034   Mean   :0.07625   Mean   : 1.299   Mean   : 2.473  
- 3rd Qu.: 4.320000   3rd Qu.:0.09325   3rd Qu.: 2.000   3rd Qu.: 3.487  
- Max.   :15.111152   Max.   :6.02000   Max.   :17.300   Max.   :15.300  
- NA's   :3           NA's   :34        NA's   :26       NA's   :12      
-      K2O              Na2O            P2O5                H2O        
- Min.   : 0.030   Min.   : 0.180   Length:3050        Min.   :0.0200  
- 1st Qu.: 2.690   1st Qu.: 3.060   Class :character   1st Qu.:0.5000  
- Median : 4.200   Median : 3.560   Mode  :character   Median :0.8000  
- Mean   : 3.842   Mean   : 3.851                      Mean   :0.8797  
- 3rd Qu.: 4.900   3rd Qu.: 4.370                      3rd Qu.:1.1000  
- Max.   :10.140   Max.   :11.600                      Max.   :4.5800  
-                                                      NA's   :2386    
-      H2Ot          H2O.MINUS           LOI                  Li       
- Min.   :0.0000   Min.   :-0.0200   Length:3050        Min.   :  3.4  
- 1st Qu.:0.2875   1st Qu.: 0.1000   Class :character   1st Qu.: 14.0  
- Median :0.4100   Median : 0.1400   Mode  :character   Median : 30.0  
- Mean   :0.4406   Mean   : 0.1495                      Mean   : 62.9  
- 3rd Qu.:0.6200   3rd Qu.: 0.1800                      3rd Qu.: 88.0  
- Max.   :0.9100   Max.   : 0.3800                      Max.   :410.0  
- NA's   :3032     NA's   :2946                         NA's   :2881   
-       Be              B                Sc              V            
- Min.   : 0.80   Min.   : 12.00   Min.   : 0.100   Length:3050       
- 1st Qu.: 2.20   1st Qu.: 36.25   1st Qu.: 3.414   Class :character  
- Median : 3.70   Median : 62.11   Median : 8.800   Mode  :character  
- Mean   : 5.34   Mean   :131.39   Mean   :10.559                     
- 3rd Qu.: 7.75   3rd Qu.:120.41   3rd Qu.:17.134                     
- Max.   :27.00   Max.   :683.19   Max.   :56.000                     
- NA's   :2952    NA's   :3024     NA's   :2584                       
-       Cr                Ni               Cu               Zn        
- Min.   :   0.00   Min.   : -1.00   Min.   :  0.00   Min.   :  6.00  
- 1st Qu.:   9.00   1st Qu.:  4.00   1st Qu.:  5.00   1st Qu.: 41.00  
- Median :  19.00   Median :  9.00   Median : 12.00   Median : 62.78  
- Mean   :  40.43   Mean   : 38.03   Mean   : 21.09   Mean   : 81.59  
- 3rd Qu.:  51.00   3rd Qu.: 21.00   3rd Qu.: 20.69   3rd Qu.: 99.47  
- Max.   :1225.00   Max.   :548.15   Max.   :830.90   Max.   :626.00  
- NA's   :2259      NA's   :2240     NA's   :2267     NA's   :2036    
-       Rb               Sr               Y                Zr        
- Min.   :   1.0   Min.   :   0.0   Min.   :  1.27   Min.   :   3.0  
- 1st Qu.:  65.0   1st Qu.:  95.0   1st Qu.: 17.00   1st Qu.: 114.0  
- Median : 140.0   Median : 211.6   Median : 29.03   Median : 170.0  
- Mean   : 159.3   Mean   : 316.5   Mean   : 48.09   Mean   : 321.9  
- 3rd Qu.: 225.0   3rd Qu.: 428.7   3rd Qu.: 61.00   3rd Qu.: 362.0  
- Max.   :1241.0   Max.   :9400.0   Max.   :725.00   Max.   :5080.0  
- NA's   :1318     NA's   :1156     NA's   :1648     NA's   :1436    
-       Nb               Cs                Ba              La           
- Min.   : -4.00   Min.   :  0.090   Min.   :   0.0   Length:3050       
- 1st Qu.:  7.00   1st Qu.:  1.400   1st Qu.: 310.2   Class :character  
- Median : 15.25   Median :  2.405   Median : 566.5   Mode  :character  
- Mean   : 47.26   Mean   :  4.095   Mean   : 689.1                     
- 3rd Qu.: 45.00   3rd Qu.:  4.200   3rd Qu.: 909.1                     
- Max.   :726.00   Max.   :205.000   Max.   :8300.0                     
- NA's   :1748     NA's   :2509      NA's   :1458                       
-       Ce              Pr                 Nd                 Sm           
- Min.   :  0.40   Length:3050        Length:3050        Length:3050       
- 1st Qu.: 32.99   Class :character   Class :character   Class :character  
- Median : 73.69   Mode  :character   Mode  :character   Mode  :character  
- Mean   :108.81                                                           
- 3rd Qu.:143.00                                                           
- Max.   :863.40                                                           
- NA's   :1901                                                             
-      Eu                 Gd                  Tb                Dy        
- Length:3050        Length:3050        Min.   :  0.000   Min.   : 0.227  
- Class :character   Class :character   1st Qu.:  0.460   1st Qu.: 2.876  
- Mode  :character   Mode  :character   Median :  0.810   Median : 4.070  
-                                       Mean   :  2.646   Mean   : 5.219  
-                                       3rd Qu.:  1.630   3rd Qu.: 6.722  
-                                       Max.   :156.000   Max.   :48.920  
-                                       NA's   :2275      NA's   :2344    
-       Ho              Er               Tm                Yb        
- Min.   :0.050   Min.   : 0.080   Min.   : 0.0200   Min.   : 0.000  
- 1st Qu.:0.585   1st Qu.: 1.538   1st Qu.: 0.2700   1st Qu.: 1.175  
- Median :0.890   Median : 2.510   Median : 0.4402   Median : 2.526  
- Mean   :1.074   Mean   : 3.051   Mean   : 0.7016   Mean   : 4.102  
- 3rd Qu.:1.360   3rd Qu.: 3.922   3rd Qu.: 0.7910   3rd Qu.: 5.008  
- Max.   :9.010   Max.   :24.235   Max.   :10.3000   Max.   :67.900  
- NA's   :2429    NA's   :2374     NA's   :2433      NA's   :2080    
-       Lu                Hf                Ta                Pb          
- Min.   :-0.1000   Min.   :  0.400   Min.   :-2.0000   Min.   : -0.0018  
- 1st Qu.: 0.1700   1st Qu.:  3.300   1st Qu.: 0.4583   1st Qu.:  7.4506  
- Median : 0.4000   Median :  5.337   Median : 1.6000   Median : 16.0000  
- Mean   : 0.6441   Mean   :  9.868   Mean   : 3.6641   Mean   : 21.5464  
- 3rd Qu.: 0.8400   3rd Qu.:  9.804   3rd Qu.: 3.3000   3rd Qu.: 27.1500  
- Max.   : 9.8000   Max.   :406.000   Max.   :49.4000   Max.   :600.0000  
- NA's   :2289      NA's   :2379      NA's   :2462      NA's   :2341      
-      Th                  U                 Co              Mo           
- Length:3050        Min.   : -4.000   Min.   :  1.00   Length:3050       
- Class :character   1st Qu.:  1.143   1st Qu.: 21.12   Class :character  
- Mode  :character   Median :  3.300   Median : 36.50   Mode  :character  
-                    Mean   :  5.041   Mean   : 40.94                     
-                    3rd Qu.:  6.000   3rd Qu.: 58.00                     
-                    Max.   :252.000   Max.   :224.09                     
-                    NA's   :2391      NA's   :2800                       
-       W                   Ga              Ge              As           
- Min.   :   0.0300   Min.   :12.00   Min.   :0.6930   Length:3050       
- 1st Qu.:   0.4408   1st Qu.:18.41   1st Qu.:0.9739   Class :character  
- Median : 204.9000   Median :20.88   Median :1.1010   Mode  :character  
- Mean   : 272.5035   Mean   :22.24   Mean   :1.1378                     
- 3rd Qu.: 524.0500   3rd Qu.:24.00   3rd Qu.:1.2499                     
- Max.   :1115.5000   Max.   :53.00   Max.   :1.9894                     
- NA's   :2835        NA's   :2651    NA's   :2966                       
-       In              Sn                 Sb                 Cd           
- Min.   :0.0465   Length:3050        Length:3050        Length:3050       
- 1st Qu.:0.0906   Class :character   Class :character   Class :character  
- Median :0.1098   Mode  :character   Mode  :character   Mode  :character  
- Mean   :0.1357                                                           
- 3rd Qu.:0.1425                                                           
- Max.   :0.5244                                                           
- NA's   :2966                                                             
-       Q               C                Or                Ab       
- Min.   : 0.00   Min.   : 0.000   Min.   : 0.1773   Min.   : 0.00  
- 1st Qu.:19.71   1st Qu.: 0.000   1st Qu.:14.9516   1st Qu.:25.72  
- Median :26.84   Median : 0.335   Median :24.4071   Median :30.06  
- Mean   :25.07   Mean   : 1.001   Mean   :22.3501   Mean   :31.95  
- 3rd Qu.:32.41   3rd Qu.: 1.821   3rd Qu.:28.7212   3rd Qu.:36.39  
- Max.   :64.42   Max.   :10.394   Max.   :59.9245   Max.   :70.94  
- NA's   :198     NA's   :198      NA's   :198       NA's   :198    
-       An               Ne                Ns                Ks     
- Min.   : 0.000   Min.   : 0.0000   Min.   :0.00000   Min.   :0    
- 1st Qu.: 3.391   1st Qu.: 0.0000   1st Qu.:0.00000   1st Qu.:0    
- Median : 7.800   Median : 0.0000   Median :0.00000   Median :0    
- Mean   : 9.827   Mean   : 0.2938   Mean   :0.08615   Mean   :0    
- 3rd Qu.:14.203   3rd Qu.: 0.0000   3rd Qu.:0.00000   3rd Qu.:0    
- Max.   :43.100   Max.   :34.6491   Max.   :5.18595   Max.   :0    
- NA's   :198      NA's   :198       NA's   :198       NA's   :656  
-       Di                Wo                 Hy                Ol          
- Min.   : 0.0000   Min.   : 0.00000   Min.   : 0.0000   Min.   : 0.00000  
- 1st Qu.: 0.0000   1st Qu.: 0.00000   1st Qu.: 0.7712   1st Qu.: 0.00000  
- Median : 0.0000   Median : 0.00000   Median : 1.9950   Median : 0.00000  
- Mean   : 0.7892   Mean   : 0.07775   Mean   : 2.9477   Mean   : 0.05012  
- 3rd Qu.: 0.4299   3rd Qu.: 0.00000   3rd Qu.: 4.6282   3rd Qu.: 0.00000  
- Max.   :45.8267   Max.   :10.54889   Max.   :28.9887   Max.   :10.78301  
- NA's   :198       NA's   :198        NA's   :198       NA's   :198       
-       Il                Tn               Pf               Ru        
- Min.   :0.00000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
- 1st Qu.:0.08557   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
- Median :0.12835   Median :0.0000   Median :0.0000   Median :0.1327  
- Mean   :0.15674   Mean   :0.4012   Mean   :0.0207   Mean   :0.1887  
- 3rd Qu.:0.21392   3rd Qu.:0.6718   3rd Qu.:0.0000   3rd Qu.:0.3041  
- Max.   :1.59607   Max.   :6.6830   Max.   :2.6410   Max.   :1.8352  
- NA's   :198       NA's   :198      NA's   :198      NA's   :198     
-       Ap            Sum_CIPW        Orthoclase        Albite      
- Min.   :0.0000   Min.   : 83.26   Min.   : 0.00   Min.   : 1.525  
- 1st Qu.:0.1184   1st Qu.: 94.06   1st Qu.:13.82   1st Qu.:25.834  
- Median :0.2842   Median : 96.02   Median :22.73   Median :30.492  
- Mean   :0.3640   Mean   : 95.58   Mean   :21.68   Mean   :32.903  
- 3rd Qu.:0.4737   3rd Qu.: 97.54   3rd Qu.:28.81   3rd Qu.:37.607  
- Max.   :6.9401   Max.   :115.81   Max.   :92.64   Max.   :98.252  
- NA's   :198      NA's   :198      NA's   :179     NA's   :179     
-   Anorthite           Quartz          Apatite          Ilmenite      
- Min.   :-53.047   Min.   :-47.37   Min.   :0.0000   Min.   :0.00475  
- 1st Qu.:  2.439   1st Qu.: 20.56   1st Qu.:0.1180   1st Qu.:0.20900  
- Median :  6.501   Median : 27.64   Median :0.2832   Median :0.37050  
- Mean   :  7.457   Mean   : 24.89   Mean   :0.3631   Mean   :0.42231  
- 3rd Qu.: 12.354   3rd Qu.: 33.08   3rd Qu.:0.4720   3rd Qu.:0.57000  
- Max.   : 38.308   Max.   : 67.14   Max.   :6.9148   Max.   :2.82150  
- NA's   :179       NA's   :179      NA's   :179      NA's   :179      
-    Biotite          Amphibole          Corundum             Rest         
- Min.   :-67.223   Min.   :  0.000   Min.   :-0.00812   Min.   :-1.43549  
- 1st Qu.:  0.192   1st Qu.:  0.000   1st Qu.: 0.00000   1st Qu.:-0.29527  
- Median :  1.842   Median :  0.000   Median : 0.34186   Median :-0.13624  
- Mean   :  1.168   Mean   :  5.896   Mean   : 1.00271   Mean   :-0.18088  
- 3rd Qu.:  4.735   3rd Qu.:  7.804   3rd Qu.: 1.80983   3rd Qu.:-0.05771  
- Max.   : 30.321   Max.   :173.888   Max.   :10.38616   Max.   : 0.59325  
- NA's   :179       NA's   :179       NA's   :179        NA's   :179       
-    sum_meso            P                K               Ti          
- Min.   : 81.34   Min.   :   0.0   Min.   :  249   Min.   :   29.98  
- 1st Qu.: 94.12   1st Qu.: 261.9   1st Qu.:18736   1st Qu.: 1318.90  
- Median : 96.04   Median : 567.4   Median :32292   Median : 2338.05  
- Mean   : 95.60   Mean   : 621.9   Mean   :29801   Mean   : 2637.34  
- 3rd Qu.: 97.53   3rd Qu.: 838.0   3rd Qu.:39348   3rd Qu.: 3537.05  
- Max.   :115.79   Max.   :4626.5   Max.   :69648   Max.   :17805.15  
- NA's   :179      NA's   :656      NA's   :656     NA's   :656       
-     Cr2O3             A.NK            A.CNK           K2O.Na2O      
- Min.   :0.0000   Min.   :0.7975   Min.   :0.4902   Min.   : 0.0052  
- 1st Qu.:0.0015   1st Qu.:1.2686   1st Qu.:0.9310   1st Qu.: 0.5819  
- Median :0.0029   Median :1.4540   Median :1.0202   Median : 1.0171  
- Mean   :0.0056   Mean   :1.5609   Mean   :1.0350   Mean   : 1.0340  
- 3rd Qu.:0.0077   3rd Qu.:1.7347   3rd Qu.:1.1339   3rd Qu.: 1.3888  
- Max.   :0.0589   Max.   :4.6544   Max.   :1.9648   Max.   :21.8529  
- NA's   :2375     NA's   :656      NA's   :656      NA's   :656      
+# A tibble: 6 x 29
+  Sample  Rock  `Distance from ~    Co    Ni    Cr     V    Sr    Rb    Ba    Pb
+  &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 SUC I-~ Blac~ 2.3–2.7          19.2   6.47  16.1  23.2  33.5  1.1   49.8  2.73
+2 SUC I-~ Blac~ 2.3–2.7           7.23  9.57  17.2  26.2 412.   1.81  25.0  2.8 
+3 SUC I ~ Lime~ 2.1               6.65 10.8   16.3  23.2 604.   0.17 101.   2.46
+4 SUC I ~ Lime~ 2.0499999999999~  6.64 10.6   15.7  22.9 576.   0.18  72.6  2.04
+5 SUC I ~ Lime~ 2                 8.5  10.3   18.1  28.0 599.   1.89 139.   2.48
+6 SUC I-~ Blac~ 0.6–1.5          10.7  12.5   24.0  37.1  77.6  8.48  43.2  7.13
+# ... with 18 more variables: Zr &lt;dbl&gt;, Yb &lt;dbl&gt;, Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;,
+#   U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;, Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;,
+#   Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;, Er &lt;dbl&gt;, Tm &lt;dbl&gt;
 ```
 
+---
+# Inspecionando os dados
+
+```r
+names(dados.ex)
+```
+
+```
+ [1] "Sample"                    "Rock"                     
+ [3] "Distance from contact (m)" "Co"                       
+ [5] "Ni"                        "Cr"                       
+ [7] "V"                         "Sr"                       
+ [9] "Rb"                        "Ba"                       
+[11] "Pb"                        "Zr"                       
+[13] "Yb"                        "Nb"                       
+[15] "Hf"                        "Th"                       
+[17] "U"                         "La"                       
+[19] "Ce"                        "Pr"                       
+[21] "Nd"                        "Sm"                       
+[23] "Eu"                        "Gd"                       
+[25] "Tb"                        "Dy"                       
+[27] "Ho"                        "Er"                       
+[29] "Tm"                       
+```
 
 ---
 # Exercício 1
 
-- Explorar banco de dados dos vulcões (volcano)
--- Importar
--- Inspecionar colunas
--- Inspecionar tipos de variáveis
+- Explorar banco de dados volcano  
+-- Importar  
+-- Inspecionar colunas  
+-- Inspecionar tipos de variáveis  
 
 ---
 
 ```r
 volcano &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
 ```
-
 
 ---
 # Dados
@@ -635,24 +363,13 @@ eruptions &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascien
 events &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/events.csv')
 tree_rings &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/tree_rings.csv')
 sulfur &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/sulfur.csv')
-
-tuesdata &lt;- tidytuesdayR::tt_load('2020-05-12')
-```
-
-```
-
-	Downloading file 1 of 5: `eruptions.csv`
-	Downloading file 2 of 5: `events.csv`
-	Downloading file 3 of 5: `sulfur.csv`
-	Downloading file 4 of 5: `tree_rings.csv`
-	Downloading file 5 of 5: `volcano.csv`
 ```
 
 ---
 # dplyr()
 
-- Pacote para a manipulação de dados
-- Flexibilidade para transformar dados
+- Pacote para a manipulação de dados  
+- Flexibilidade para transformar dados  
 
 
 ```r
@@ -693,6 +410,25 @@ volcano %&gt;%
   head()
 ```
 
+```
+# A tibble: 6 x 25
+  volcano_number volcano_name  primary_volcano~ last_eruption_y~ country region 
+           &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt;  
+1         283001 Abu           Shield(s)        -6850            Japan   Japan,~
+2         355096 Acamarachi    Stratovolcano    Unknown          Chile   South ~
+3         342080 Acatenango    Stratovolcano(e~ 1972             Guatem~ México~
+4         213004 Acigol-Nevse~ Caldera          -2080            Turkey  Medite~
+5         321040 Adams         Stratovolcano    950              United~ Canada~
+6         283170 Adatarayama   Stratovolcano(e~ 1996             Japan   Japan,~
+# ... with 19 more variables: subregion &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;,
+#   elevation &lt;dbl&gt;, evidence_category &lt;chr&gt;, major_rock_1 &lt;chr&gt;,
+#   major_rock_2 &lt;chr&gt;, major_rock_3 &lt;chr&gt;, major_rock_4 &lt;chr&gt;,
+#   major_rock_5 &lt;chr&gt;, minor_rock_1 &lt;chr&gt;, minor_rock_2 &lt;chr&gt;,
+#   minor_rock_3 &lt;chr&gt;, minor_rock_4 &lt;chr&gt;, minor_rock_5 &lt;chr&gt;,
+#   population_within_5_km &lt;dbl&gt;, population_within_10_km &lt;dbl&gt;,
+#   population_within_30_km &lt;dbl&gt;, population_within_100_km &lt;dbl&gt;
+```
+
 ---
 # funções que auxiliam na seleção das variáveis:
 
@@ -704,26 +440,21 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(starts_with("population"))
+  select(starts_with("population")) %&gt;% 
+  head()
 ```
 
 ```
-# A tibble: 958 x 4
-   population_within_~ population_within_~ population_within~ population_within~
-                 &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
- 1                3597                9594             117805            4071152
- 2                   0                   7                294               9092
- 3                4329               60730            1042836            7634778
- 4              127863              127863             218469            2253483
- 5                   0                  70               4019             393303
- 6                 428                3936             717078            5024654
- 7                 101                 485              18645            1242922
- 8                  51                6042               8611             161009
- 9                   0                   0                  0                  0
-10                9890              114404            2530449            7441660
-# ... with 948 more rows
+# A tibble: 6 x 4
+  population_within_~ population_within_~ population_within~ population_within_~
+                &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;               &lt;dbl&gt;
+1                3597                9594             117805             4071152
+2                   0                   7                294                9092
+3                4329               60730            1042836             7634778
+4              127863              127863             218469             2253483
+5                   0                  70               4019              393303
+6                 428                3936             717078             5024654
 ```
-
 
 ---
 # filter()
@@ -732,21 +463,113 @@ volcano %&gt;%
 ```r
 volcano %&gt;% 
   select(volcano_name, country, latitude:elevation) %&gt;% 
-  filter(country == "Antarctica")
-
-volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation) %&gt;% 
-  filter(!country == "Antarctica")
-
-volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation) %&gt;% 
-  filter(country == "Antarctica" | latitude &gt; 10)
-
-volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation) %&gt;% 
-  filter(country %in% c("Antarctica", "Japan"))
+  filter(country == "Antarctica") %&gt;% 
+  head()
 ```
 
+```
+# A tibble: 6 x 5
+  volcano_name     country    latitude longitude elevation
+  &lt;chr&gt;            &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 Andrus           Antarctica    -75.8    -132.       2978
+2 Berlin           Antarctica    -76.0    -136        3478
+3 Buckle Island    Antarctica    -66.8     163.       1239
+4 Deception Island Antarctica    -63.0     -60.7       602
+5 Erebus           Antarctica    -77.5     167.       3794
+6 Hudson Mountains Antarctica    -74.3     -99.4       749
+```
+
+---
+# filter()
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation) %&gt;% 
+  filter(!country == "Antarctica") %&gt;% 
+  head()
+```
+
+```
+# A tibble: 6 x 5
+  volcano_name    country       latitude longitude elevation
+  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 Abu             Japan             34.5     132.        641
+2 Acamarachi      Chile            -23.3     -67.6      6023
+3 Acatenango      Guatemala         14.5     -90.9      3976
+4 Acigol-Nevsehir Turkey            38.5      34.6      1683
+5 Adams           United States     46.2    -121.       3742
+6 Adatarayama     Japan             37.6     140.       1728
+```
+
+---
+# filter()
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation) %&gt;% 
+  filter(country == "Antarctica" | latitude &gt; 10) %&gt;% 
+  head()
+```
+
+```
+# A tibble: 6 x 5
+  volcano_name    country       latitude longitude elevation
+  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 Abu             Japan             34.5     132.        641
+2 Acatenango      Guatemala         14.5     -90.9      3976
+3 Acigol-Nevsehir Turkey            38.5      34.6      1683
+4 Adams           United States     46.2    -121.       3742
+5 Adatarayama     Japan             37.6     140.       1728
+6 Adwa            Ethiopia          10.1      40.8      1733
+```
+
+---
+# filter()
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation) %&gt;% 
+  filter(country %in% c("Antarctica", "Japan")) %&gt;% 
+  head()
+```
+
+```
+# A tibble: 6 x 5
+  volcano_name     country latitude longitude elevation
+  &lt;chr&gt;            &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 Abu              Japan       34.5      132.       641
+2 Adatarayama      Japan       37.6      140.      1728
+3 Aira             Japan       31.6      131.      1117
+4 Akagisan         Japan       36.6      139.      1828
+5 Akan             Japan       43.4      144.      1499
+6 Akita-Komagatake Japan       39.8      141.      1637
+```
+
+---
+# filter()
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation) %&gt;% 
+  filter(country == "Japan" &amp; latitude &gt; 1) %&gt;% 
+  head()
+```
+
+```
+# A tibble: 6 x 5
+  volcano_name     country latitude longitude elevation
+  &lt;chr&gt;            &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 Abu              Japan       34.5      132.       641
+2 Adatarayama      Japan       37.6      140.      1728
+3 Aira             Japan       31.6      131.      1117
+4 Akagisan         Japan       36.6      139.      1828
+5 Akan             Japan       43.4      144.      1499
+6 Akita-Komagatake Japan       39.8      141.      1637
+```
 ---
 # mutate()
 
@@ -758,24 +581,100 @@ volcano %&gt;%
   select(volcano_name, country, last_eruption_year) %&gt;% 
   filter(!country == "Antarctica") %&gt;% 
   mutate(last_eruption_year = as.numeric(last_eruption_year),
-         years_ago = 2020 - last_eruption_year)
+         years_ago = 2020 - last_eruption_year) %&gt;% 
+  head()
 ```
 
 ```
-# A tibble: 941 x 4
-   volcano_name    country       last_eruption_year years_ago
-   &lt;chr&gt;           &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;
- 1 Abu             Japan                      -6850      8870
- 2 Acamarachi      Chile                         NA        NA
- 3 Acatenango      Guatemala                   1972        48
- 4 Acigol-Nevsehir Turkey                     -2080      4100
- 5 Adams           United States                950      1070
- 6 Adatarayama     Japan                       1996        24
- 7 Adwa            Ethiopia                      NA        NA
- 8 Afdera          Ethiopia                      NA        NA
- 9 Agrigan         United States               1917       103
-10 Agua            Guatemala                     NA        NA
-# ... with 931 more rows
+# A tibble: 6 x 4
+  volcano_name    country       last_eruption_year years_ago
+  &lt;chr&gt;           &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;
+1 Abu             Japan                      -6850      8870
+2 Acamarachi      Chile                         NA        NA
+3 Acatenango      Guatemala                   1972        48
+4 Acigol-Nevsehir Turkey                     -2080      4100
+5 Adams           United States                950      1070
+6 Adatarayama     Japan                       1996        24
+```
+
+---
+# group_by()
+
+- sozinho não faz nenhuma alteração notável na base
+- quando usado junto com funções como mutate() ou summarise() muda o escopo da função:
+  - executa o código separadamente para cada grupo
+  - trata de cada grupo como se fossem banco de dados distintos
+
+---
+# summarise()
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
+  filter(country %in% c("United States", "Mexico", "Canada")) %&gt;% 
+  group_by(country) %&gt;% 
+  summarise(n = n(),
+            media_lat = mean(elevation),
+            sd_lat = sd(elevation),
+            min = min(elevation, na.rm = TRUE),
+            max = max(elevation, na.rm = TRUE)) %&gt;% 
+  ungroup()
+```
+
+```
+# A tibble: 3 x 6
+  country           n media_lat sd_lat   min   max
+  &lt;chr&gt;         &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 Canada           18     1954.  1182. -2050  3160
+2 Mexico           28     2676.  1685.    95  5564
+3 United States    99     1760.  1187. -1535  4392
+```
+
+---
+# count()
+
+- Exemplo: Quantos vulcões existem nos Estados Unidos e no México?
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country) %&gt;% 
+  filter(country %in% c("United States", "Mexico")) %&gt;% 
+  group_by(country) %&gt;% 
+  count(sort = TRUE)
+```
+
+```
+# A tibble: 2 x 2
+# Groups:   country [2]
+  country           n
+  &lt;chr&gt;         &lt;int&gt;
+1 United States    99
+2 Mexico           28
+```
+
+---
+# arrange()
+
+
+```r
+volcano %&gt;% 
+  select(volcano_name, country, latitude:elevation) %&gt;% 
+  arrange(volcano_name) %&gt;% 
+  head()
+```
+
+```
+# A tibble: 6 x 5
+  volcano_name    country       latitude longitude elevation
+  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 Abu             Japan             34.5     132.        641
+2 Acamarachi      Chile            -23.3     -67.6      6023
+3 Acatenango      Guatemala         14.5     -90.9      3976
+4 Acigol-Nevsehir Turkey            38.5      34.6      1683
+5 Adams           United States     46.2    -121.       3742
+6 Adatarayama     Japan             37.6     140.       1728
 ```
 
 ---
@@ -836,93 +735,42 @@ volcano %&gt;%
 volcano %&gt;% 
   select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
   mutate(var = n(),
-         var1 = n_distinct(last_eruption_year))
+         var1 = n_distinct(last_eruption_year)) %&gt;% 
+  head()
 ```
 
 ```
-# A tibble: 958 x 8
-   volcano_name   country    latitude longitude elevation last_eruption_y~   var
-   &lt;chr&gt;          &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;            &lt;int&gt;
- 1 Abu            Japan          34.5     132.        641 -6850              958
- 2 Acamarachi     Chile         -23.3     -67.6      6023 Unknown            958
- 3 Acatenango     Guatemala      14.5     -90.9      3976 1972               958
- 4 Acigol-Nevseh~ Turkey         38.5      34.6      1683 -2080              958
- 5 Adams          United St~     46.2    -121.       3742 950                958
- 6 Adatarayama    Japan          37.6     140.       1728 1996               958
- 7 Adwa           Ethiopia       10.1      40.8      1733 Unknown            958
- 8 Afdera         Ethiopia       13.1      40.9      1250 Unknown            958
- 9 Agrigan        United St~     18.8     146.        965 1917               958
-10 Agua           Guatemala      14.5     -90.7      3760 Unknown            958
-# ... with 948 more rows, and 1 more variable: var1 &lt;int&gt;
+# A tibble: 6 x 8
+  volcano_name country latitude longitude elevation last_eruption_y~   var  var1
+  &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;            &lt;int&gt; &lt;int&gt;
+1 Abu          Japan       34.5     132.        641 -6850              958   342
+2 Acamarachi   Chile      -23.3     -67.6      6023 Unknown            958   342
+3 Acatenango   Guatem~     14.5     -90.9      3976 1972               958   342
+4 Acigol-Nevs~ Turkey      38.5      34.6      1683 -2080              958   342
+5 Adams        United~     46.2    -121.       3742 950                958   342
+6 Adatarayama  Japan       37.6     140.       1728 1996               958   342
 ```
 
 ---
-# group_by()
+# Exercícios 2
 
-- sozinho não faz nenhuma alteração notável na base
-- quando usado junto com funções como mutate() ou summarise() muda o escopo da função:
-  - executa o código separadamente para cada grupo
-  - trata de cada grupo como se fossem banco de dados distintos
+### Resolvendo problemas..
+- Em qual país existem mais vulcões?  
+- Nesse país, qual o tipo de vulcão mais comum?  
+- Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
+- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?  
 
-
----
-# summarise()
-
-- calcula medidas como:
-  - média
-  - desvio padrão
-  - entre outras
-  
-
-```r
-volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
-  filter(!country == "Antarctica") %&gt;% 
-  group_by(country) %&gt;% 
-  summarise(n = n(),
-            media_lat = mean(elevation),
-            sd_lat = sd(elevation),
-            min = min(elevation, na.rm = TRUE),
-            max = max(elevation, na.rm = TRUE)) %&gt;% 
-  ungroup()
-```
-
-```
-# A tibble: 88 x 6
-   country                n media_lat sd_lat   min   max
-   &lt;chr&gt;              &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1 Algeria                1     1672     NA   1672  1672
- 2 Argentina             14     3608.  1490.  1344  6095
- 3 Armenia                3     3422.   775.  2575  4095
- 4 Armenia-Azerbaijan     1     3029     NA   3029  3029
- 5 Australia              2     1878   1226.  1011  2745
- 6 Bolivia                3     4877   1064.  3650  5543
- 7 Burma (Myanmar)        1     1518     NA   1518  1518
- 8 Cameroon               3     2535.  1844.   500  4095
- 9 Canada                18     1954.  1182. -2050  3160
-10 Cape Verde             1     2829     NA   2829  2829
-# ... with 78 more rows
-```
-
+### Funções
+-- select()  
+-- filter()  
+-- mutate()  
+-- group_by()  
+-- count()  
+-- summarise()  
+-- arrange()  
 
 ---
-# Pausa para exercícios
-- Resolvendo problemas..
--- Em qual país existem mais vulcões?
--- Nesse país, qual o tipo de vulcão mais comum?
--- Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?
--- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?
-
-- Funcões ()
--- select
--- filter
--- mutate
--- group_by
--- count
--- summarise
--- arrange
----
-# Perguntas: 
+# Respostas: 
 
 - Em qual país existem mais vulcões?
 
@@ -933,6 +781,24 @@ volcano %&gt;%
   count(country, sort = TRUE)
 ```
 
+```
+# A tibble: 89 x 2
+# Groups:   country [89]
+   country              n
+   &lt;chr&gt;            &lt;int&gt;
+ 1 United States       99
+ 2 Indonesia           95
+ 3 Japan               92
+ 4 Russia              79
+ 5 Chile               43
+ 6 Iceland             28
+ 7 Mexico              28
+ 8 Papua New Guinea    28
+ 9 Philippines         27
+10 Ecuador             26
+# ... with 79 more rows
+```
+
 ---
 - Nesse país, qual o tipo de vulcão mais comum?
 
@@ -941,6 +807,27 @@ volcano %&gt;%
 volcano %&gt;% 
   filter(country == "United States") %&gt;% 
   count(primary_volcano_type, sort = TRUE)
+```
+
+```
+# A tibble: 15 x 2
+   primary_volcano_type     n
+   &lt;chr&gt;                &lt;int&gt;
+ 1 Stratovolcano           32
+ 2 Shield                  15
+ 3 Volcanic field          13
+ 4 Stratovolcano(es)        8
+ 5 Submarine                6
+ 6 Pyroclastic cone(s)      5
+ 7 Shield(s)                5
+ 8 Lava dome(s)             4
+ 9 Caldera                  3
+10 Maar(s)                  3
+11 Caldera(s)               1
+12 Complex                  1
+13 Pyroclastic cone         1
+14 Stratovolcano?           1
+15 Tuff cone(s)             1
 ```
 
 ---
@@ -955,8 +842,21 @@ volcano %&gt;%
   count(volcano_name, last_eruption_year)
 ```
 
+```
+# A tibble: 6 x 3
+  volcano_name        last_eruption_year     n
+  &lt;chr&gt;               &lt;chr&gt;              &lt;int&gt;
+1 Chillan, Nevados de 2020                   1
+2 Reventador          2020                   1
+3 Ruiz, Nevado del    2020                   1
+4 Sabancaya           2020                   1
+5 Sangay              2020                   1
+6 Villarrica          2020                   1
+```
+
 ---
 - Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?
+  -- Obs.: pegue (filtre) países em que existam mais de 2 vulcões.
 
 
 ```r
@@ -969,6 +869,23 @@ volcano %&gt;%
             max_pop = max(population_within_5_km)) %&gt;% 
   filter(n &gt; 2) %&gt;% #mais de 2 vulcões no país
   arrange(desc(media_pop))
+```
+
+```
+# A tibble: 52 x 5
+   country          n media_pop   sd_pop max_pop
+   &lt;chr&gt;        &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+ 1 Armenia          3   432210   721521. 1265153
+ 2 Vietnam          3   376222   537303.  991688
+ 3 Italy           12   292554.  662546. 2234109
+ 4 Uganda           3   288883   140125.  446218
+ 5 Mexico          28   269105. 1091616. 5783287
+ 6 China            8   255031.  598402. 1731229
+ 7 El Salvador     14   231179.  553330. 2049583
+ 8 Saudi Arabia     8   170776.  353415. 1010115
+ 9 Yemen            9   153611.  262493.  791276
+10 Cameroon         3   122298.  117445.  234623
+# ... with 42 more rows
 ```
 
 
@@ -996,30 +913,26 @@ library(tidyr)
 
 
 ```r
-volcano_long = volcano %&gt;% 
+volcano_long &lt;- volcano %&gt;% 
   select(volcano_name, latitude, longitude) %&gt;% 
   pivot_longer(cols = c(latitude, longitude),
                names_to = "variable",
-               values_to = "value")
+               values_to = "value") %&gt;% 
+  head()
 
 volcano_long
 ```
 
 ```
-# A tibble: 1,916 x 3
-   volcano_name    variable   value
-   &lt;chr&gt;           &lt;chr&gt;      &lt;dbl&gt;
- 1 Abu             latitude    34.5
- 2 Abu             longitude  132. 
- 3 Acamarachi      latitude   -23.3
- 4 Acamarachi      longitude  -67.6
- 5 Acatenango      latitude    14.5
- 6 Acatenango      longitude  -90.9
- 7 Acigol-Nevsehir latitude    38.5
- 8 Acigol-Nevsehir longitude   34.6
- 9 Adams           latitude    46.2
-10 Adams           longitude -121. 
-# ... with 1,906 more rows
+# A tibble: 6 x 3
+  volcano_name variable  value
+  &lt;chr&gt;        &lt;chr&gt;     &lt;dbl&gt;
+1 Abu          latitude   34.5
+2 Abu          longitude 132. 
+3 Acamarachi   latitude  -23.3
+4 Acamarachi   longitude -67.6
+5 Acatenango   latitude   14.5
+6 Acatenango   longitude -90.9
 ```
 
 
@@ -1035,24 +948,20 @@ volcano %&gt;%
   mutate(last_eruption_year = case_when(last_eruption_year &lt;= 2000 ~ "before_2000",
                                         last_eruption_year &gt; 2000 ~ "after_2000")) %&gt;% 
   pivot_wider(names_from = last_eruption_year,
-              values_from = latitude)
+              values_from = latitude) %&gt;% 
+  head()
 ```
 
 ```
-# A tibble: 958 x 4
-   volcano_name    longitude before_2000 after_2000
-   &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;
- 1 Abu                 132.         34.5       NA  
- 2 Acamarachi          -67.6        NA        -23.3
- 3 Acatenango          -90.9        14.5       NA  
- 4 Acigol-Nevsehir      34.6        38.5       NA  
- 5 Adams              -121.         NA         46.2
- 6 Adatarayama         140.         37.6       NA  
- 7 Adwa                 40.8        NA         10.1
- 8 Afdera               40.9        NA         13.1
- 9 Agrigan             146.         18.8       NA  
-10 Agua                -90.7        NA         14.5
-# ... with 948 more rows
+# A tibble: 6 x 4
+  volcano_name    longitude before_2000 after_2000
+  &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+1 Abu                 132.         34.5       NA  
+2 Acamarachi          -67.6        NA        -23.3
+3 Acatenango          -90.9        14.5       NA  
+4 Acigol-Nevsehir      34.6        38.5       NA  
+5 Adams              -121.         NA         46.2
+6 Adatarayama         140.         37.6       NA  
 ```
 
 
@@ -1067,24 +976,20 @@ volcano %&gt;%
   select(volcano_name, tectonic_settings) %&gt;% 
   separate(tectonic_settings,
            into = c("zone", "crust"),
-           sep = " / ")
+           sep = " / ") %&gt;% 
+  head()
 ```
 
 ```
-# A tibble: 958 x 3
-   volcano_name    zone            crust                        
-   &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;                        
- 1 Abu             Subduction zone Continental crust (&gt;25 km)   
- 2 Acamarachi      Subduction zone Continental crust (&gt;25 km)   
- 3 Acatenango      Subduction zone Continental crust (&gt;25 km)   
- 4 Acigol-Nevsehir Intraplate      Continental crust (&gt;25 km)   
- 5 Adams           Subduction zone Continental crust (&gt;25 km)   
- 6 Adatarayama     Subduction zone Continental crust (&gt;25 km)   
- 7 Adwa            Rift zone       Intermediate crust (15-25 km)
- 8 Afdera          Rift zone       Intermediate crust (15-25 km)
- 9 Agrigan         Subduction zone Crustal thickness unknown    
-10 Agua            Subduction zone Continental crust (&gt;25 km)   
-# ... with 948 more rows
+# A tibble: 6 x 3
+  volcano_name    zone            crust                     
+  &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;                     
+1 Abu             Subduction zone Continental crust (&gt;25 km)
+2 Acamarachi      Subduction zone Continental crust (&gt;25 km)
+3 Acatenango      Subduction zone Continental crust (&gt;25 km)
+4 Acigol-Nevsehir Intraplate      Continental crust (&gt;25 km)
+5 Adams           Subduction zone Continental crust (&gt;25 km)
+6 Adatarayama     Subduction zone Continental crust (&gt;25 km)
 ```
 
 
@@ -1100,77 +1005,30 @@ volcano %&gt;%
   unite(col = volcano_name, 
         volcano_number,
         volcano_name,
-        sep = "_")
+        sep = "_") %&gt;% 
+  head()
 ```
 
 ```
-# A tibble: 958 x 1
-   volcano_name          
-   &lt;chr&gt;                 
- 1 283001_Abu            
- 2 355096_Acamarachi     
- 3 342080_Acatenango     
- 4 213004_Acigol-Nevsehir
- 5 321040_Adams          
- 6 283170_Adatarayama    
- 7 221170_Adwa           
- 8 221110_Afdera         
- 9 284160_Agrigan        
-10 342100_Agua           
-# ... with 948 more rows
+# A tibble: 6 x 1
+  volcano_name          
+  &lt;chr&gt;                 
+1 283001_Abu            
+2 355096_Acamarachi     
+3 342080_Acatenango     
+4 213004_Acigol-Nevsehir
+5 321040_Adams          
+6 283170_Adatarayama    
 ```
 
 
 ---
-# nest()
+# Exercícios 3
 
-- cria uma coluna de lista
-
-
-```r
-volcano_nest = volcano %&gt;% 
-  group_by(country) %&gt;% 
-  nest()
-```
-
+- 
 
 ---
-# unnest()
-
-- desfaz a coluna de lista
-
-
-```r
-volcano_nest %&gt;% 
-  unnest()
-```
-
-```
-# A tibble: 958 x 26
-# Groups:   country [89]
-   country volcano_number volcano_name  primary_volcano~ last_eruption_y~ region
-   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt; 
- 1 Japan           283001 Abu           Shield(s)        -6850            Japan~
- 2 Japan           283170 Adatarayama   Stratovolcano(e~ 1996             Japan~
- 3 Japan           282080 Aira          Caldera          2020             Japan~
- 4 Japan           283130 Akagisan      Stratovolcano    Unknown          Japan~
- 5 Japan           285070 Akan          Caldera          2008             Japan~
- 6 Japan           283230 Akita-Komaga~ Stratovolcano(e~ 1971             Japan~
- 7 Japan           283260 Akita-Yakeya~ Stratovolcano    1997             Japan~
- 8 Japan           282022 Akusekijima   Stratovolcano(e~ Unknown          Japan~
- 9 Japan           284060 Aogashima     Stratovolcano    1785             Japan~
-10 Japan           283110 Asamayama     Complex          2019             Japan~
-# ... with 948 more rows, and 20 more variables: subregion &lt;chr&gt;,
-#   latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, elevation &lt;dbl&gt;, tectonic_settings &lt;chr&gt;,
-#   evidence_category &lt;chr&gt;, major_rock_1 &lt;chr&gt;, major_rock_2 &lt;chr&gt;,
-#   major_rock_3 &lt;chr&gt;, major_rock_4 &lt;chr&gt;, major_rock_5 &lt;chr&gt;,
-#   minor_rock_1 &lt;chr&gt;, minor_rock_2 &lt;chr&gt;, minor_rock_3 &lt;chr&gt;,
-#   minor_rock_4 &lt;chr&gt;, minor_rock_5 &lt;chr&gt;, population_within_5_km &lt;dbl&gt;,
-#   population_within_10_km &lt;dbl&gt;, population_within_30_km &lt;dbl&gt;,
-#   population_within_100_km &lt;dbl&gt;
-```
-
-# Exercícios 2
+# Respostas
 
 
 ```r
@@ -1183,6 +1041,26 @@ volcano %&gt;%
   count(country, primary_volcano_type, sort = TRUE) %&gt;% 
   pivot_wider(names_from = "primary_volcano_type",
               values_from = "n")
+```
+
+```
+# A tibble: 89 x 17
+   country    stratovolcano shield complex volcanicfield caldera pyroclasticcone
+   &lt;chr&gt;              &lt;int&gt;  &lt;int&gt;   &lt;int&gt;         &lt;int&gt;   &lt;int&gt;           &lt;int&gt;
+ 1 Indonesia             65     NA      14            NA      12               2
+ 2 Japan                 51      8       7            NA      11               1
+ 3 United St~            41     20       1            13       4               6
+ 4 Russia                33     20       3             4       7               7
+ 5 Chile                 29      1       1            NA       3               6
+ 6 Philippin~            19     NA       3            NA       2              NA
+ 7 Iceland               12      1      NA            NA       2               1
+ 8 Ecuador               11      9      NA            NA       3               1
+ 9 Guatemala             11     NA       1             3      NA               1
+10 El Salvad~            10     NA      NA             1       2               1
+# ... with 79 more rows, and 10 more variables: lavadome &lt;int&gt;,
+#   submarine &lt;int&gt;, craterrows &lt;int&gt;, subglacial &lt;int&gt;, fissurevent &lt;int&gt;,
+#   tuffcone &lt;int&gt;, pyroclasticshield &lt;int&gt;, compound &lt;int&gt;, maar &lt;int&gt;,
+#   lavacone &lt;int&gt;
 ```
 
     </textarea>

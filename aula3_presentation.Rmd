@@ -1,154 +1,214 @@
 ---
-title: "Embedded Flipbook"
-author: Me, an Rmarkdown writer and flipbook builder
-output: html_document
+title: "Intensivão de programação funcional em R aplicado à Geologia"
+subtitle: "⚒<br/>Aula 3 - visualização de dados com o ggplot2"
+author: "Bárbara Malcorra"
+institute: "PUCRS"
+date: '`r Sys.Date()`'
+encoding: "UTF-8"
+output:
+  xaringan::moon_reader:
+    css: ["xaringan-themer.css", "custom.css"]
+    lib_dir: libs
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
 ---
 
-This template aimed at doing the following:  preparing a flipbook from within an .Rmd source file and then *embedded* it in the resulting html.  Narrative might be interspersed between the code-movies.  
 
-```{r}
-remotes::install_github("gadenbuie/xaringanExtra")
+```{r xaringan-themer, include = FALSE, warning = FALSE}
+library(xaringanthemer)
+
+style_mono_accent(
+  base_color = "#1c5253",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono")
+)
 ```
 
 
-## Steps:
-
-#### 1. Write a code chunk. 
-#### 2. Use flipbookr:::embed_flipbook() to create chunk's flipbook and embed in your html_document 
-
-## More detail about step 2:
-
-#### 2.a. save that chunk code out as text and the current global environment
-#### 2.b. create an .Rmd file that will bring in code and global environment
-#### 2.c. render that file to an html (xaringan slide show)
-#### 2.d. embed the flipbook upon knitting your working .Rmd to .html
-
-
-```{r setup, include = F}
-# This is the recommended set up for flipbooks
-# you might think about setting cache to TRUE as you gain practice --- building flipbooks from scratch can be time consuming
-# options(knitr.duplicate.label = "allow")
-knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F, error = F)
+```{r, include = FALSE}
 library(flipbookr)
+
+knitr::opts_chunk$set(fig.width = 6,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = "",
+                      cache = FALSE)
+```
+
+---
+```{r}
 library(tidyverse)
+library(readxl)
 ```
-
-# A1. Here is some code (I'm naming the chunk "my_code"): 
-
-You might think about setting this code chunk's option include = F, to hide the code and output.
-
-```{r my_code}
-cars %>% 
-  ggplot() +
-  aes(x = dist) +
-  aes(y = speed) +
-  geom_point() -> 
-g
-```
-
-
-
-# A2. Let's get a walk-through using flipbookr:::embed_flipbook():
-
-You might want to set the code chunk options to echo = F, unless you are demoing embed_flibook(). 
 
 ```{r}
-flipbookr:::embed_flipbook(chunk_name = "my_code",
-               use_share_again = T,
-               font_size = 120)
+setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
+
+#install.packages("readxl")
+library(readxl)
+
+dados.ex <- read_excel("dados_santos2009.xlsx") %>% 
+  as_tibble()
+
+dados.ex
 ```
+
+```{r}
+dados.ex = read_excel("dados_santos2009.xlsx") %>% 
+  rename(distance = `Distance from contact (m)`) %>% 
+  mutate(distance = replace_na(distance, "0"),
+         litho = case_when(Rock == c("sill", "Sill") ~ "volcanic",
+                           Rock == "Black shale" ~ "shale",
+                           TRUE ~ "carbonate")) %>% 
+  separate(distance,
+           into = c("lower", "upper"),
+           sep = "–") %>% 
+  relocate(litho, upper, lower, .before = Co) %>% 
+  mutate(across(upper:Tm, as.double))
+
+dados.ex
+```
+
+
+```{r}
+volcano <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
+```
+
 
 ---
+# Exercícios
 
-# B1. Here is some more code; I'm named the code chunk "fine_tuning":
+1. A partir da base "dados_santos2009", plote um boxplot da variável "Pb" agrupando por "litho". Utilize o pacote ggplot2 e a função "stat_summary".
 
-You might just set the code chunk options include = F.
+2. Faça um gráfico de barras dos elementos químicos. Agrupe por litho e adicione barras de erro.
+  - Dica: utilize as funções pivot_longer() e facet_wrap().
+  
+3. Faça um gráfico de pontos (scatter plot) da razão La/Tm por distance. Utilize a função "geom_smooth" para plotar o modelo.
 
-```{r fine_tuning, fig.show='hide'}
-g + 
-  theme_minimal(base_size = 12) +
-  aes(size = dist) +
-  aes(color = dist) +
-  scale_color_viridis_c() + 
-  geom_smooth() +
-  theme(legend.position = 
-          "none") +
-  labs(x = "Distance") +
-  labs(y = "Speed") + #BREAK
-  labs(title = "Cool plot!") +
-  theme(plot.title.position = 
-          "plot") #BREAK
-```
+4. Agora, plote uma linha para cada grupo (litho).
 
-# B2. Let's look at the build created from  embed_flipbook. View below or view [in new tab](fine_tuning.html){target="_blank"}
+5. Faça um histograma de frequência da variável "Pb".
 
-You might set the code chunk option echo = F
-
-```{r}
-flipbookr:::embed_flipbook(chunk_name = "fine_tuning", 
-               use_share_again = T, 
-               use_embed_xaringan = T,
-               font_size = 100,
-               title_page = T,
-               title = "How to Style your Plot",
-               subtitle = "Thematic Adjustments",
-               author = "Reynolds Lab",
-               break_type = "user")
-```
-
-
-
-# C. Okay python!  Just kidding.  This doesn't work yet.
+6. Explore a relação entre a distância até o sill e os elementos químicos nas rochas SEDIMENTARES.
 
 ---
+# 1: box plot
 
-```{python hello_python, include = T}
-[1, 4] * 8
+`r chunk_reveal("box")`
 
-3 + 4 * 8 
-
-2 + 6
-
-4 * 8
-
-[1,2] + [3,4,5,6]
-
-["hello", "world!", 1, 2, 3] * 2
-
-import numpy as np
-
-np.reshape(np.arange(1,25), 
-    (4,3,2), "F")
+```{r box, warning = FALSE, message = FALSE}
+dados.ex %>% 
+  dplyr::select(litho, Pb) %>% 
+  ggplot(aes(x = litho, y = Pb, fill = litho)) +
+  geom_boxplot() +
+  stat_summary(color = "red") + #erro padrão
+  geom_jitter(alpha = 0.5, size = 3)
 ```
 
 
+---
+# 2: bar plot with error bars
 
-```{r, eval = F}
-flipbookr:::embed_flipbook("hello_python",
-               lang = "python")
+`r chunk_reveal("bar")`
+
+```{r bar, warning = FALSE, message = FALSE, results = FALSE}
+dados.ex %>% 
+  dplyr::select(litho, Co:Tm) %>% 
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %>% 
+  ggplot(aes(x = litho, y = value, fill = litho)) +
+  stat_summary(geom = "bar") +
+  stat_summary() +
+  facet_wrap(~variable, scales = "free")
 ```
 
 
-# D. Text flipbook subject to change:
+---
+# 3: scatter plot 1
 
-```{r}
-embed_text_flipbook("hi there good seeing you", 
-                    title = "greetings", 
-                    sep = " ",
-                    use_embed_xaringan = T)
+`r chunk_reveal("point")`
+
+```{r point, warning = FALSE, message = FALSE}
+library(ggpubr)
+
+dados.ex %>% 
+  dplyr::select(lower, La, Tm) %>% 
+  ggplot(aes(x = lower, y = La/Tm)) +
+  geom_point(size = 3) + #aes aqui também
+  geom_smooth(method = "lm") +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman") +
+  theme(legend.position = "right") +
+  scale_x_log10() + #altera a escala
+  labs(x = "distance to sill (m)")
 ```
 
 
+---
+# 4: scatter plot 2
 
+`r chunk_reveal("point2")`
 
+```{r point2, warning = FALSE, message = FALSE}
+library(ggpubr)
 
-
-```{css, eval = TRUE, echo = FALSE}
-.remark-code{line-height: 1.5; font-size: 80%}
-
-@media print {
-  .has-continuation {
-    display: block;
-  }
-}
+dados.ex %>% 
+  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
+  geom_point(size = 3) + #aes aqui também
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "spearman",
+           label.x.npc = "left",
+           label.y.npc = "top") +
+  theme(legend.position = "bottom") +
+  scale_x_log10() + #altera a escala
+  labs(x = "distance to sill (m)",
+       title = "Razão LREE e MREE em sedimentos em função da distância até o sill")
 ```
+
+
+---
+# 5. histograma
+
+`r chunk_reveal("hist")`
+
+```{r hist, warning = FALSE, message = FALSE}
+dados.ex %>% 
+  ggplot(aes(x = Pb)) +
+  geom_histogram(color = "white") +
+  labs(title = "Histograma")
+```
+
+
+---
+# 6. qual a correlação entre distância até o sill e os elementos químicos nas rochas SEDIMENTARES?
+
+`r chunk_reveal("cor")`
+
+```{r cor, warning = FALSE, message = FALSE}
+dados.ex %>% 
+  filter(!litho == "volcanic") %>% 
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %>% 
+  ggplot(aes(x = lower, y = value, color = litho)) +
+  geom_point(alpha = 0.7, size = 2) +
+  scale_x_log10() +
+  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+           method = "lm") +
+  labs(x = "distance to sill (m)",
+       y = "value",
+       caption = "referência") +
+  facet_wrap(~variable, scales = "free") +
+  scale_color_manual(values = c("red", "blue"))
+  theme_bw()
+```
+
