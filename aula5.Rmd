@@ -1,181 +1,174 @@
 ---
-title: "Aula 5"
+title: "Aula 5 - Dados espaciais"
 author: "Gabriel Bertolini"
-date: "05/07/2021"
-subtitle: "Reproduzindo Geociência"
+date: "18/07/2021"
 output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-# (geo-) Ciência de dados
 
-## Estudo de caso 1
+# Dados espaciais
 
--- O estudo pioneiro de Elkins, L. T. & Grove, T. L (1990) "Ternary Feldspar Experiments and Thermodynamic Models American Mineralogist"
--- Elkins, L. T. & Grove, T. L. Ternary Feldspar Experiments and Thermodynamic Models American Mineralogist, Mineral Soc America, 1990, 75, 544-559
+- Dados espaciais apresentam peculiaridades em relação aos objetos que havíamos trabalhado anteriormente
+- Para trabalhar com dados espaciais, devemos utilizar pacote sf (ou outros como STARS, RASTER, TERRA)
 
-- 1) Explorar banco de dados "Feldspar"
-- 2) Existe relação entre os teores dos componentes Ab, An e Or em feldspatos com:
-
--- a) Tipos de feldspato?
--- b) Temperatura?
--- c) Pressão?
-
-- 3) Modelar isotermas e isóbaras
-
-
-
-## Estudo de caso 2
-
-- Estudo de caso de petrofísica e petrologia de Bertolini et al. (2021)- busca entender a relação entre diagênese e petrofísica na interface lava-sedimento, com exemplo ns interação entre a Fm. Botucatu em contato e Fm. Serra Geral
-- Estudo de caso em análise de reservatório
-
-- 1) Explorar banco de dados "lvsd"
-- 2 Qual relação entre as velocidades das ondas P- e S- nos arenitos? (Modele)
-- 3) A porosidade controla a velocidade da onda sísmica? - (Modele)
-- 4) A estratigrafia controla a a diagênese?
-- 5) qual a relação entre a distancia até a lava e porosidade? e ondas sismicas?
-- 6) qual relação da diagênese e distância até a lava?
-- 7) e da provêniencia?
-
-
-## Respostas- Estudo de caso 1
+- Quais são as informações necessárias para configurar um dado espacial
+ - Coordenadas (geográficas ou projetada)
+ - Coordinate Reference System (CRS) 
+ - Vamos usar como exemplo o banco de dados "volcano"
 
 ```{r}
-library(dplyr)
-library(tidypaleo)
-library(ggtern)
-library(ggplot2)
-library(tidyr)
-library(readr)
-library(readxl)
+volcano<-read.csv("volcano.csv")
+View(volcano)
 ```
+---
+
+- BD apresenta colunas latitude e longitute em coordenadas geográficas em graus decimais 
+- Primeiro vamos importar pacote sf que vai transformar esse banco de dados em objeto espacial
+- Função "st_as_sf" transforma banco de dados em dados espaciais
+  - definir qual coluna é o x e y / long e lat no parâmetro coords
 
 ```{r}
-#1 - Explorar 
-data(Feldspar)
-Feldspar
-
-View(Feldspar)  # Abre janela estilo excel ou então, selecionar objeto-banco de dados e apertar F2
-
-Feldspar %>% str()
-
-Feldspar %>% 
-  group_by(Feldspar) %>% 
-  summarise(mean_Ab=mean(Ab),
-            mean_An=mean(An),
-            mean_Or=mean(Or))
-  
-
-#2a - Tipos de Feldspato
-
-ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) +
-  ggplot2::geom_point(aes(color=Feldspar))
-
-#2b - Temperatura?
-
-ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
-    ggplot2::geom_point(aes(color=T.C))+
-    facet_wrap(~Feldspar)
-
-#2c - Pressão?
-ggtern::ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
-    ggplot2::geom_point(aes(color=P.Gpa))+
-    facet_wrap(~Feldspar)
-
-#3 - Modelo
-
-ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
-    ggtern::geom_crosshair_tern(aes(color=T.C,
-                   shape=Feldspar,
-                   size=P.Gpa))
-
-
+library(sf)
+library(tidyverse)
+volcano %>% st_as_sf(coords=c("longitude","latitude"))
+# como setar sistema de coordenada?
 
 ```
+---
 
-# Estudo de caso 2
+- Sistema de referência do banco de dados é WGS-84 lat/long
+- Vamos pesquisar qual o codigo desse sistema no site "https://epsg.io/"
+- Podemos trocar o sistema por algum sistema de coordenadas projetada, usando a função st_transform()
+
 ```{r}
-#library(devtools)
-#install_version("ggplot2", version = "3.3.0", repos = "http://cran.us.r-project.org")
+volcano %>% st_as_sf(coords=c("longitude","latitude"), crs=4326) # WGS 84
 
-library(ggplot2)
+volcano %>% st_as_sf(coords=c("longitude","latitude"), crs=4326) %>% 
+  st_transform(crs = 3857) # WGS84 projetada (pseudo-mercator)
 
-library(readxl)
-
-setwd("D:/Documentos Drive/Academicos/Aulas/ProgramacaoFuncional_Geologia")
-
-lv<-read_csv("petrophysics_bertolini_2020.csv") %>% 
-  unite(sample,c("Sample", "a"),sep = "-")
-
-sd_1<-read_excel("petrography_bertolini_2020.xlsx",sheet=1)
-
-lvsd<-left_join(lv,sd_1,by="sample")
-  
-#1 Explorar banco de dados "lvsd"
-
-lvsd
-
-lvsd %>% str()
-  
-lvsd %>% group_by(well) %>% 
-  summarise(across(starts_with("Por"), ~ mean(.x, na.rm = TRUE)))
-  
-lvsd %>% group_by(well) %>% 
-  summarise(across(starts_with("Comp"), ~ mean(.x, na.rm = TRUE)))  
-  
-
-#2 Qual relação entre as velocidades das ondas P- e S- nos arenitos? (Modele)
-
-
-lvsd %>% 
-  #drop_na(s_wave) %>% 
-  ggplot(aes(x=p_wave,y=s_wave))+
-  geom_point()+
-  geom_smooth(method = "lm")+
-  labs(title="Velocidade sísmica em arenitos da Fm. Botucatu")+
-  xlab("Onda P")+
-  ylab("Onda S")
-
-#3 A porosidade controla a velocidade da onda sísmica? - (Modele)
-
-lvsd %>% 
-  drop_na(s_wave) %>%
-  pivot_longer(cols = c(p_wave:s_wave),names_to = "var",values_to = "seismic_velocity") %>% 
-  ggplot(aes(x=porosity,y=seismic_velocity))+
-  geom_point()+
-  geom_smooth(method = "lm")+
-  facet_wrap(~var)+
-  labs(title="Velocidade sísmica e porosidade arenitos da Fm. Botucatu")
-
-
-#4 Qual a relação entre petrofisica e estratigrafia (well TG-227)?
-
-lvsd %>%
-  filter(well=="TG-227") %>% 
-  pivot_longer(cols = c(p_wave:s_wave,porosity, density),names_to = "var",values_to = "value") %>%
-  mutate(var=factor(var,levels = c("porosity","density","p_wave","s_wave"))) %>% 
-  ggplot(aes(x = value, y = depth)) +
-  geom_lineh() +
-  geom_point() +
-  scale_y_reverse() +
-  facet_geochem_gridh(vars(var), scales = "free") +
-  geom_hline(yintercept = c(283.45,298.10), col = "red", lty = 2, alpha = 0.7)+
-  labs(x = NULL, y = "Depth (m)", title = "Cretaceous Paraná Basin")+
-  theme_classic()
-  
-
-#5 qual a relação entre a distancia até a lava e porosidade? e ondas sismicas?
-
-lvsd %>% 
-  mutate(dis_1=)
-
-
-#6 qual relação da diagênese e distância até a lava?
-
-
-
-
-#7  e da provêniencia?
 ```
+---
+
+- pacote SF apresenta uma série de funções para lidar com GIS, por exemplo
+  - st_
+  
+---
+- Vamos plotar esses dados e ver como ficar..
+- para isso, vamos utilizar o pacote de mapas interativos mapview()
+
+
+
+```{r}
+library(mapview)
+volcano %>% st_as_sf(coords=c("longitude","latitude"), crs=4326) %>% 
+mapview()
+```
+---
+- parâmetro zcol ="nome_da_coluna" adiciona cor ao pontos
+```{r}
+library(mapview)
+volcano %>% st_as_sf(coords=c("longitude","latitude"), crs=4326) %>% 
+mapview(zcol="elevation")
+```
+
+--- 
+# Exercício 1
+- Mapear vulcões com maio georisco associados a populações de 5, 10 e 30 km
+
+# 5km
+```{r}
+
+volcano %>% mutate(pop_5km=as.double(population_within_5_km),
+                   pop_5km=if_else(pop_5km==0,0,log10(pop_5km))) %>% 
+  st_as_sf(coords=c("longitude","latitude"), crs=4326) %>% 
+  mapview(zcol="pop_5km")
+```
+
+# 10km
+```{r}
+volcano %>% mutate(pop_10km=as.double(population_within_10_km),
+                   pop_10km=if_else(pop_10km==0,0,log10(pop_10km))) %>% 
+  st_as_sf(coords=c("longitude","latitude"), crs=4326) %>% 
+mapview(zcol="pop_10km")
+```
+
+# 30km
+```{r}
+volcano %>% mutate(pop_30km=as.double(population_within_30_km),
+                   pop_30km=if_else(pop_30km==0,0,log10(pop_30km))) %>% 
+  st_as_sf(coords=c("longitude","latitude"), crs=4326) %>% 
+mapview(zcol="pop_30km")
+```
+
+
+# Exercício 2
+- Mapear tipos de vulcões
+
+# 5km
+```{r}
+library(stringr)
+volcano %>%  mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
+         primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
+         primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),
+         primary_volcano_type = str_replace(primary_volcano_type, "[:punct:]", "")) %>% 
+  st_as_sf(coords=c("longitude","latitude"), crs=4326) %>% 
+  mapview(zcol="primary_volcano_type")
+```
+
+
+---
+
+# Pacote TMAP
+- pacote tmap tem estrutura similar ao GGPLOT
+- pacote voltado a mapas temáticos
+
+```{r}
+library(tmap)
+library(tidyverse)
+library(tmaptools)
+
+tmaptools::palette_explorer() 
+
+data(World)
+World 
+
+volca<-volcano %>% pivot_longer(population_within_5_km:population_within_30_km, values_to="value", names_to="var") %>% 
+  mutate(value=as.numeric(value),
+         primary_volcano_type = str_to_lower(primary_volcano_type),
+         primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
+         primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),
+         primary_volcano_type = str_replace(primary_volcano_type, "[:punct:]", "")) %>% 
+   st_as_sf(coords=c("longitude","latitude"), crs=4326)
+
+ tm_shape(World) +
+  tm_polygons()+
+  tm_shape(volca)+
+  tm_dots(col="primary_volcano_type",size=.35,palette = "Set1", n = 17)+
+  tm_compass(type="4star")+
+  tm_grid(alpha = 0.5)+
+  tm_layout(main.title="Types of volcanos",
+  legend.outside="T")+
+  tm_scale_bar(position=c("left", "bottom"))+
+  tmap_style("classic")
+```
+
+
+
+```{r}
+
+  tm_shape(World) +
+  tm_polygons("continent")+
+  tm_shape(volca)+
+  tm_dots(col="value",size=.2,style="kmeans",palette = "viridis", n = 5, contrast = c(0.29, 1))+
+  tm_compass(type="4star")+
+  tm_grid(alpha = 0.5)+
+  tm_layout(main.title="Evaluation of volcano-eruption geohazard",
+  legend.outside="T")+
+  tm_scale_bar(position=c("left", "bottom"))+
+  tm_facets(by="var")
+  
+
+```
+
 
