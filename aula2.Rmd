@@ -84,11 +84,10 @@ knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
 **|** ou  
 **!** diferente de  
   
-  
-- Boa parte da programação está em:  
- -- 1) consertar erros de sintaxe do seu código  
- -- 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
-
+# Boa parte da programação está em:
+- 1) consertar erros de sintaxe do seu código  
+- 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
+ 
 ---
 # Pacotes
 
@@ -251,7 +250,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, latitude:elevation) %>% 
+  dplyr::select(volcano_name, country, latitude:elevation) %>% 
   filter(!country == "Antarctica") %>% 
   head()
 ```
@@ -261,7 +260,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, latitude:elevation) %>% 
+  dplyr::select(volcano_name, country, latitude:elevation) %>% 
   filter(country == "Antarctica" | latitude > 10) %>% 
   head()
 ```
@@ -271,7 +270,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, latitude:elevation) %>% 
+  dplyr::select(volcano_name, country, latitude:elevation) %>% 
   filter(country %in% c("Antarctica", "Japan")) %>% 
   head()
 ```
@@ -281,7 +280,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, latitude:elevation) %>% 
+  dplyr::select(volcano_name, country, latitude:elevation) %>% 
   filter(country == "Japan" & latitude > 1) %>% 
   head()
 ```
@@ -292,7 +291,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, last_eruption_year) %>% 
+  dplyr::select(volcano_name, country, last_eruption_year) %>% 
   filter(!country == "Antarctica") %>% 
   mutate(last_eruption_year = as.numeric(last_eruption_year),
          years_ago = 2020 - last_eruption_year) %>% 
@@ -312,7 +311,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, latitude:elevation, last_eruption_year) %>% 
+  dplyr::select(volcano_name, country, latitude:elevation, last_eruption_year) %>% 
   filter(country %in% c("United States", "Mexico", "Canada")) %>% 
   group_by(country) %>% 
   summarise(n = n(),
@@ -330,7 +329,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country) %>% 
+  dplyr::select(volcano_name, country) %>% 
   filter(country %in% c("United States", "Mexico")) %>% 
   group_by(country) %>% 
   count(sort = TRUE)
@@ -341,7 +340,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, latitude:elevation) %>% 
+  dplyr::select(volcano_name, country, latitude:elevation) %>% 
   arrange(volcano_name) %>% 
   head()
 ```
@@ -381,7 +380,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, latitude:elevation, last_eruption_year) %>% 
+  dplyr::select(volcano_name, country, latitude:elevation, last_eruption_year) %>% 
   mutate(var = n(),
          var1 = n_distinct(last_eruption_year)) %>% 
   head()
@@ -394,7 +393,7 @@ volcano %>%
 - Em qual país existem mais vulcões?  
 - Nesse país, qual o tipo de vulcão mais comum?  
 - Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
-- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?  
+- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Fltre países em que existam mais de 2 vulcões.
 
 ### Funções
 -- select()  
@@ -430,19 +429,18 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(region, volcano_name, last_eruption_year) %>% 
+  dplyr::select(region, volcano_name, last_eruption_year) %>% 
   filter(region == "South America",
          last_eruption_year == "2020") %>% 
   count(volcano_name, last_eruption_year)
 ```
 
 ---
-- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?
-  -- Obs.: pegue (filtre) países em que existam mais de 2 vulcões.
+- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Filtre países em que existam mais de 2 vulcões.
 
 ```{r}
 volcano %>% 
-  select(country, population_within_5_km) %>% 
+  dplyr::select(country, population_within_5_km) %>% 
   group_by(country) %>% 
   summarise(n = n(),
             media_pop = mean(population_within_5_km),
@@ -478,7 +476,7 @@ knitr::include_graphics("https://www.dadosaleatorios.com.br/post/introducao-ao-t
 
 ```{r}
 volcano_long <- volcano %>% 
-  select(volcano_name, latitude, longitude) %>% 
+  dplyr::select(volcano_name, latitude, longitude) %>% 
   pivot_longer(cols = c(latitude, longitude),
                names_to = "variable",
                values_to = "value") %>% 
@@ -495,7 +493,7 @@ volcano_long
 
 ```{r}
 volcano %>% 
-  select(volcano_name, latitude, longitude, last_eruption_year) %>% 
+  dplyr::select(volcano_name, latitude, longitude, last_eruption_year) %>% 
   mutate(last_eruption_year = case_when(last_eruption_year <= 2000 ~ "before_2000",
                                         last_eruption_year > 2000 ~ "after_2000")) %>% 
   pivot_wider(names_from = last_eruption_year,
@@ -511,7 +509,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, tectonic_settings) %>% 
+  dplyr::select(volcano_name, tectonic_settings) %>% 
   separate(tectonic_settings,
            into = c("zone", "crust"),
            sep = " / ") %>% 
@@ -526,7 +524,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, volcano_number) %>% 
+  dplyr::select(volcano_name, volcano_number) %>% 
   unite(col = volcano_name, 
         volcano_number,
         volcano_name,
@@ -536,16 +534,11 @@ volcano %>%
 
 
 ---
-# Exercícios 3
-
-- 
-
----
 # Respostas
 
 ```{r}
 volcano %>% 
-  select(country, primary_volcano_type, major_rock_1) %>% 
+  dplyr::select(country, primary_volcano_type, major_rock_1) %>% 
   mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
          primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
          primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),

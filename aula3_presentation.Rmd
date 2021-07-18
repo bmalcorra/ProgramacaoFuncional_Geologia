@@ -212,3 +212,21 @@ dados.ex %>%
   theme_bw()
 ```
 
+
+# 7.
+
+```{r}
+volcano <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
+```
+
+
+`r chunk_reveal("")`
+
+```{r, warning = FALSE, message = FALSE}
+volcano %>% 
+  filter(country == "Argentina") %>% 
+  ggplot(aes(x = latitude, y = longitude)) +
+  geom_point()
+```
+
+

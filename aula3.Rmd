@@ -166,6 +166,7 @@ dados %>%
   geom_errorbar(aes(ymin = mean_value - sd_value, ymax = mean_value + sd_value, color = Group), width = .1) +
   scale_y_log10() +
   labs(title = "Distribuição de elementos terras raras em granitóides",
+       subtitle = "",
        color = "Tipos de granitos",
        caption = "Bonin et al. (2020)",
        x = "",

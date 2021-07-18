@@ -16,7 +16,6 @@ Como trabalhar no Rstudio
       Atalho <- : Alt-
       Knit
 
-
 # R como calculadora
 
 ```{r}
@@ -48,7 +47,8 @@ log10(5)
 # Tipos e atribuição de objetos
 
 ```{r}
-myNumber <- 5
+myNumber <- 5 #Camel case - prática de escrever palavras ou frase, onde cada palavra é iniciada com maiúsculas e unidas sem espaços
+
 myNumber
 
 myNumber <- 7
@@ -76,12 +76,12 @@ myTRUE <- TRUE
 4 == 4 #4 é igual a 4?
 
 #qual a estrutura dessas variáveis?
-class(myNumber)
-class(myInteger)
-class(myWord)
-class(myFactor)
+class(myNumber) #variável numérica - qualquer número DECIMAL
+class(myInteger) #variável numérica - número INTEIRO
+class(myWord) #variável caracter
+class(myFactor) #fator
 class(mySentence)
-class(myTRUE)
+class(myTRUE) #variável lógica
 ```
 
 

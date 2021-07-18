@@ -4,7 +4,7 @@
     <title>Intensivão de programação funcional em R aplicado à Geologia</title>
     <meta charset="utf-8" />
     <meta name="author" content="Bárbara Malcorra" />
-    <meta name="date" content="2021-07-16" />
+    <meta name="date" content="2021-07-18" />
     <script src="libs/header-attrs-2.9/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## ⚒<br/>Aula 2 - programação funcional
 ### Bárbara Malcorra
 ### PUCRS
-### 2021-07-16
+### 2021-07-18
 
 ---
 
@@ -66,11 +66,10 @@ library(tidyverse)
 **|** ou  
 **!** diferente de  
   
-  
-- Boa parte da programação está em:  
- -- 1) consertar erros de sintaxe do seu código  
- -- 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
-
+# Boa parte da programação está em:
+- 1) consertar erros de sintaxe do seu código  
+- 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
+ 
 ---
 # Pacotes
 
@@ -485,7 +484,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation) %&gt;% 
+  dplyr::select(volcano_name, country, latitude:elevation) %&gt;% 
   filter(!country == "Antarctica") %&gt;% 
   head()
 ```
@@ -508,7 +507,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation) %&gt;% 
+  dplyr::select(volcano_name, country, latitude:elevation) %&gt;% 
   filter(country == "Antarctica" | latitude &gt; 10) %&gt;% 
   head()
 ```
@@ -531,7 +530,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation) %&gt;% 
+  dplyr::select(volcano_name, country, latitude:elevation) %&gt;% 
   filter(country %in% c("Antarctica", "Japan")) %&gt;% 
   head()
 ```
@@ -554,7 +553,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation) %&gt;% 
+  dplyr::select(volcano_name, country, latitude:elevation) %&gt;% 
   filter(country == "Japan" &amp; latitude &gt; 1) %&gt;% 
   head()
 ```
@@ -578,7 +577,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, country, last_eruption_year) %&gt;% 
+  dplyr::select(volcano_name, country, last_eruption_year) %&gt;% 
   filter(!country == "Antarctica") %&gt;% 
   mutate(last_eruption_year = as.numeric(last_eruption_year),
          years_ago = 2020 - last_eruption_year) %&gt;% 
@@ -611,7 +610,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
+  dplyr::select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
   filter(country %in% c("United States", "Mexico", "Canada")) %&gt;% 
   group_by(country) %&gt;% 
   summarise(n = n(),
@@ -639,7 +638,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, country) %&gt;% 
+  dplyr::select(volcano_name, country) %&gt;% 
   filter(country %in% c("United States", "Mexico")) %&gt;% 
   group_by(country) %&gt;% 
   count(sort = TRUE)
@@ -660,7 +659,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation) %&gt;% 
+  dplyr::select(volcano_name, country, latitude:elevation) %&gt;% 
   arrange(volcano_name) %&gt;% 
   head()
 ```
@@ -733,7 +732,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
+  dplyr::select(volcano_name, country, latitude:elevation, last_eruption_year) %&gt;% 
   mutate(var = n(),
          var1 = n_distinct(last_eruption_year)) %&gt;% 
   head()
@@ -758,7 +757,7 @@ volcano %&gt;%
 - Em qual país existem mais vulcões?  
 - Nesse país, qual o tipo de vulcão mais comum?  
 - Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
-- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?  
+- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Fltre países em que existam mais de 2 vulcões.
 
 ### Funções
 -- select()  
@@ -836,7 +835,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(region, volcano_name, last_eruption_year) %&gt;% 
+  dplyr::select(region, volcano_name, last_eruption_year) %&gt;% 
   filter(region == "South America",
          last_eruption_year == "2020") %&gt;% 
   count(volcano_name, last_eruption_year)
@@ -855,13 +854,12 @@ volcano %&gt;%
 ```
 
 ---
-- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?
-  -- Obs.: pegue (filtre) países em que existam mais de 2 vulcões.
+- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Filtre países em que existam mais de 2 vulcões.
 
 
 ```r
 volcano %&gt;% 
-  select(country, population_within_5_km) %&gt;% 
+  dplyr::select(country, population_within_5_km) %&gt;% 
   group_by(country) %&gt;% 
   summarise(n = n(),
             media_pop = mean(population_within_5_km),
@@ -914,7 +912,7 @@ library(tidyr)
 
 ```r
 volcano_long &lt;- volcano %&gt;% 
-  select(volcano_name, latitude, longitude) %&gt;% 
+  dplyr::select(volcano_name, latitude, longitude) %&gt;% 
   pivot_longer(cols = c(latitude, longitude),
                names_to = "variable",
                values_to = "value") %&gt;% 
@@ -944,7 +942,7 @@ volcano_long
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, latitude, longitude, last_eruption_year) %&gt;% 
+  dplyr::select(volcano_name, latitude, longitude, last_eruption_year) %&gt;% 
   mutate(last_eruption_year = case_when(last_eruption_year &lt;= 2000 ~ "before_2000",
                                         last_eruption_year &gt; 2000 ~ "after_2000")) %&gt;% 
   pivot_wider(names_from = last_eruption_year,
@@ -973,7 +971,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, tectonic_settings) %&gt;% 
+  dplyr::select(volcano_name, tectonic_settings) %&gt;% 
   separate(tectonic_settings,
            into = c("zone", "crust"),
            sep = " / ") %&gt;% 
@@ -1001,7 +999,7 @@ volcano %&gt;%
 
 ```r
 volcano %&gt;% 
-  select(volcano_name, volcano_number) %&gt;% 
+  dplyr::select(volcano_name, volcano_number) %&gt;% 
   unite(col = volcano_name, 
         volcano_number,
         volcano_name,
@@ -1023,17 +1021,12 @@ volcano %&gt;%
 
 
 ---
-# Exercícios 3
-
-- 
-
----
 # Respostas
 
 
 ```r
 volcano %&gt;% 
-  select(country, primary_volcano_type, major_rock_1) %&gt;% 
+  dplyr::select(country, primary_volcano_type, major_rock_1) %&gt;% 
   mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
          primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
          primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),
