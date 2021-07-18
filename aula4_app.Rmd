@@ -1,0 +1,129 @@
+---
+title: "App Aula 4"
+subtitle: "Pacotes úteis para geologia"
+author: "Gabriel Bertolini, Julho 2021"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, hygge, ninjutsu]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+- Pacote ggtern 
+-- plots de diagramas ternários
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+---
+
+
+- Pacote tidypaleo
+-- plots estratigráficos
+
+```{r}
+setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
+
+dados.ex = read_excel("dados_santos2009.xlsx") %>% 
+  rename(distance = `Distance from contact (m)`) %>% 
+  mutate(distance = replace_na(distance, "0"),
+         litho = case_when(Rock == c("sill", "Sill") ~ "volcanic",
+                           Rock == "Black shale" ~ "shale",
+                           TRUE ~ "carbonate")) %>% 
+  separate(distance,
+           into = c("lower", "upper"),
+           sep = "–") %>% 
+  relocate(litho, upper, lower, .before = Co) %>% 
+  mutate(across(upper:Tm, as.double))
+
+dados.ex
+```
+
+
+```{r}
+library(tidypaleo)
+
+dados.ex %>% 
+  pivot_longer(cols = Co:Tm,
+               names_to = "variable",
+               values_to = "value") %>% 
+  ggplot(aes(x = value, y = lower)) +
+  geom_lineh() +
+  geom_point(aes(color = variable),
+             show.legend = FALSE) +
+  scale_y_reverse() +
+  facet_wrap(~variable, scales = "free") +
+  labs(x = "",
+       y = "Depth (metros)") + 
+  theme_classic()
+```
+
+`r chunk_reveal("teste")`
+
+```{r teste, warning=FALSE, message=FALSE}
+volcano %>% 
+  filter(country == "Antarctica") %>% 
+  ggplot(aes(elevation, longitude, color = primary_volcano_type)) +
+  geom_point()
+```
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+--- 
+
+- Pacote sf
+-- plots dados espaciais
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+---
+
+- Pacote tidymodels
+-- Modelamento estatístico
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+---
+
+- Outros pacotes que podem ser úteis
+-- 
