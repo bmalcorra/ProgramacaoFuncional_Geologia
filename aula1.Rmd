@@ -6,12 +6,11 @@ editor_options:
 ---
 
 Como trabalhar no Rstudio
-  - abrir R normal
   - Console vs. Rstudio
   - Criando projeto "Intensivão R"
   - Script file
-    - Comentários "##"
   - Rmarkdown file
+      Comentários "##"
       Chunk
       Atalho: Ctrl + Alt + I
       Atalho <- : Alt-
@@ -46,37 +45,37 @@ log10(5)
 ```
 
 
-# Objetos - tipos e atribuição
+# Tipos e atribuição de objetos
 
 ```{r}
-myNumber = 5
+myNumber <- 5
 myNumber
 
-myNumber = 7
+myNumber <- 7
 
-myInteger = as.integer(myNumber)
+myInteger <- as.integer(myNumber)
 myInteger
 
-calculo = 5 + (3 * 5 / 2)
+calculo <- 5 + (3 * 5 / 2)
 myNumber * calculo
 
 #myWord = geologia #erro
-myWord = "geologia"
+myWord <- "geologia"
 myWord
 
-myFactor = factor(myWord)
+myFactor <- factor(myWord)
 myFactor
 
-mySentence = "esta é a minha frase"
+mySentence <- "esta é a minha frase"
 mySentence
 
-#O R também trabalha com classes lógicas, TRUE or FALSE
+#o R também trabalha com classes lógicas, TRUE or FALSE
 #variável boleana (binária, lógica)
 
-myTRUE = TRUE
+myTRUE <- TRUE
 4 == 4 #4 é igual a 4?
 
-#Qual a estrutura dessas variáveis?
+#qual a estrutura dessas variáveis?
 class(myNumber)
 class(myInteger)
 class(myWord)
@@ -89,9 +88,9 @@ class(myTRUE)
 # Vetores: objetos que contêm uma sequência de elementos/variáveis
 
 ```{r}
-myNumbers = c(1, 2, 3, 4, 5) #vetor
-myNumbers = 1:5
-myNumbers = seq(1, 5, by = 1)
+myNumbers <- c(1, 2, 3, 4, 5) #vetor
+myNumbers <- 1:5
+myNumbers <- seq(1, 5, by = 1)
 
 myNumbers[myNumbers > 3]
 myNumbers[myNumbers >= 3]
@@ -103,54 +102,59 @@ myWords[3]
 myWords[4]
 
 
-meuVetor = c(1, 2, 3, 4, 5)
+meuVetor <- c(1, 2, 3, 4, 5)
 
-dp = sd(meuVetor) #
-n = length(meuVetor)
+dp <- sd(meuVetor) #indica o grau de variação de um conjunto de elementos
+#quanto menor o desvio padrão, mais homogênea é a amostra
+n <- length(meuVetor)
 
-SE = dp / sqrt(n)
-SE
+SE <- dp / sqrt(n)
+SE #medida de variação de uma média amostral em relação à média da população
+
+#desvio padrão trata de um índice de dispersão da amostra em relação à média
+#erro padrão é uma medida que ajuda a avaliar a confiabilidade da média calculada
 ```
 
 
 # Matrix - dataframes
 
 ```{r}
-myMatrix = matrix(1:6, nrow = 2, ncol = 3) 
+myMatrix <- matrix(1:6, nrow = 2, ncol = 3) 
 myMatrix
 
-# mostrar indexação [,1] e [1,]
-
-y = seq(1, 10, by = 2)
-myMatrix2 = matrix(y, nrow = 3, ncol = 2)
+y <- seq(1, 10, by = 2)
+myMatrix2 <- matrix(y, nrow = 3, ncol = 2)
 myMatrix2
 
+#indexação
+myMatrix[,1] #coluna 1
+myMatrix[1,] #linha 1
+
 #juntar colunas de dois vetores para formar uma matrix
-x = 1:4
-y = 10:13
+x <- 1:4
+y <- 10:13
 
-cbind(x, y) #as colunas devem ter o mesmo número de linhas
-#cbind = Column Bind
+cbind(x, y) #cbind = Column Bind
+#as colunas devem ter o mesmo número de linhas
 
-rbind(x, y) #juntar linhas
-#rbind = Row Bind
+rbind(x, y) #rbind = Row Bind
 
-matriz=cbind(x, y)
-df = as.data.frame(matriz)
+matriz <- cbind(x, y)
+matriz #matrix matemática
 
-matriz # matrix matematica
-df # banco de dados
+df <- as.data.frame(matriz)
+df #banco de dados
 
 class(matriz)
 class(df)
 
-
 str(df)
 length(df)
 
-# matrix 3D, matrizes empilhadas - LISTA
+#lista
+#matrizes empilhadas
 z <- 2:7
-myList = list(x,y,z)
+myList <- list(x, y, z)
 myList[[2]]
 myList[[3]][2]
 
@@ -173,18 +177,8 @@ maior = function(parametro1, parametro2) {
 a = 4
 b = 10
 
-maior(parametro1=b, parametro2=a)
+maior(parametro1 = b, parametro2 = a)
 maior(b, a)
-```
-
-
----------------PAUSA----------------
-
-
-# Exercícios
-
-```{r}
-
 ```
 
 
