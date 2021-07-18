@@ -100,8 +100,9 @@ ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) +
 #install_version("ggplot2", version = "3.3.0", repos = "http://cran.us.r-project.org")
 
 library(ggplot2)
-
+library(tidyverse)
 library(readxl)
+library(tidypaleo)
 
 setwd("D:/Documentos Drive/Academicos/Aulas/ProgramacaoFuncional_Geologia")
 
@@ -110,7 +111,20 @@ lv<-read_csv("petrophysics_bertolini_2020.csv") %>%
 
 sd_1<-read_excel("petrography_bertolini_2020.xlsx",sheet=1)
 
-lvsd<-left_join(lv,sd_1,by="sample")
+lvsd<-left_join(lv,sd_1,by="sample") %>% 
+      mutate(lava_1_base=lava_1,
+         lava_1_top=lava_1_base-exp_1,
+         lava_2_base=lava_2,
+         lava_2_top=lava_2_base-exp_2,
+          dis_1_top=lava_1_top-depth,
+         dis_1_base=depth-lava_1_base,
+         dis_2_top=lava_2_top-depth,
+         dis_2_base=depth-lava_2_base,
+         dis_l1=if_else(dis_1_base>0,dis_1_base,dis_1_top),
+         dis_l2=if_else(dis_2_base>0,dis_2_base,dis_2_top),
+         distance= case_when(is.na(dis_l2) | dis_l2<0 ~dis_l1,
+                             dis_l1>dis_l2~dis_l2,
+                             TRUE~dis_l1))
   
 #1 Explorar banco de dados "lvsd"
 
@@ -122,7 +136,8 @@ lvsd %>% group_by(well) %>%
   summarise(across(starts_with("Por"), ~ mean(.x, na.rm = TRUE)))
   
 lvsd %>% group_by(well) %>% 
-  summarise(across(starts_with("Comp"), ~ mean(.x, na.rm = TRUE)))  
+  summarise(across(starts_with("Comp"), ~ mean(.x, na.rm = TRUE))) %>% 
+  
   
 
 #2 Qual relação entre as velocidades das ondas P- e S- nos arenitos? (Modele)
@@ -156,26 +171,77 @@ lvsd %>%
   pivot_longer(cols = c(p_wave:s_wave,porosity, density),names_to = "var",values_to = "value") %>%
   mutate(var=factor(var,levels = c("porosity","density","p_wave","s_wave"))) %>% 
   ggplot(aes(x = value, y = depth)) +
+  geom_rect(mapping = aes(ymin = 283.45, 
+                          ymax = 298.10, 
+                          xmin = -Inf, 
+                          xmax = Inf), 
+            alpha = 0.2,
+            alpha=0.5,
+            fill = "gray",
+            inherit.aes = FALSE)+
+  geom_rect(mapping = aes(ymin = 298.10, 
+                          ymax = 340, 
+                          xmin = -Inf, 
+                          xmax = Inf), 
+            alpha = 0.2,
+            alpha=0.3,
+            fill = "lightyellow",
+            inherit.aes = FALSE)+
+  geom_hline(yintercept = c(283.45,298.10,340), col = "red", lty = 2, alpha = 0.7)+
   geom_lineh() +
   geom_point() +
   scale_y_reverse() +
   facet_geochem_gridh(vars(var), scales = "free") +
-  geom_hline(yintercept = c(283.45,298.10), col = "red", lty = 2, alpha = 0.7)+
-  labs(x = NULL, y = "Depth (m)", title = "Cretaceous Paraná Basin")+
-  theme_classic()
+  
+  labs(x = NULL, y = "Depth (m)",
+       title = "Cretaceous Paraná Basin",
+       caption=" Petrophysical attributes variation in well TG-227. Pale-yellow- Sandstone, Gray- Basalt, Bertolini et al., 2021")+
+  theme_paleo()
   
 
 #5 qual a relação entre a distancia até a lava e porosidade? e ondas sismicas?
 
 lvsd %>% 
-  mutate(dis_1=)
-
+  pivot_longer(cols=c(porosity,s_wave,p_wave),names_to = "var",values_to = "values") %>% 
+  ggplot(aes(x=distance,y=values))+
+  geom_point(aes(color=well))+
+  scale_x_log10()+
+  geom_smooth(method = "lm")+
+  facet_wrap(~var,scales="free")
 
 #6 qual relação da diagênese e distância até a lava?
 
+lvsd %>% 
+  pivot_longer(starts_with("cem"),names_to = "var",values_to = "values") %>% 
+  ggplot(aes(x=distance,y=values))+
+  geom_point(aes(color=well))+
+  scale_x_log10()+
+  geom_smooth(method = "lm")+
+  facet_wrap(~var,scales="free")
 
-
+lvsd %>% 
+  pivot_longer(starts_with("con"),names_to = "var",values_to = "values") %>% 
+  ggplot(aes(x=distance,y=values))+
+  geom_point(aes(color=well))+
+  scale_x_log10()+
+  geom_smooth(method = "lm")+
+  facet_wrap(~var,scales="free")
 
 #7  e da provêniencia?
+lvsd %>% 
+  pivot_longer(starts_with(c("qtz","f","lt")),names_to = "var",values_to = "values") %>% 
+  ggplot(aes(x=distance,y=values))+
+  geom_point(aes(color=well))+
+  scale_x_log10()+
+  geom_smooth(method = "lm")+
+  facet_wrap(~var,scales="free")
+
+lvsd %>% 
+  pivot_longer(starts_with("gm"),names_to = "var",values_to = "values") %>% 
+  ggplot(aes(x=distance,y=values))+
+  geom_point(aes(color=well))+
+  scale_x_log10()+
+  geom_smooth(method = "lm")+
+  facet_wrap(~var,scales="free")
 ```
 
