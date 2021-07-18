@@ -4,7 +4,7 @@
     <title>Intensivão de programação funcional em R aplicado à Geologia</title>
     <meta charset="utf-8" />
     <meta name="author" content="Bárbara Malcorra" />
-    <meta name="date" content="2021-07-17" />
+    <meta name="date" content="2021-07-18" />
     <script src="libs/header-attrs-2.9/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="custom.css" type="text/css" />
@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## ⚒<br/>Aula 3 - visualização de dados com o ggplot2
 ### Bárbara Malcorra
 ### PUCRS
-### 2021-07-17
+### 2021-07-18
 
 ---
 
@@ -36,10 +36,10 @@ library(readxl)
 ```
 
 
+
 ```r
 setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
 
-#install.packages("readxl")
 library(readxl)
 
 dados.ex &lt;- read_excel("dados_santos2009.xlsx") %&gt;% 
@@ -106,30 +106,23 @@ dados.ex
 ```
 
 
-
-```r
-volcano &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
-```
-
-
 ---
 # Exercícios
 
-1. A partir da base "dados_santos2009", plote um boxplot da variável "Pb" agrupando por "litho". Utilize o pacote ggplot2 e a função "stat_summary".
+- 1) A partir da base "dados_santos2009", plote um boxplot da variável "Pb" agrupando por "litho". Utilize o pacote ggplot2 e a função "stat_summary".
 
-2. Faça um gráfico de barras dos elementos químicos. Agrupe por litho e adicione barras de erro.
-  - Dica: utilize as funções pivot_longer() e facet_wrap().
+- 2) Faça um gráfico de barras dos elementos químicos. Agrupe por litho e adicione barras de erro. Dica: utilize as funções pivot_longer() e facet_wrap().
   
-3. Faça um gráfico de pontos (scatter plot) da razão La/Tm por distance. Utilize a função "geom_smooth" para plotar o modelo.
+- 3) Faça um gráfico de pontos (scatter plot) da razão La/Tm por distance. Utilize a função "geom_smooth" para plotar o modelo.
 
-4. Agora, plote uma linha para cada grupo (litho).
+- 4) Agora, plote uma linha para cada grupo (litho).
 
-5. Faça um histograma de frequência da variável "Pb".
+- 5) Faça um histograma de frequência da variável "Pb".
 
-6. Explore a relação entre a distância até o sill e os elementos químicos nas rochas SEDIMENTARES.
+- 6) Explore a relação entre a distância até o sill e os elementos químicos nas rochas SEDIMENTARES.
 
 ---
-# 1: box plot
+- 1) A partir da base "dados_santos2009", plote um boxplot da variável "Pb" agrupando por "litho". Utilize o pacote ggplot2 e a função "stat_summary".
 
 count: false
  
@@ -313,7 +306,7 @@ dados.ex %&gt;%
 
 
 ---
-# 2: bar plot with error bars
+- 2) Faça um gráfico de barras dos elementos químicos. Agrupe por litho e adicione barras de erro. Dica: utilize as funções pivot_longer() e facet_wrap().
 
 count: false
  
@@ -549,7 +542,7 @@ dados.ex %&gt;%
 
 
 ---
-# 3: scatter plot 1
+- 3) Faça um gráfico de pontos (scatter plot) da razão La/Tm por distance. Utilize a função "geom_smooth" para plotar o modelo.
 
 count: false
  
@@ -687,7 +680,7 @@ dados.ex %&gt;%
   dplyr::select(lower, La, Tm) %&gt;%
   ggplot(aes(x = lower, y = La/Tm)) +
   geom_point(size = 3) +  #aes aqui também
-* geom_smooth(method = "lm")
+* scale_x_log10()   #altera a escala
 ```
 ]
  
@@ -708,9 +701,8 @@ dados.ex %&gt;%
   dplyr::select(lower, La, Tm) %&gt;%
   ggplot(aes(x = lower, y = La/Tm)) +
   geom_point(size = 3) +  #aes aqui também
-  geom_smooth(method = "lm") +
-* stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
-*          method = "spearman")
+  scale_x_log10() +  #altera a escala
+* geom_smooth(method = "lm")
 ```
 ]
  
@@ -731,10 +723,10 @@ dados.ex %&gt;%
   dplyr::select(lower, La, Tm) %&gt;%
   ggplot(aes(x = lower, y = La/Tm)) +
   geom_point(size = 3) +  #aes aqui também
+  scale_x_log10() +  #altera a escala
   geom_smooth(method = "lm") +
-  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
-           method = "spearman") +
-* theme(legend.position = "right")
+* stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+*          method = "spearman")
 ```
 ]
  
@@ -755,11 +747,11 @@ dados.ex %&gt;%
   dplyr::select(lower, La, Tm) %&gt;%
   ggplot(aes(x = lower, y = La/Tm)) +
   geom_point(size = 3) +  #aes aqui também
+  scale_x_log10() +  #altera a escala
   geom_smooth(method = "lm") +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "spearman") +
-  theme(legend.position = "right") +
-* scale_x_log10()   #altera a escala
+* theme(legend.position = "right")
 ```
 ]
  
@@ -780,11 +772,11 @@ dados.ex %&gt;%
   dplyr::select(lower, La, Tm) %&gt;%
   ggplot(aes(x = lower, y = La/Tm)) +
   geom_point(size = 3) +  #aes aqui também
+  scale_x_log10() +  #altera a escala
   geom_smooth(method = "lm") +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "spearman") +
   theme(legend.position = "right") +
-  scale_x_log10() +  #altera a escala
 * labs(x = "distance to sill (m)")
 ```
 ]
@@ -830,11 +822,11 @@ dados.ex %&gt;%
   dplyr::select(lower, La, Tm) %&gt;% 
   ggplot(aes(x = lower, y = La/Tm)) +
   geom_point(size = 3) + #aes aqui também
+  scale_x_log10() + #altera a escala
   geom_smooth(method = "lm") +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "spearman") +
   theme(legend.position = "right") +
-  scale_x_log10() + #altera a escala
   labs(x = "distance to sill (m)")
 ```
 
@@ -842,7 +834,7 @@ dados.ex %&gt;%
 
 
 ---
-# 4: scatter plot 2
+- 4) Agora, plote uma linha para cada grupo (litho).
 
 count: false
  
@@ -943,7 +935,7 @@ library(ggpubr)
 dados.ex %&gt;%
   ggplot(aes(x = lower, y = La/Eu, color = litho)) +
   geom_point(size = 3) +  #aes aqui também
-* geom_smooth(method = "lm", se = FALSE, aes(color = litho))
+* scale_x_log10()   #altera a escala
 ```
 ]
  
@@ -963,11 +955,8 @@ library(ggpubr)
 dados.ex %&gt;%
   ggplot(aes(x = lower, y = La/Eu, color = litho)) +
   geom_point(size = 3) +  #aes aqui também
-  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
-* stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
-*          method = "spearman",
-*          label.x.npc = "left",
-*          label.y.npc = "top")
+  scale_x_log10() +  #altera a escala
+* geom_smooth(method = "lm", se = FALSE, aes(color = litho))
 ```
 ]
  
@@ -987,12 +976,12 @@ library(ggpubr)
 dados.ex %&gt;%
   ggplot(aes(x = lower, y = La/Eu, color = litho)) +
   geom_point(size = 3) +  #aes aqui também
+  scale_x_log10() +  #altera a escala
   geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
-  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
-           method = "spearman",
-           label.x.npc = "left",
-           label.y.npc = "top") +
-* theme(legend.position = "bottom")
+* stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+*          method = "spearman",
+*          label.x.npc = "left",
+*          label.y.npc = "top")
 ```
 ]
  
@@ -1012,13 +1001,13 @@ library(ggpubr)
 dados.ex %&gt;%
   ggplot(aes(x = lower, y = La/Eu, color = litho)) +
   geom_point(size = 3) +  #aes aqui também
+  scale_x_log10() +  #altera a escala
   geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "spearman",
            label.x.npc = "left",
            label.y.npc = "top") +
-  theme(legend.position = "bottom") +
-* scale_x_log10()   #altera a escala
+* theme(legend.position = "bottom")
 ```
 ]
  
@@ -1038,13 +1027,13 @@ library(ggpubr)
 dados.ex %&gt;%
   ggplot(aes(x = lower, y = La/Eu, color = litho)) +
   geom_point(size = 3) +  #aes aqui também
+  scale_x_log10() +  #altera a escala
   geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "spearman",
            label.x.npc = "left",
            label.y.npc = "top") +
   theme(legend.position = "bottom") +
-  scale_x_log10() +  #altera a escala
 * labs(x = "distance to sill (m)",
 *      title = "Razão LREE e MREE em sedimentos em função da distância até o sill")
 ```
@@ -1090,13 +1079,13 @@ library(ggpubr)
 dados.ex %&gt;% 
   ggplot(aes(x = lower, y = La/Eu, color = litho)) +
   geom_point(size = 3) + #aes aqui também
+  scale_x_log10() + #altera a escala
   geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "spearman",
            label.x.npc = "left",
            label.y.npc = "top") +
   theme(legend.position = "bottom") +
-  scale_x_log10() + #altera a escala
   labs(x = "distance to sill (m)",
        title = "Razão LREE e MREE em sedimentos em função da distância até o sill")
 ```
@@ -1105,7 +1094,7 @@ dados.ex %&gt;%
 
 
 ---
-# 5. histograma
+- 5) Faça um histograma de frequência da variável "Pb".
 
 count: false
  
@@ -1232,7 +1221,7 @@ dados.ex %&gt;%
 
 
 ---
-# 6. qual a correlação entre distância até o sill e os elementos químicos nas rochas SEDIMENTARES?
+- 6) Explore a relação entre a distância até o sill e os elementos químicos nas rochas SEDIMENTARES.
 
 count: false
  
@@ -1415,7 +1404,7 @@ dados.ex %&gt;%
   ggplot(aes(x = lower, y = value, color = litho)) +
   geom_point(alpha = 0.7, size = 2) +
   scale_x_log10() +
-* geom_smooth(method = "lm", se = FALSE, aes(color = litho))
+* facet_wrap(~variable, scales = "free")
 ```
 ]
  
@@ -1438,9 +1427,8 @@ dados.ex %&gt;%
   ggplot(aes(x = lower, y = value, color = litho)) +
   geom_point(alpha = 0.7, size = 2) +
   scale_x_log10() +
-  geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
-* stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
-*          method = "lm")
+  facet_wrap(~variable, scales = "free") +
+* geom_smooth(method = "lm", se = FALSE, aes(color = litho))
 ```
 ]
  
@@ -1463,12 +1451,10 @@ dados.ex %&gt;%
   ggplot(aes(x = lower, y = value, color = litho)) +
   geom_point(alpha = 0.7, size = 2) +
   scale_x_log10() +
+  facet_wrap(~variable, scales = "free") +
   geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
-  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
-           method = "lm") +
-* labs(x = "distance to sill (m)",
-*      y = "value",
-*      caption = "referência")
+* stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+*          method = "lm")
 ```
 ]
  
@@ -1491,13 +1477,13 @@ dados.ex %&gt;%
   ggplot(aes(x = lower, y = value, color = litho)) +
   geom_point(alpha = 0.7, size = 2) +
   scale_x_log10() +
+  facet_wrap(~variable, scales = "free") +
   geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "lm") +
-  labs(x = "distance to sill (m)",
-       y = "value",
-       caption = "referência") +
-* facet_wrap(~variable, scales = "free")
+* labs(x = "distance to sill (m)",
+*      y = "value",
+*      caption = "referência")
 ```
 ]
  
@@ -1520,13 +1506,13 @@ dados.ex %&gt;%
   ggplot(aes(x = lower, y = value, color = litho)) +
   geom_point(alpha = 0.7, size = 2) +
   scale_x_log10() +
+  facet_wrap(~variable, scales = "free") +
   geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "lm") +
   labs(x = "distance to sill (m)",
        y = "value",
        caption = "referência") +
-  facet_wrap(~variable, scales = "free") +
 * scale_color_manual(values = c("red", "blue"))
 ```
 ]
@@ -1550,13 +1536,13 @@ dados.ex %&gt;%
   ggplot(aes(x = lower, y = value, color = litho)) +
   geom_point(alpha = 0.7, size = 2) +
   scale_x_log10() +
+  facet_wrap(~variable, scales = "free") +
   geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "lm") +
   labs(x = "distance to sill (m)",
        y = "value",
        caption = "referência") +
-  facet_wrap(~variable, scales = "free") +
   scale_color_manual(values = c("red", "blue"))
 * theme_bw()
 ```
@@ -2028,13 +2014,13 @@ dados.ex %&gt;%
   ggplot(aes(x = lower, y = value, color = litho)) +
   geom_point(alpha = 0.7, size = 2) +
   scale_x_log10() +
+  facet_wrap(~variable, scales = "free") +
   geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "lm") +
   labs(x = "distance to sill (m)",
        y = "value",
        caption = "referência") +
-  facet_wrap(~variable, scales = "free") +
   scale_color_manual(values = c("red", "blue"))
 ```
 
@@ -2466,6 +2452,9 @@ List of 93
  - attr(*, "complete")= logi TRUE
  - attr(*, "validate")= logi TRUE
 ```
+
+
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

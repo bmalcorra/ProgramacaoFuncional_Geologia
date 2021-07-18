@@ -238,61 +238,6 @@ dados.ex %>%
 ```
 
 
-
-
-
-
-
-```{r}
-dados %>%
-  dplyr::select(Tectonic_setting, Apatite, La:Lu) %>% 
-  mutate(across(La:Lu, as.numeric)) %>% 
-  pivot_longer(cols = La:Lu,
-               names_to = "variable",
-               values_to = "value") %>% 
-  ggplot(aes(x = value, y = Apatite, color = Tectonic_setting)) +
-  geom_point(alpha = 0.7) +
-  facet_wrap(~Tectonic_setting, scales = "free") +
-  geom_smooth(method = "lm", se = FALSE, aes(color = Tectonic_setting)) +
-  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
-           method = "spearman")
-```
-
-
-# Explorando a relação entre Chumbo e Tório
-
-.pull-left[
-```{r plot-label5, eval=FALSE}
-dados.ex %>% 
-  ggplot(aes(x = lower, y = Th)) +
-  geom_point(alpha = 0.7, size = 2) +
-  geom_smooth(method = "lm", se = TRUE) +
-  labs(x = "distance to sill (m)",
-       y = "Pb (ppm)",
-       title = "Título",
-       subtitle = "Subtítulo",
-       caption = "referência") +
-  facet_wrap(~litho, scales = "free")
-```
-]
-
-.pull-right[
-```{r plot-label5-out, ref.label="plot-label5", echo=FALSE}
-```
-]
-
-# Faça um histograma da variável **last_eruption_year**
-
-```{r}
-volcano %>% 
-  mutate(last_eruption_year = as.numeric(last_eruption_year)) %>% 
-  ggplot(aes(last_eruption_year, fill = evidence_category)) +
-  geom_histogram()
-```
-
-
-
-
-
+# Exercícios
 
 

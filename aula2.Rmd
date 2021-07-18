@@ -164,15 +164,9 @@ names(dados.ex)
 ---
 # Exercício 1
 
-- Explorar banco de dados volcano  
--- Importar  
--- Inspecionar colunas  
--- Inspecionar tipos de variáveis  
-
----
-```{r}
-volcano <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
-```
+- 1) Importar banco de dados "volcano"  
+- 2) Inspecionar colunas  
+- 3) Inspecionar tipos de variáveis  
 
 ---
 # Dados
@@ -181,13 +175,27 @@ volcano <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/ti
 
 <https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-12/readme.md>
 
-```{r, message = FALSE, warning = FALSE}
-volcano <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
-eruptions <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/eruptions.csv')
-events <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/events.csv')
-tree_rings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/tree_rings.csv')
-sulfur <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/sulfur.csv')
+```{r}
+volcano <- read.csv("volcano.csv") %>% 
+  as_tibble()
+
+volcano
 ```
+
+
+```{r}
+volcano %>% 
+  colnames()
+
+volcano %>% 
+  summary()
+
+volcano %>% 
+  str()
+
+str(volcano)
+```
+
 
 ---
 # dplyr()
@@ -208,7 +216,7 @@ knitr::include_graphics("https://didatica.tech/wp-content/uploads/2019/10/dplyr.
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, latitude:elevation) %>% 
+  dplyr::select(volcano_name, country, latitude:elevation) %>% 
   head()
 ```
 
@@ -217,7 +225,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(-tectonic_settings) %>% 
+  dplyr::select(-tectonic_settings) %>% 
   head()
 ```
 
@@ -231,7 +239,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(starts_with("population")) %>% 
+  dplyr::select(starts_with("population")) %>% 
   head()
 ```
 
@@ -240,7 +248,7 @@ volcano %>%
 
 ```{r}
 volcano %>% 
-  select(volcano_name, country, latitude:elevation) %>% 
+  dplyr::select(volcano_name, country, latitude:elevation) %>% 
   filter(country == "Antarctica") %>% 
   head()
 ```
@@ -390,10 +398,10 @@ volcano %>%
 # Exercícios 2
 
 ### Resolvendo problemas..
-- Em qual país existem mais vulcões?  
-- Nesse país, qual o tipo de vulcão mais comum?  
-- Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
-- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Fltre países em que existam mais de 2 vulcões.
+- 1) Em qual país existem mais vulcões?  
+- 2) Nesse país, qual o tipo de vulcão mais comum?  
+- 3) Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
+- 4) Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Fltre países em que existam mais de 2 vulcões.
 
 ### Funções
 -- select()  
@@ -405,9 +413,7 @@ volcano %>%
 -- arrange()  
 
 ---
-# Respostas: 
-
-- Em qual país existem mais vulcões?
+- 1. Em qual país existem mais vulcões?
 
 ```{r}
 volcano %>% 
@@ -416,7 +422,7 @@ volcano %>%
 ```
 
 ---
-- Nesse país, qual o tipo de vulcão mais comum?
+- 2. Nesse país, qual o tipo de vulcão mais comum?
 
 ```{r}
 volcano %>% 
@@ -425,7 +431,7 @@ volcano %>%
 ```
 
 ---
-- Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?
+- 3. Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?
 
 ```{r}
 volcano %>% 
@@ -436,7 +442,7 @@ volcano %>%
 ```
 
 ---
-- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Filtre países em que existam mais de 2 vulcões.
+- 4. Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Filtre países em que existam mais de 2 vulcões.
 
 ```{r}
 volcano %>% 
@@ -534,7 +540,12 @@ volcano %>%
 
 
 ---
-# Respostas
+# Exercício 3
+
+- 1) Qual o número de tipos de vulcões por país? Dica: count() + pivot_wider()
+
+---
+- 1) Qual o número de tipos de vulcões por país? Dica: count() + pivot_wider()
 
 ```{r}
 volcano %>% 
