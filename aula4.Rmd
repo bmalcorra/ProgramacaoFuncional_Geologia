@@ -16,12 +16,87 @@ editor_options:
 # dados estratigráficos
 
 - pacote tidypaleo
-- abstrações e funções otimizadas
+- abstrações e funções otimizadas para dados estrasti
+
+```{r}
+library(tidypaleo)
+```
 
 
 
+---
+
+- Vamos explorar o pacote com os dados do artigo Santos et al., 2009
+
+```{r}
+
+distance <- read.csv("santos_2009.csv") %>% 
+  as_tibble()
+```
+
+- Pergunta 1: qual relação do V em função da distância ate o sill?
+
+```{r}
+distance %>%
+  filter(!litho=="volcanic") %>% 
+  ggplot(aes(x = Ni, y = lower)) +
+  geom_lineh() +
+  geom_point(size=2,
+             aes(color=litho)) +
+  scale_y_reverse()+
+  geom_hline(yintercept = 0, col = "red", lty = 2, alpha = 0.7)+
+  labs(y = "Depth (m)",
+       title = "Permian Paraná Basin",
+       caption="V changes from distance to sill, Santos et al., 2009")+
+  theme_paleo()
+  
+```
+
+- Pergunta 2: o tipo de rocha afeta a interação entre sedimento e sill?
+```{r}
+distance %>%
+  filter(!litho=="volcanic") %>% 
+  ggplot(aes(x = Pb, y = lower)) +
+  geom_lineh() +
+  geom_point(size=2,
+             aes(color=litho)) +
+  scale_y_reverse()+
+  geom_hline(yintercept = 0, col = "red", lty = 2, alpha = 0.7)+
+  labs(y = "Depth (m)",
+       title = "Permian Paraná Basin",
+       caption="V changes from distance to sill, Santos et al., 2009")+
+  facet_wrap(~litho)+
+  theme_paleo()
+```
 
 
+
+  geom_rect(mapping = aes(ymin = 283.45, 
+                          ymax = 298.10, 
+                          xmin = -Inf, 
+                          xmax = Inf), 
+            alpha = 0.2,
+            alpha=0.5,
+            fill = "gray",
+            inherit.aes = FALSE)+
+  geom_rect(mapping = aes(ymin = 298.10, 
+                          ymax = 340, 
+                          xmin = -Inf, 
+                          xmax = Inf), 
+            alpha = 0.2,
+            alpha=0.3,
+            fill = "lightyellow",
+            inherit.aes = FALSE)+
+  geom_hline(yintercept = c(283.45,298.10,340), col = "red", lty = 2, alpha = 0.7)+
+  geom_lineh() +
+  geom_point() +
+  scale_y_reverse() +
+  facet_geochem_gridh(vars(var), scales = "free") +
+  
+```
+
+
+---
 ## Estudo de caso 1
 
 - Estudo de caso de petrofísica e petrologia de Bertolini et al. (2021)- busca entender a relação entre diagênese e petrofísica na interface lava-sedimento, com exemplo ns interação entre a Fm. Botucatu em contato e Fm. Serra Geral
@@ -34,12 +109,14 @@ editor_options:
 - 5) qual a relação entre a distancia até a lava e porosidade? e ondas sismicas?
 - 6) qual relação da diagênese e distância até a lava?
 - 7) e da provêniencia?
+---
+
+```{r}
 
 
 ## Respostas- Estudo de caso 1
 
-# Estudo de caso 1
-```{r}
+# Estudo de caso 1```{r}
 #library(devtools)
 #install_version("ggplot2", version = "3.3.0", repos = "http://cran.us.r-project.org")
 
@@ -73,7 +150,7 @@ lvsd<-left_join(lv,sd_1,by="sample") %>%
   
 #1 Explorar banco de dados "lvsd"
 
-lvsd
+lvsd <- read_csv("lvsd.csv")
 
 lvsd %>% str()
   
@@ -137,7 +214,6 @@ lvsd %>%
   geom_point() +
   scale_y_reverse() +
   facet_geochem_gridh(vars(var), scales = "free") +
-  
   labs(x = NULL, y = "Depth (m)",
        title = "Cretaceous Paraná Basin",
        caption=" Petrophysical attributes variation in well TG-227. Pale-yellow- Sandstone, Gray- Basalt, Bertolini et al., 2021")+
