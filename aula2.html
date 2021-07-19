@@ -3,8 +3,8 @@
   <head>
     <title>Intensivão de programação funcional em R aplicado à Geologia</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Bárbara Malcorra" />
-    <meta name="date" content="2021-07-18" />
+    <meta name="author" content="Bárbara Malcorra, Gabriel Bertolini" />
+    <meta name="date" content="2021-07-19" />
     <script src="libs/header-attrs-2.9/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -14,9 +14,9 @@ class: center, middle, inverse, title-slide
 
 # Intensivão de programação funcional em R aplicado à Geologia
 ## ⚒<br/>Aula 2 - programação funcional
-### Bárbara Malcorra
-### PUCRS
-### 2021-07-18
+### Bárbara Malcorra, Gabriel Bertolini
+### UFRGS
+### 2021-07-19
 
 ---
 
@@ -31,8 +31,12 @@ class: center, middle, inverse, title-slide
 
 
 ```r
+#install.packages("tidyverse")
 library(tidyverse)
 ```
+
+- Família de pacote recente
+
 
 .pull-left[
 &lt;img src="https://tidyverse.tidyverse.org/articles/tidyverse-logo.png" width="70%" style="display: block; margin: auto;" /&gt;
@@ -60,16 +64,19 @@ library(tidyverse)
 **&lt;=** menor igual a  
 **&gt;=** maior igual a  
 **==** igual a  
-**%in%** faz parte de um grupo  
-**is.na()** é NA  
 **&amp;** e  
 **|** ou  
-**!** diferente de  
-  
-# Boa parte da programação está em:
-- 1) consertar erros de sintaxe do seu código  
-- 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
- 
+**!** diferente de 
+**%in%** faz parte de um grupo  
+**is.na()** é NA  
+
+---
+# Lembrete
+
+- Boa parte da programação está em:
+  - 1) consertar erros de sintaxe do seu código  
+  - 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
+
 ---
 # Pacotes
 
@@ -337,9 +344,9 @@ names(dados.ex)
 ---
 # Exercício 1
 
-- 1. Importar banco de dados "volcano"  
-- 2. Inspecionar colunas  
-- 3. Inspecionar tipos de variáveis  
+- 1) Importar banco de dados "volcano"  
+- 2) Inspecionar colunas  
+- 3) Inspecionar tipos de variáveis  
 
 ---
 # Dados
@@ -924,10 +931,10 @@ volcano %&gt;%
 # Exercícios 2
 
 ### Resolvendo problemas..
-- 1. Em qual país existem mais vulcões?  
-- 2. Nesse país, qual o tipo de vulcão mais comum?  
-- 3. Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
-- 4. Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Fltre países em que existam mais de 2 vulcões.
+- 1) Em qual país existem mais vulcões?  
+- 2) Nesse país, qual o tipo de vulcão mais comum?  
+- 3) Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
+- 4) Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Fltre países em que existam mais de 2 vulcões.
 
 ### Funções
 -- select()  
@@ -1191,10 +1198,10 @@ volcano %&gt;%
 ---
 # Exercício 3
 
-- 1. Qual o número de tipos de vulcões por país? Dica: count() + pivot_wider()
+- 1) Qual o número de tipos de vulcões por país? Dica: count() + pivot_wider()
 
 ---
-- 1. Qual o número de tipos de vulcões por país? Dica: count() + pivot_wider()
+- 1) Qual o número de tipos de vulcões por país? Dica: count() + pivot_wider()
 
 
 ```r

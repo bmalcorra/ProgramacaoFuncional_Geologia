@@ -1,8 +1,8 @@
 ---
 title: "Intensivão de programação funcional em R aplicado à Geologia"
 subtitle: "⚒<br/>Aula 2 - programação funcional"
-author: "Bárbara Malcorra"
-institute: "PUCRS"
+author: "Bárbara Malcorra, Gabriel Bertolini"
+institute: "UFRGS"
 date: '`r Sys.Date()`'
 encoding: "UTF-8"
 output:
@@ -43,8 +43,12 @@ knitr::opts_chunk$set(fig.width = 6,
 # Tidyverse
 
 ```{r}
+#install.packages("tidyverse")
 library(tidyverse)
 ```
+
+- Família de pacote recente
+
 
 .pull-left[
 ```{r, echo = FALSE, fig.align = 'center', out.width = "70%"}
@@ -62,9 +66,9 @@ knitr::include_graphics("https://education.rstudio.com/blog/2020/07/teaching-the
 ---
 # Pipe %>%
 
-- Atalho Ctrl + Shift + M
-
 - Analisa o código do lado esquerdo e passa o resultado como o primeiro argumento do código do lado direito
+
+- Atalho Ctrl + Shift + M
 
 ```{r, echo = FALSE, fig.align = 'center', out.width = "30%"}
 knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
@@ -78,16 +82,19 @@ knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
 **<=** menor igual a  
 **>=** maior igual a  
 **==** igual a  
-**%in%** faz parte de um grupo  
-**is.na()** é NA  
 **&** e  
 **|** ou  
-**!** diferente de  
-  
-# Boa parte da programação está em:
-- 1) consertar erros de sintaxe do seu código  
-- 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
- 
+**!** diferente de 
+**%in%** faz parte de um grupo  
+**is.na()** é NA  
+
+---
+# Lembrete
+
+- Boa parte da programação está em:
+  - 1) consertar erros de sintaxe do seu código  
+  - 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
+
 ---
 # Pacotes
 
@@ -117,6 +124,8 @@ getwd()
 ```{r}
 dados <- read.csv("geoquim_granite.csv", header = TRUE, sep = ";") %>% 
   as_tibble()
+#espécie de dataframe com particularidades
+#mostra o tipo de variável
 
 dados
 ```
@@ -162,7 +171,7 @@ names(dados.ex)
 ```
 
 ---
-# Exercício 1
+# Exercício prático 1
 
 - 1) Importar banco de dados "volcano"  
 - 2) Inspecionar colunas  
@@ -292,6 +301,7 @@ volcano %>%
   filter(country == "Japan" & latitude > 1) %>% 
   head()
 ```
+
 ---
 # mutate()
 
@@ -395,13 +405,22 @@ volcano %>%
 ```
 
 ---
-# Exercícios 2
+# Perguntas:
+
+- 1) Se quisermos gerar médias para uma variávek categórica X, qual a primeira e a segunda função que utilizaremos?
+
+- 2) Se quisermos excluir linhas (criar subsets), qual a função que utilizaremos?
+
+- 3) Se quisermos excluir colunas, qual função utilizaremos?
+
+---
+# Exercícios práticos 2
 
 ### Resolvendo problemas..
 - 1) Em qual país existem mais vulcões?  
 - 2) Nesse país, qual o tipo de vulcão mais comum?  
 - 3) Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
-- 4) Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Fltre países em que existam mais de 2 vulcões.
+- 4) Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Filtre países em que existam mais de 2 vulcões.
 
 ### Funções
 -- select()  
@@ -540,7 +559,7 @@ volcano %>%
 
 
 ---
-# Exercício 3
+# Exercício prático 3
 
 - 1) Qual o número de tipos de vulcões por país? Dica: count() + pivot_wider()
 

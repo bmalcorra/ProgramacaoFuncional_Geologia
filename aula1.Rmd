@@ -5,32 +5,48 @@ editor_options:
   chunk_output_type: console
 ---
 
-Como trabalhar no Rstudio
-  - Console vs. Rstudio
-  - Criando projeto "Intensivão R"
-  - Script file
-  - Rmarkdown file
-      Comentários "##"
-      Chunk
-      Atalho: Ctrl + Alt + I
-      Atalho <- : Alt-
-      Knit
+# Como trabalhar no Rstudio
+
+- Console vs. Rstudio
+  - R = linguagem desenvolvida para computação estatística
+  - Rstudio = editor/ambiente para R
+      - inúmeros recursos adicionais
+      - o que vamos ver no curso é apenas uma fração minúscula do que ele oferece
+      - desde análise estatística até escrita de uma tese
+      - documentos, sites, apresentações, etc.
+      - fundo preto
+      
+- Painéis
+  - Script
+
+  - Console = respostas do que a gente pergunta para o R - o output
+  
+  - File = navegador dos arquivos do computador
+  - Plot = salvar, dar zoom
+  - Help
+  
+- Criando projeto "Intensivão R"
+  
+- Rmarkdown file
+  - Comentários "##"
+  - Chunk
+  - Atalho: Ctrl + Alt + I
+  - Atalho <- : Alt-
+  - Knit
 
 # R como calculadora
 
 ```{r}
 5 + 2 #soma
 
-5 * 2 #multiplicação
+10 - 8 #subtração
 
 8.2 / 2 #divisão
 
-10 - 8 #subtração
+5 * 2 #multiplicação
 
 5 ** 3 #elevado ao cubo
 5 ^ 3
-
-pi
 
 sqrt(81) #raiz quadrada
 
@@ -40,11 +56,14 @@ log(5)
 
 log10(5)
 
+pi
+
 5 + (3 * 5 / 2) #operações mais elaboradas
 ```
 
 
-# Tipos e atribuição de objetos
+# Criar variáveis
+## Tipos e atribuição de objetos
 
 ```{r}
 myNumber <- 5 #Camel case - prática de escrever palavras ou frase, onde cada palavra é iniciada com maiúsculas e unidas sem espaços

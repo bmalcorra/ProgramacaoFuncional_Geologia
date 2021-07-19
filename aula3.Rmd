@@ -28,8 +28,8 @@ library(viridis)
 dados %>% 
   dplyr::select(TiO2, Tectonic_setting) %>% 
   ggplot(aes(x = TiO2, y = Tectonic_setting, fill = Tectonic_setting)) +
-  geom_boxplot() +
-  stat_summary(color = "red") +
+  geom_boxplot() + #mediana
+  stat_summary(color = "red") + #média
   scale_fill_viridis(discrete = TRUE, option = "B") +
   theme_bw()
 
@@ -102,11 +102,11 @@ dados %>%
   filter(Group == "1- CPG & MPG") %>% 
   ggplot(aes(x = SiO2, y = MgO, color = SubGroup)) +
   geom_point(alpha = 0.7, size = 2, aes(shape = SubGroup)) +
-  geom_smooth(method = "lm", se = TRUE) +
-  stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
-           method = "spearman",
-           label.x.npc = "left",
-           label.y.npc = "bottom") +
+  geom_smooth(method = "lm", se = TRUE) + #
+  # stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
+  #          method = "spearman",
+  #          label.x.npc = "left",
+  #          label.y.npc = "bottom") +
   scale_y_log10() +
   theme(legend.position = "bottom") +
   scale_fill_viridis(discrete = TRUE)
@@ -119,7 +119,7 @@ dados %>%
   ggplot(aes(x = P, y = Q, color = SubGroup)) +
   geom_point(alpha = 0.5, size = 2) +
   scale_fill_viridis(discrete = TRUE, option = "B") +
-  facet_wrap(~Group) +
+  facet_wrap(~Group) + #painéis - útil para ver os dados de forma separada
   theme_light()
 ```
 
@@ -134,8 +134,8 @@ dados %>%
                names_to = "variable",
                values_to = "value") %>% 
   ggplot(aes(x = Group, y = value, fill = Group)) +
-  stat_summary(geom = "bar") +
-  stat_summary() +
+  stat_summary(geom = "bar") + #gráfico simples e pouco informativo
+  stat_summary() + #sem a barra de erro, a média é muito pouco informativa
   facet_wrap(~variable, scales = "free")
 ```
 

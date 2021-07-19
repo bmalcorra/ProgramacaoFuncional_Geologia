@@ -168,7 +168,7 @@ pre code {
 </div>
 
 
-<p>Como trabalhar no Rstudio - abrir R normal - Console vs. Rstudio - Criando projeto “Intensivão R” - Script file - Comentários “##” - Rmarkdown file Chunk Atalho: Ctrl + Alt + I Atalho &lt;- : Alt- Knit</p>
+<p>Como trabalhar no Rstudio - Console vs. Rstudio - Criando projeto “Intensivão R” - Script file - Rmarkdown file Comentários “##” Chunk Atalho: Ctrl + Alt + I Atalho &lt;- : Alt- Knit</p>
 <div id="r-como-calculadora" class="section level1">
 <h1>R como calculadora</h1>
 <pre class="r"><code>5 + 2 #soma</code></pre>
@@ -196,55 +196,56 @@ pre code {
 <pre class="r"><code>5 + (3 * 5 / 2) #operações mais elaboradas</code></pre>
 <pre><code>## [1] 12.5</code></pre>
 </div>
-<div id="objetos---tipos-e-atribuição" class="section level1">
-<h1>Objetos - tipos e atribuição</h1>
-<pre class="r"><code>myNumber = 5
+<div id="tipos-e-atribuição-de-objetos" class="section level1">
+<h1>Tipos e atribuição de objetos</h1>
+<pre class="r"><code>myNumber &lt;- 5 #Camel case - prática de escrever palavras ou frase, onde cada palavra é iniciada com maiúsculas e unidas sem espaços
+
 myNumber</code></pre>
 <pre><code>## [1] 5</code></pre>
-<pre class="r"><code>myNumber = 7
+<pre class="r"><code>myNumber &lt;- 7
 
-myInteger = as.integer(myNumber)
+myInteger &lt;- as.integer(myNumber)
 myInteger</code></pre>
 <pre><code>## [1] 7</code></pre>
-<pre class="r"><code>calculo = 5 + (3 * 5 / 2)
+<pre class="r"><code>calculo &lt;- 5 + (3 * 5 / 2)
 myNumber * calculo</code></pre>
 <pre><code>## [1] 87.5</code></pre>
 <pre class="r"><code>#myWord = geologia #erro
-myWord = &quot;geologia&quot;
+myWord &lt;- &quot;geologia&quot;
 myWord</code></pre>
 <pre><code>## [1] &quot;geologia&quot;</code></pre>
-<pre class="r"><code>myFactor = factor(myWord)
+<pre class="r"><code>myFactor &lt;- factor(myWord)
 myFactor</code></pre>
 <pre><code>## [1] geologia
 ## Levels: geologia</code></pre>
-<pre class="r"><code>mySentence = &quot;esta é a minha frase&quot;
+<pre class="r"><code>mySentence &lt;- &quot;esta é a minha frase&quot;
 mySentence</code></pre>
 <pre><code>## [1] &quot;esta é a minha frase&quot;</code></pre>
-<pre class="r"><code>#O R também trabalha com classes lógicas, TRUE or FALSE
+<pre class="r"><code>#o R também trabalha com classes lógicas, TRUE or FALSE
 #variável boleana (binária, lógica)
 
-myTRUE = TRUE
+myTRUE &lt;- TRUE
 4 == 4 #4 é igual a 4?</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>#Qual a estrutura dessas variáveis?
-class(myNumber)</code></pre>
+<pre class="r"><code>#qual a estrutura dessas variáveis?
+class(myNumber) #variável numérica - qualquer número DECIMAL</code></pre>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
-<pre class="r"><code>class(myInteger)</code></pre>
+<pre class="r"><code>class(myInteger) #variável numérica - número INTEIRO</code></pre>
 <pre><code>## [1] &quot;integer&quot;</code></pre>
-<pre class="r"><code>class(myWord)</code></pre>
+<pre class="r"><code>class(myWord) #variável caracter</code></pre>
 <pre><code>## [1] &quot;character&quot;</code></pre>
-<pre class="r"><code>class(myFactor)</code></pre>
+<pre class="r"><code>class(myFactor) #fator</code></pre>
 <pre><code>## [1] &quot;factor&quot;</code></pre>
 <pre class="r"><code>class(mySentence)</code></pre>
 <pre><code>## [1] &quot;character&quot;</code></pre>
-<pre class="r"><code>class(myTRUE)</code></pre>
+<pre class="r"><code>class(myTRUE) #variável lógica</code></pre>
 <pre><code>## [1] &quot;logical&quot;</code></pre>
 </div>
 <div id="vetores-objetos-que-contêm-uma-sequência-de-elementosvariáveis" class="section level1">
 <h1>Vetores: objetos que contêm uma sequência de elementos/variáveis</h1>
-<pre class="r"><code>myNumbers = c(1, 2, 3, 4, 5) #vetor
-myNumbers = 1:5
-myNumbers = seq(1, 5, by = 1)
+<pre class="r"><code>myNumbers &lt;- c(1, 2, 3, 4, 5) #vetor
+myNumbers &lt;- 1:5
+myNumbers &lt;- seq(1, 5, by = 1)
 
 myNumbers[myNumbers &gt; 3]</code></pre>
 <pre><code>## [1] 4 5</code></pre>
@@ -259,26 +260,27 @@ myWords</code></pre>
 <pre><code>## [1] &quot;estratigrafia&quot;</code></pre>
 <pre class="r"><code>myWords[4]</code></pre>
 <pre><code>## [1] NA</code></pre>
-<pre class="r"><code>meuVetor = c(1, 2, 3, 4, 5)
+<pre class="r"><code>meuVetor &lt;- c(1, 2, 3, 4, 5)
 
-dp = sd(meuVetor) #
-n = length(meuVetor)
+dp &lt;- sd(meuVetor) #indica o grau de variação de um conjunto de elementos
+#quanto menor o desvio padrão, mais homogênea é a amostra
+n &lt;- length(meuVetor)
 
-SE = dp / sqrt(n)
-SE</code></pre>
+SE &lt;- dp / sqrt(n)
+SE #medida de variação de uma média amostral em relação à média da população</code></pre>
 <pre><code>## [1] 0.7071068</code></pre>
+<pre class="r"><code>#desvio padrão trata de um índice de dispersão da amostra em relação à média
+#erro padrão é uma medida que ajuda a avaliar a confiabilidade da média calculada</code></pre>
 </div>
 <div id="matrix---dataframes" class="section level1">
 <h1>Matrix - dataframes</h1>
-<pre class="r"><code>myMatrix = matrix(1:6, nrow = 2, ncol = 3) 
+<pre class="r"><code>myMatrix &lt;- matrix(1:6, nrow = 2, ncol = 3) 
 myMatrix</code></pre>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]    1    3    5
 ## [2,]    2    4    6</code></pre>
-<pre class="r"><code># mostrar indexação [,1] e [1,]
-
-y = seq(1, 10, by = 2)
-myMatrix2 = matrix(y, nrow = 3, ncol = 2)</code></pre>
+<pre class="r"><code>y &lt;- seq(1, 10, by = 2)
+myMatrix2 &lt;- matrix(y, nrow = 3, ncol = 2)</code></pre>
 <pre><code>## Warning in matrix(y, nrow = 3, ncol = 2): comprimento dos dados [5] não é um
 ## submúltiplo ou múltiplo do número de linhas [3]</code></pre>
 <pre class="r"><code>myMatrix2</code></pre>
@@ -286,34 +288,36 @@ myMatrix2 = matrix(y, nrow = 3, ncol = 2)</code></pre>
 ## [1,]    1    7
 ## [2,]    3    9
 ## [3,]    5    1</code></pre>
+<pre class="r"><code>#indexação
+myMatrix[,1] #coluna 1</code></pre>
+<pre><code>## [1] 1 2</code></pre>
+<pre class="r"><code>myMatrix[1,] #linha 1</code></pre>
+<pre><code>## [1] 1 3 5</code></pre>
 <pre class="r"><code>#juntar colunas de dois vetores para formar uma matrix
-x = 1:4
-y = 10:13
+x &lt;- 1:4
+y &lt;- 10:13
 
-cbind(x, y) #as colunas devem ter o mesmo número de linhas</code></pre>
+cbind(x, y) #cbind = Column Bind</code></pre>
 <pre><code>##      x  y
 ## [1,] 1 10
 ## [2,] 2 11
 ## [3,] 3 12
 ## [4,] 4 13</code></pre>
-<pre class="r"><code>#cbind = Column Bind
+<pre class="r"><code>#as colunas devem ter o mesmo número de linhas
 
-rbind(x, y) #juntar linhas</code></pre>
+rbind(x, y) #rbind = Row Bind</code></pre>
 <pre><code>##   [,1] [,2] [,3] [,4]
 ## x    1    2    3    4
 ## y   10   11   12   13</code></pre>
-<pre class="r"><code>#rbind = Row Bind
-
-matriz=cbind(x, y)
-df = as.data.frame(matriz)
-
-matriz # matrix matematica</code></pre>
+<pre class="r"><code>matriz &lt;- cbind(x, y)
+matriz #matrix matemática</code></pre>
 <pre><code>##      x  y
 ## [1,] 1 10
 ## [2,] 2 11
 ## [3,] 3 12
 ## [4,] 4 13</code></pre>
-<pre class="r"><code>df # banco de dados</code></pre>
+<pre class="r"><code>df &lt;- as.data.frame(matriz)
+df #banco de dados</code></pre>
 <pre><code>##   x  y
 ## 1 1 10
 ## 2 2 11
@@ -329,9 +333,10 @@ matriz # matrix matematica</code></pre>
 ##  $ y: int  10 11 12 13</code></pre>
 <pre class="r"><code>length(df)</code></pre>
 <pre><code>## [1] 2</code></pre>
-<pre class="r"><code># matrix 3D, matrizes empilhadas - LISTA
+<pre class="r"><code>#lista
+#matrizes empilhadas
 z &lt;- 2:7
-myList = list(x,y,z)
+myList &lt;- list(x, y, z)
 myList[[2]]</code></pre>
 <pre><code>## [1] 10 11 12 13</code></pre>
 <pre class="r"><code>myList[[3]][2]</code></pre>
@@ -354,512 +359,10 @@ myLists[[1]][3,2]</code></pre>
 a = 4
 b = 10
 
-maior(parametro1=b, parametro2=a)</code></pre>
+maior(parametro1 = b, parametro2 = a)</code></pre>
 <pre><code>## [1] 10</code></pre>
 <pre class="r"><code>maior(b, a)</code></pre>
 <pre><code>## [1] 10</code></pre>
-<p>—————PAUSA—————-</p>
-</div>
-<div id="pacotes" class="section level1">
-<h1>Pacotes</h1>
-<p>Compilado de funções especiais Nos ajudam a desevolver códigos mais robustos, além de facilitarem resoluções de problemas</p>
-<pre class="r"><code>#install.packages(&quot;tidyverse&quot;)
-library(tidyverse)</code></pre>
-<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
-<pre><code>## v ggplot2 3.3.5     v purrr   0.3.4
-## v tibble  3.1.2     v dplyr   1.0.6
-## v tidyr   1.1.3     v stringr 1.4.0
-## v readr   1.4.0     v forcats 0.5.1</code></pre>
-<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-</div>
-<div id="estabelecendo-um-diretório-de-trabalho" class="section level1">
-<h1>Estabelecendo um diretório de trabalho</h1>
-<pre class="r"><code>setwd(&quot;C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/&quot;)</code></pre>
-</div>
-<div id="importando-os-dados" class="section level1">
-<h1>Importando os dados</h1>
-<ul>
-<li>de um arquivo .csv</li>
-</ul>
-<pre class="r"><code>dados = read.csv(&quot;geoquim_granite.csv&quot;, header = TRUE, sep = &quot;;&quot;) %&gt;% 
-  as_tibble()
-
-dados</code></pre>
-<pre><code>## # A tibble: 3,050 x 116
-##    X     Tectonic_setting Location_notes    Pluton  Colour Symbol Size_rel  Size
-##    &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt;             &lt;chr&gt;   &lt;chr&gt;   &lt;int&gt;    &lt;dbl&gt; &lt;dbl&gt;
-##  1 CR03  OROGENIC BELT    ////////Peninsul~ Cape P~ brown4     16      1.6  1.28
-##  2 BB202 OROGENIC BELT    ////////Peninsul~ Cape P~ brown4     16      1.6  1.28
-##  3 CB02  OROGENIC BELT    ////////Peninsul~ Cape P~ brown4     16      1.6  1.28
-##  4 HB02  OROGENIC BELT    ////////Peninsul~ Cape P~ brown4     16      1.6  1.28
-##  5 CR01  OROGENIC BELT    ////////Peninsul~ Cape P~ brown4     16      1.6  1.28
-##  6 LL01  OROGENIC BELT    ////////Peninsul~ Cape P~ brown4     16      1.6  1.28
-##  7 MP21  OROGENIC BELT    ////////Peninsul~ Cape P~ brown4     16      1.6  1.28
-##  8 OK07  OROGENIC BELT    ////////Peninsul~ Cape P~ brown4     16      1.6  1.28
-##  9 LG05  OROGENIC BELT    ////////Langebaa~ Cape P~ brown4     16      1.6  1.28
-## 10 BB201 OROGENIC BELT    ////////Peninsul~ Cape P~ brown4     16      1.6  1.28
-## # ... with 3,040 more rows, and 108 more variables: SubGroup &lt;chr&gt;,
-## #   Group &lt;chr&gt;, DebonPQ &lt;chr&gt;, TASMiddlemostPlut &lt;chr&gt;, Villaseca &lt;chr&gt;,
-## #   QANOR &lt;chr&gt;, LaRoche &lt;chr&gt;, Geol_unit_notes &lt;chr&gt;, Rock_type_notes &lt;chr&gt;,
-## #   Ref &lt;chr&gt;, Age &lt;chr&gt;, Latitude &lt;dbl&gt;, Longitude &lt;dbl&gt;, SiO2 &lt;dbl&gt;,
-## #   TiO2 &lt;dbl&gt;, Al2O3 &lt;dbl&gt;, FeOt &lt;dbl&gt;, MnO &lt;dbl&gt;, MgO &lt;dbl&gt;, CaO &lt;dbl&gt;,
-## #   K2O &lt;dbl&gt;, Na2O &lt;dbl&gt;, P2O5 &lt;chr&gt;, H2O &lt;dbl&gt;, H2Ot &lt;dbl&gt;, H2O.MINUS &lt;dbl&gt;,
-## #   LOI &lt;chr&gt;, Li &lt;dbl&gt;, Be &lt;dbl&gt;, B &lt;dbl&gt;, Sc &lt;dbl&gt;, V &lt;chr&gt;, Cr &lt;dbl&gt;,
-## #   Ni &lt;dbl&gt;, Cu &lt;dbl&gt;, Zn &lt;dbl&gt;, Rb &lt;dbl&gt;, Sr &lt;dbl&gt;, Y &lt;dbl&gt;, Zr &lt;dbl&gt;,
-## #   Nb &lt;dbl&gt;, Cs &lt;dbl&gt;, Ba &lt;dbl&gt;, La &lt;chr&gt;, Ce &lt;dbl&gt;, Pr &lt;chr&gt;, Nd &lt;chr&gt;,
-## #   Sm &lt;chr&gt;, Eu &lt;chr&gt;, Gd &lt;chr&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;, Er &lt;dbl&gt;,
-## #   Tm &lt;dbl&gt;, Yb &lt;dbl&gt;, Lu &lt;dbl&gt;, Hf &lt;dbl&gt;, Ta &lt;dbl&gt;, Pb &lt;dbl&gt;, Th &lt;chr&gt;,
-## #   U &lt;dbl&gt;, Co &lt;dbl&gt;, Mo &lt;chr&gt;, W &lt;dbl&gt;, Ga &lt;dbl&gt;, Ge &lt;dbl&gt;, As &lt;chr&gt;,
-## #   In &lt;dbl&gt;, Sn &lt;chr&gt;, Sb &lt;chr&gt;, Cd &lt;chr&gt;, Q &lt;dbl&gt;, C &lt;dbl&gt;, Or &lt;dbl&gt;,
-## #   Ab &lt;dbl&gt;, An &lt;dbl&gt;, Ne &lt;dbl&gt;, Ns &lt;dbl&gt;, Ks &lt;int&gt;, Di &lt;dbl&gt;, Wo &lt;dbl&gt;,
-## #   Hy &lt;dbl&gt;, Ol &lt;dbl&gt;, Il &lt;dbl&gt;, Tn &lt;dbl&gt;, Pf &lt;dbl&gt;, Ru &lt;dbl&gt;, Ap &lt;dbl&gt;,
-## #   Sum_CIPW &lt;dbl&gt;, Orthoclase &lt;dbl&gt;, Albite &lt;dbl&gt;, Anorthite &lt;dbl&gt;,
-## #   Quartz &lt;dbl&gt;, Apatite &lt;dbl&gt;, Ilmenite &lt;dbl&gt;, Biotite &lt;dbl&gt;,
-## #   Amphibole &lt;dbl&gt;, Corundum &lt;dbl&gt;, Rest &lt;dbl&gt;, ...</code></pre>
-<ul>
-<li>de um arquivo excel</li>
-</ul>
-<pre class="r"><code>#install.packages(&quot;readxl&quot;)
-library(readxl)
-
-dados.ex = read_excel(&quot;dados_santos2009.xlsx&quot;)
-
-dados.ex</code></pre>
-<pre><code>## # A tibble: 26 x 29
-##    Sample  Rock     `Distance from c~    Co    Ni    Cr     V    Sr    Rb     Ba
-##    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-##  1 SUC I-~ Black s~ 2.3–2.7           19.2   6.47  16.1  23.2  33.5  1.1   49.8 
-##  2 SUC I-~ Black s~ 2.3–2.7            7.23  9.57  17.2  26.2 412.   1.81  25.0 
-##  3 SUC I ~ Limesto~ 2.1                6.65 10.8   16.3  23.2 604.   0.17 101.  
-##  4 SUC I ~ Limesto~ 2.04999999999999~  6.64 10.6   15.7  22.9 576.   0.18  72.6 
-##  5 SUC I ~ Limesto~ 2                  8.5  10.3   18.1  28.0 599.   1.89 139.  
-##  6 SUC I-~ Black s~ 0.6–1.5           10.7  12.5   24.0  37.1  77.6  8.48  43.2 
-##  7 SUC I-9 Stoliti~ 0.4                7.24 10.9   14.9  22.5 535.   0.1  106.  
-##  8 SUC I ~ Limesto~ 0.35–340           2.55  5.4   13.0  20.3  27.0  0.09   4.83
-##  9 SUC I-7 Black s~ 0.2–0.3           10.1   8.11  19.6  29.0  77.1  8.33  24.5 
-## 10 SUC I-~ Black s~ 0.2–0.3            8.14  7.35  16.6  27.0  63.2 14.3   26.8 
-## # ... with 16 more rows, and 19 more variables: Pb &lt;dbl&gt;, Zr &lt;dbl&gt;, Yb &lt;dbl&gt;,
-## #   Nb &lt;dbl&gt;, Hf &lt;dbl&gt;, Th &lt;dbl&gt;, U &lt;dbl&gt;, La &lt;dbl&gt;, Ce &lt;dbl&gt;, Pr &lt;dbl&gt;,
-## #   Nd &lt;dbl&gt;, Sm &lt;dbl&gt;, Eu &lt;dbl&gt;, Gd &lt;dbl&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;,
-## #   Er &lt;dbl&gt;, Tm &lt;dbl&gt;</code></pre>
-<hr />
-</div>
-<div id="inspecionando-os-dados" class="section level1">
-<h1>Inspecionando os dados</h1>
-<pre class="r"><code>View(dados)
-names(dados)</code></pre>
-<pre><code>##   [1] &quot;X&quot;                 &quot;Tectonic_setting&quot;  &quot;Location_notes&quot;   
-##   [4] &quot;Pluton&quot;            &quot;Colour&quot;            &quot;Symbol&quot;           
-##   [7] &quot;Size_rel&quot;          &quot;Size&quot;              &quot;SubGroup&quot;         
-##  [10] &quot;Group&quot;             &quot;DebonPQ&quot;           &quot;TASMiddlemostPlut&quot;
-##  [13] &quot;Villaseca&quot;         &quot;QANOR&quot;             &quot;LaRoche&quot;          
-##  [16] &quot;Geol_unit_notes&quot;   &quot;Rock_type_notes&quot;   &quot;Ref&quot;              
-##  [19] &quot;Age&quot;               &quot;Latitude&quot;          &quot;Longitude&quot;        
-##  [22] &quot;SiO2&quot;              &quot;TiO2&quot;              &quot;Al2O3&quot;            
-##  [25] &quot;FeOt&quot;              &quot;MnO&quot;               &quot;MgO&quot;              
-##  [28] &quot;CaO&quot;               &quot;K2O&quot;               &quot;Na2O&quot;             
-##  [31] &quot;P2O5&quot;              &quot;H2O&quot;               &quot;H2Ot&quot;             
-##  [34] &quot;H2O.MINUS&quot;         &quot;LOI&quot;               &quot;Li&quot;               
-##  [37] &quot;Be&quot;                &quot;B&quot;                 &quot;Sc&quot;               
-##  [40] &quot;V&quot;                 &quot;Cr&quot;                &quot;Ni&quot;               
-##  [43] &quot;Cu&quot;                &quot;Zn&quot;                &quot;Rb&quot;               
-##  [46] &quot;Sr&quot;                &quot;Y&quot;                 &quot;Zr&quot;               
-##  [49] &quot;Nb&quot;                &quot;Cs&quot;                &quot;Ba&quot;               
-##  [52] &quot;La&quot;                &quot;Ce&quot;                &quot;Pr&quot;               
-##  [55] &quot;Nd&quot;                &quot;Sm&quot;                &quot;Eu&quot;               
-##  [58] &quot;Gd&quot;                &quot;Tb&quot;                &quot;Dy&quot;               
-##  [61] &quot;Ho&quot;                &quot;Er&quot;                &quot;Tm&quot;               
-##  [64] &quot;Yb&quot;                &quot;Lu&quot;                &quot;Hf&quot;               
-##  [67] &quot;Ta&quot;                &quot;Pb&quot;                &quot;Th&quot;               
-##  [70] &quot;U&quot;                 &quot;Co&quot;                &quot;Mo&quot;               
-##  [73] &quot;W&quot;                 &quot;Ga&quot;                &quot;Ge&quot;               
-##  [76] &quot;As&quot;                &quot;In&quot;                &quot;Sn&quot;               
-##  [79] &quot;Sb&quot;                &quot;Cd&quot;                &quot;Q&quot;                
-##  [82] &quot;C&quot;                 &quot;Or&quot;                &quot;Ab&quot;               
-##  [85] &quot;An&quot;                &quot;Ne&quot;                &quot;Ns&quot;               
-##  [88] &quot;Ks&quot;                &quot;Di&quot;                &quot;Wo&quot;               
-##  [91] &quot;Hy&quot;                &quot;Ol&quot;                &quot;Il&quot;               
-##  [94] &quot;Tn&quot;                &quot;Pf&quot;                &quot;Ru&quot;               
-##  [97] &quot;Ap&quot;                &quot;Sum_CIPW&quot;          &quot;Orthoclase&quot;       
-## [100] &quot;Albite&quot;            &quot;Anorthite&quot;         &quot;Quartz&quot;           
-## [103] &quot;Apatite&quot;           &quot;Ilmenite&quot;          &quot;Biotite&quot;          
-## [106] &quot;Amphibole&quot;         &quot;Corundum&quot;          &quot;Rest&quot;             
-## [109] &quot;sum_meso&quot;          &quot;P&quot;                 &quot;K&quot;                
-## [112] &quot;Ti&quot;                &quot;Cr2O3&quot;             &quot;A.NK&quot;             
-## [115] &quot;A.CNK&quot;             &quot;K2O.Na2O&quot;</code></pre>
-<pre class="r"><code>head(dados)</code></pre>
-<pre><code>## # A tibble: 6 x 116
-##   X     Tectonic_setting Location_notes    Pluton   Colour Symbol Size_rel  Size
-##   &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt;             &lt;chr&gt;    &lt;chr&gt;   &lt;int&gt;    &lt;dbl&gt; &lt;dbl&gt;
-## 1 CR03  OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-## 2 BB202 OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-## 3 CB02  OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-## 4 HB02  OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-## 5 CR01  OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-## 6 LL01  OROGENIC BELT    ////////Peninsul~ Cape Pe~ brown4     16      1.6  1.28
-## # ... with 108 more variables: SubGroup &lt;chr&gt;, Group &lt;chr&gt;, DebonPQ &lt;chr&gt;,
-## #   TASMiddlemostPlut &lt;chr&gt;, Villaseca &lt;chr&gt;, QANOR &lt;chr&gt;, LaRoche &lt;chr&gt;,
-## #   Geol_unit_notes &lt;chr&gt;, Rock_type_notes &lt;chr&gt;, Ref &lt;chr&gt;, Age &lt;chr&gt;,
-## #   Latitude &lt;dbl&gt;, Longitude &lt;dbl&gt;, SiO2 &lt;dbl&gt;, TiO2 &lt;dbl&gt;, Al2O3 &lt;dbl&gt;,
-## #   FeOt &lt;dbl&gt;, MnO &lt;dbl&gt;, MgO &lt;dbl&gt;, CaO &lt;dbl&gt;, K2O &lt;dbl&gt;, Na2O &lt;dbl&gt;,
-## #   P2O5 &lt;chr&gt;, H2O &lt;dbl&gt;, H2Ot &lt;dbl&gt;, H2O.MINUS &lt;dbl&gt;, LOI &lt;chr&gt;, Li &lt;dbl&gt;,
-## #   Be &lt;dbl&gt;, B &lt;dbl&gt;, Sc &lt;dbl&gt;, V &lt;chr&gt;, Cr &lt;dbl&gt;, Ni &lt;dbl&gt;, Cu &lt;dbl&gt;,
-## #   Zn &lt;dbl&gt;, Rb &lt;dbl&gt;, Sr &lt;dbl&gt;, Y &lt;dbl&gt;, Zr &lt;dbl&gt;, Nb &lt;dbl&gt;, Cs &lt;dbl&gt;,
-## #   Ba &lt;dbl&gt;, La &lt;chr&gt;, Ce &lt;dbl&gt;, Pr &lt;chr&gt;, Nd &lt;chr&gt;, Sm &lt;chr&gt;, Eu &lt;chr&gt;,
-## #   Gd &lt;chr&gt;, Tb &lt;dbl&gt;, Dy &lt;dbl&gt;, Ho &lt;dbl&gt;, Er &lt;dbl&gt;, Tm &lt;dbl&gt;, Yb &lt;dbl&gt;,
-## #   Lu &lt;dbl&gt;, Hf &lt;dbl&gt;, Ta &lt;dbl&gt;, Pb &lt;dbl&gt;, Th &lt;chr&gt;, U &lt;dbl&gt;, Co &lt;dbl&gt;,
-## #   Mo &lt;chr&gt;, W &lt;dbl&gt;, Ga &lt;dbl&gt;, Ge &lt;dbl&gt;, As &lt;chr&gt;, In &lt;dbl&gt;, Sn &lt;chr&gt;,
-## #   Sb &lt;chr&gt;, Cd &lt;chr&gt;, Q &lt;dbl&gt;, C &lt;dbl&gt;, Or &lt;dbl&gt;, Ab &lt;dbl&gt;, An &lt;dbl&gt;,
-## #   Ne &lt;dbl&gt;, Ns &lt;dbl&gt;, Ks &lt;int&gt;, Di &lt;dbl&gt;, Wo &lt;dbl&gt;, Hy &lt;dbl&gt;, Ol &lt;dbl&gt;,
-## #   Il &lt;dbl&gt;, Tn &lt;dbl&gt;, Pf &lt;dbl&gt;, Ru &lt;dbl&gt;, Ap &lt;dbl&gt;, Sum_CIPW &lt;dbl&gt;,
-## #   Orthoclase &lt;dbl&gt;, Albite &lt;dbl&gt;, Anorthite &lt;dbl&gt;, Quartz &lt;dbl&gt;,
-## #   Apatite &lt;dbl&gt;, Ilmenite &lt;dbl&gt;, Biotite &lt;dbl&gt;, Amphibole &lt;dbl&gt;,
-## #   Corundum &lt;dbl&gt;, Rest &lt;dbl&gt;, ...</code></pre>
-<pre class="r"><code>str(dados)</code></pre>
-<pre><code>## tibble [3,050 x 116] (S3: tbl_df/tbl/data.frame)
-##  $ X                : chr [1:3050] &quot;CR03&quot; &quot;BB202&quot; &quot;CB02&quot; &quot;HB02&quot; ...
-##  $ Tectonic_setting : chr [1:3050] &quot;OROGENIC BELT&quot; &quot;OROGENIC BELT&quot; &quot;OROGENIC BELT&quot; &quot;OROGENIC BELT&quot; ...
-##  $ Location_notes   : chr [1:3050] &quot;////////Peninsula//////&quot; &quot;////////Peninsula//////&quot; &quot;////////Peninsula//////&quot; &quot;////////Peninsula//////&quot; ...
-##  $ Pluton           : chr [1:3050] &quot;Cape Peninsula&quot; &quot;Cape Peninsula&quot; &quot;Cape Peninsula&quot; &quot;Cape Peninsula&quot; ...
-##  $ Colour           : chr [1:3050] &quot;brown4&quot; &quot;brown4&quot; &quot;brown4&quot; &quot;brown4&quot; ...
-##  $ Symbol           : int [1:3050] 16 16 16 16 16 16 16 16 16 16 ...
-##  $ Size_rel         : num [1:3050] 1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 1.6 ...
-##  $ Size             : num [1:3050] 1.28 1.28 1.28 1.28 1.28 1.28 1.28 1.28 1.28 1.28 ...
-##  $ SubGroup         : chr [1:3050] &quot;Mafic S-types&quot; &quot;Mafic S-types&quot; &quot;Mafic S-types&quot; &quot;Mafic S-types&quot; ...
-##  $ Group            : chr [1:3050] &quot;1- CPG &amp; MPG&quot; &quot;1- CPG &amp; MPG&quot; &quot;1- CPG &amp; MPG&quot; &quot;1- CPG &amp; MPG&quot; ...
-##  $ DebonPQ          : chr [1:3050] &quot;gr&quot; &quot;gr&quot; &quot;gr&quot; &quot;gr&quot; ...
-##  $ TASMiddlemostPlut: chr [1:3050] &quot;quartz monzonite&quot; &quot;granodiorite&quot; &quot;granite&quot; &quot;granite&quot; ...
-##  $ Villaseca        : chr [1:3050] &quot;h-P&quot; &quot;h-P&quot; &quot;h-P&quot; &quot;h-P&quot; ...
-##  $ QANOR            : chr [1:3050] &quot;3b granite&quot; &quot;3b granite&quot; &quot;3b granite&quot; &quot;3b granite&quot; ...
-##  $ LaRoche          : chr [1:3050] &quot;granodiorite&quot; &quot;granodiorite&quot; &quot;granite&quot; &quot;granite&quot; ...
-##  $ Geol_unit_notes  : chr [1:3050] &quot;//////////&quot; &quot;//////////&quot; &quot;//////////&quot; &quot;//////////&quot; ...
-##  $ Rock_type_notes  : chr [1:3050] &quot;//////&quot; &quot;//////&quot; &quot;//////&quot; &quot;//////&quot; ...
-##  $ Ref              : chr [1:3050] &quot;Unpub. Data, A.Villaros, G. Stevens, R. Scheepers (Villaros et al. 2009)&quot; &quot;Unpub. Data, A.Villaros, G. Stevens, R. Scheepers (Villaros et al. 2009)&quot; &quot;Unpub. Data, A.Villaros, G. Stevens, R. Scheepers (Villaros et al. 2009)&quot; &quot;Unpub. Data, A.Villaros, G. Stevens, R. Scheepers (Villaros et al. 2009)&quot; ...
-##  $ Age              : chr [1:3050] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-##  $ Latitude         : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Longitude        : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ SiO2             : num [1:3050] 65.4 69.6 70.6 70.6 70.7 ...
-##  $ TiO2             : num [1:3050] 0.827 0.709 0.571 0.478 0.532 ...
-##  $ Al2O3            : num [1:3050] 17.1 14.9 15.3 15.7 15.3 ...
-##  $ FeOt             : num [1:3050] 4.91 4.19 2.82 2.51 2.54 ...
-##  $ MnO              : num [1:3050] 0.0771 0.054 0.0532 0.0407 0.0609 ...
-##  $ MgO              : num [1:3050] 1.796 1.629 1.331 0.978 1.207 ...
-##  $ CaO              : num [1:3050] 1.81 1.44 1.2 1.31 1.24 ...
-##  $ K2O              : num [1:3050] 5.13 5.02 5.6 5.28 5.57 ...
-##  $ Na2O             : num [1:3050] 2.66 2.22 2.33 2.88 2.64 ...
-##  $ P2O5             : chr [1:3050] &quot;0.2880228&quot; &quot;0.22098&quot; &quot;0.197212&quot; &quot;0.2001758&quot; ...
-##  $ H2O              : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ H2Ot             : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ H2O.MINUS        : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ LOI              : chr [1:3050] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-##  $ Li               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Be               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ B                : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Sc               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ V                : chr [1:3050] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-##  $ Cr               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Ni               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Cu               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Zn               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Rb               : num [1:3050] 269 214 239 254 234 ...
-##  $ Sr               : num [1:3050] 97.2 99 90.4 116.3 91.3 ...
-##  $ Y                : num [1:3050] 52.2 38.3 30 36.9 39 ...
-##  $ Zr               : num [1:3050] 305 260 186 182 173 ...
-##  $ Nb               : num [1:3050] 25.4 19.9 15.1 15.2 14.6 ...
-##  $ Cs               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Ba               : num [1:3050] 390 416 548 499 408 ...
-##  $ La               : chr [1:3050] &quot;56.40085&quot; &quot;44.29357&quot; &quot;32.36167&quot; &quot;34.12151&quot; ...
-##  $ Ce               : num [1:3050] 112.2 90 63.9 70.4 62.9 ...
-##  $ Pr               : chr [1:3050] &quot;13.223848&quot; &quot;10.382656&quot; &quot;7.248746&quot; &quot;8.06835&quot; ...
-##  $ Nd               : chr [1:3050] &quot;52.34722&quot; &quot;39.39793&quot; &quot;28.7628&quot; &quot;30.55275&quot; ...
-##  $ Sm               : chr [1:3050] &quot;11.393739&quot; &quot;7.655565&quot; &quot;6.040634&quot; &quot;6.613892&quot; ...
-##  $ Eu               : chr [1:3050] &quot;1.2494124&quot; &quot;1.0286014&quot; &quot;1.076092&quot; &quot;1.2179917&quot; ...
-##  $ Gd               : chr [1:3050] &quot;10.838077&quot; &quot;8.160105&quot; &quot;5.3337&quot; &quot;6.696204&quot; ...
-##  $ Tb               : num [1:3050] 1.627 1.136 0.858 1.096 1.044 ...
-##  $ Dy               : num [1:3050] 9.84 8.07 5.57 7.27 6.88 ...
-##  $ Ho               : num [1:3050] 2.02 1.52 1.09 1.32 1.27 ...
-##  $ Er               : num [1:3050] 6.21 3.95 3.17 3.77 3.82 ...
-##  $ Tm               : num [1:3050] 0.898 0.544 0.445 0.531 0.49 ...
-##  $ Yb               : num [1:3050] 6.08 3.74 2.76 3.35 3.01 ...
-##  $ Lu               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Hf               : num [1:3050] 8.75 7.34 5.43 5.15 4.65 ...
-##  $ Ta               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Pb               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Th               : chr [1:3050] &quot;26.782157&quot; &quot;19.492634&quot; &quot;14.798949&quot; &quot;15.483984&quot; ...
-##  $ U                : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Co               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Mo               : chr [1:3050] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-##  $ W                : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Ga               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Ge               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ As               : chr [1:3050] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-##  $ In               : num [1:3050] NA NA NA NA NA NA NA NA NA NA ...
-##  $ Sn               : chr [1:3050] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-##  $ Sb               : chr [1:3050] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-##  $ Cd               : chr [1:3050] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-##  $ Q                : num [1:3050] 24.5 32.7 31.6 30 30.2 ...
-##  $ C                : num [1:3050] 4.55 3.73 3.67 3.35 3.2 ...
-##  $ Or               : num [1:3050] 30.3 29.7 33.1 31.2 32.9 ...
-##  $ Ab               : num [1:3050] 22.5 18.8 19.7 24.3 22.4 ...
-##  $ An               : num [1:3050] 7.12 5.68 4.69 5.2 4.65 ...
-##  $ Ne               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Ns               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Ks               : int [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Di               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Wo               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Hy               : num [1:3050] 4.47 4.06 3.31 2.44 3.01 ...
-##  $ Ol               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Il               : num [1:3050] 0.165 0.115 0.114 0.087 0.13 ...
-##  $ Tn               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Pf               : num [1:3050] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Ru               : num [1:3050] 0.741 0.648 0.511 0.432 0.464 ...
-##  $ Ap               : num [1:3050] 0.682 0.523 0.467 0.474 0.537 ...
-##  $ Sum_CIPW         : num [1:3050] 95.1 95.8 97.2 97.5 97.5 ...
-##  $ Orthoclase       : num [1:3050] 25.6 25.4 29.6 28.6 29.8 ...
-##   [list output truncated]</code></pre>
-<pre class="r"><code>summary(dados)</code></pre>
-<pre><code>##       X             Tectonic_setting   Location_notes        Pluton         
-##  Length:3050        Length:3050        Length:3050        Length:3050       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##                                                                             
-##                                                                             
-##                                                                             
-##                                                                             
-##     Colour              Symbol        Size_rel          Size      
-##  Length:3050        Min.   : 0.0   Min.   :1.400   Min.   :1.000  
-##  Class :character   1st Qu.:15.0   1st Qu.:1.420   1st Qu.:1.136  
-##  Mode  :character   Median :16.0   Median :1.600   Median :1.280  
-##                     Mean   :13.4   Mean   :1.623   Mean   :1.280  
-##                     3rd Qu.:17.0   3rd Qu.:1.600   3rd Qu.:1.280  
-##                     Max.   :18.0   Max.   :2.000   Max.   :1.600  
-##                                                                   
-##    SubGroup            Group             DebonPQ          TASMiddlemostPlut 
-##  Length:3050        Length:3050        Length:3050        Length:3050       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##                                                                             
-##                                                                             
-##                                                                             
-##                                                                             
-##   Villaseca            QANOR             LaRoche          Geol_unit_notes   
-##  Length:3050        Length:3050        Length:3050        Length:3050       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##                                                                             
-##                                                                             
-##                                                                             
-##                                                                             
-##  Rock_type_notes        Ref                Age               Latitude     
-##  Length:3050        Length:3050        Length:3050        Min.   :-49.15  
-##  Class :character   Class :character   Class :character   1st Qu.:-21.53  
-##  Mode  :character   Mode  :character   Mode  :character   Median : 36.20  
-##                                                           Mean   : 19.72  
-##                                                           3rd Qu.: 44.41  
-##                                                           Max.   : 64.50  
-##                                                           NA&#39;s   :1301    
-##    Longitude             SiO2            TiO2            Al2O3      
-##  Min.   :-176.580   Min.   :45.28   Min.   :0.0050   Min.   : 3.91  
-##  1st Qu.: -69.900   1st Qu.:65.00   1st Qu.:0.2200   1st Qu.:13.72  
-##  Median :   4.286   Median :70.25   Median :0.3800   Median :14.90  
-##  Mean   :   9.132   Mean   :68.62   Mean   :0.4398   Mean   :14.87  
-##  3rd Qu.:  69.540   3rd Qu.:73.18   3rd Qu.:0.5900   3rd Qu.:15.89  
-##  Max.   : 173.500   Max.   :89.27   Max.   :2.9700   Max.   :23.49  
-##  NA&#39;s   :1301                                                       
-##       FeOt                MnO               MgO              CaO        
-##  Min.   : 0.009001   Min.   :0.00317   Min.   : 0.005   Min.   : 0.010  
-##  1st Qu.: 1.696189   1st Qu.:0.04000   1st Qu.: 0.360   1st Qu.: 0.910  
-##  Median : 2.837741   Median :0.06000   Median : 0.820   Median : 1.870  
-##  Mean   : 3.259034   Mean   :0.07625   Mean   : 1.299   Mean   : 2.473  
-##  3rd Qu.: 4.320000   3rd Qu.:0.09325   3rd Qu.: 2.000   3rd Qu.: 3.487  
-##  Max.   :15.111152   Max.   :6.02000   Max.   :17.300   Max.   :15.300  
-##  NA&#39;s   :3           NA&#39;s   :34        NA&#39;s   :26       NA&#39;s   :12      
-##       K2O              Na2O            P2O5                H2O        
-##  Min.   : 0.030   Min.   : 0.180   Length:3050        Min.   :0.0200  
-##  1st Qu.: 2.690   1st Qu.: 3.060   Class :character   1st Qu.:0.5000  
-##  Median : 4.200   Median : 3.560   Mode  :character   Median :0.8000  
-##  Mean   : 3.842   Mean   : 3.851                      Mean   :0.8797  
-##  3rd Qu.: 4.900   3rd Qu.: 4.370                      3rd Qu.:1.1000  
-##  Max.   :10.140   Max.   :11.600                      Max.   :4.5800  
-##                                                       NA&#39;s   :2386    
-##       H2Ot          H2O.MINUS           LOI                  Li       
-##  Min.   :0.0000   Min.   :-0.0200   Length:3050        Min.   :  3.4  
-##  1st Qu.:0.2875   1st Qu.: 0.1000   Class :character   1st Qu.: 14.0  
-##  Median :0.4100   Median : 0.1400   Mode  :character   Median : 30.0  
-##  Mean   :0.4406   Mean   : 0.1495                      Mean   : 62.9  
-##  3rd Qu.:0.6200   3rd Qu.: 0.1800                      3rd Qu.: 88.0  
-##  Max.   :0.9100   Max.   : 0.3800                      Max.   :410.0  
-##  NA&#39;s   :3032     NA&#39;s   :2946                         NA&#39;s   :2881   
-##        Be              B                Sc              V            
-##  Min.   : 0.80   Min.   : 12.00   Min.   : 0.100   Length:3050       
-##  1st Qu.: 2.20   1st Qu.: 36.25   1st Qu.: 3.414   Class :character  
-##  Median : 3.70   Median : 62.11   Median : 8.800   Mode  :character  
-##  Mean   : 5.34   Mean   :131.39   Mean   :10.559                     
-##  3rd Qu.: 7.75   3rd Qu.:120.41   3rd Qu.:17.134                     
-##  Max.   :27.00   Max.   :683.19   Max.   :56.000                     
-##  NA&#39;s   :2952    NA&#39;s   :3024     NA&#39;s   :2584                       
-##        Cr                Ni               Cu               Zn        
-##  Min.   :   0.00   Min.   : -1.00   Min.   :  0.00   Min.   :  6.00  
-##  1st Qu.:   9.00   1st Qu.:  4.00   1st Qu.:  5.00   1st Qu.: 41.00  
-##  Median :  19.00   Median :  9.00   Median : 12.00   Median : 62.78  
-##  Mean   :  40.43   Mean   : 38.03   Mean   : 21.09   Mean   : 81.59  
-##  3rd Qu.:  51.00   3rd Qu.: 21.00   3rd Qu.: 20.69   3rd Qu.: 99.47  
-##  Max.   :1225.00   Max.   :548.15   Max.   :830.90   Max.   :626.00  
-##  NA&#39;s   :2259      NA&#39;s   :2240     NA&#39;s   :2267     NA&#39;s   :2036    
-##        Rb               Sr               Y                Zr        
-##  Min.   :   1.0   Min.   :   0.0   Min.   :  1.27   Min.   :   3.0  
-##  1st Qu.:  65.0   1st Qu.:  95.0   1st Qu.: 17.00   1st Qu.: 114.0  
-##  Median : 140.0   Median : 211.6   Median : 29.03   Median : 170.0  
-##  Mean   : 159.3   Mean   : 316.5   Mean   : 48.09   Mean   : 321.9  
-##  3rd Qu.: 225.0   3rd Qu.: 428.7   3rd Qu.: 61.00   3rd Qu.: 362.0  
-##  Max.   :1241.0   Max.   :9400.0   Max.   :725.00   Max.   :5080.0  
-##  NA&#39;s   :1318     NA&#39;s   :1156     NA&#39;s   :1648     NA&#39;s   :1436    
-##        Nb               Cs                Ba              La           
-##  Min.   : -4.00   Min.   :  0.090   Min.   :   0.0   Length:3050       
-##  1st Qu.:  7.00   1st Qu.:  1.400   1st Qu.: 310.2   Class :character  
-##  Median : 15.25   Median :  2.405   Median : 566.5   Mode  :character  
-##  Mean   : 47.26   Mean   :  4.095   Mean   : 689.1                     
-##  3rd Qu.: 45.00   3rd Qu.:  4.200   3rd Qu.: 909.1                     
-##  Max.   :726.00   Max.   :205.000   Max.   :8300.0                     
-##  NA&#39;s   :1748     NA&#39;s   :2509      NA&#39;s   :1458                       
-##        Ce              Pr                 Nd                 Sm           
-##  Min.   :  0.40   Length:3050        Length:3050        Length:3050       
-##  1st Qu.: 32.99   Class :character   Class :character   Class :character  
-##  Median : 73.69   Mode  :character   Mode  :character   Mode  :character  
-##  Mean   :108.81                                                           
-##  3rd Qu.:143.00                                                           
-##  Max.   :863.40                                                           
-##  NA&#39;s   :1901                                                             
-##       Eu                 Gd                  Tb                Dy        
-##  Length:3050        Length:3050        Min.   :  0.000   Min.   : 0.227  
-##  Class :character   Class :character   1st Qu.:  0.460   1st Qu.: 2.876  
-##  Mode  :character   Mode  :character   Median :  0.810   Median : 4.070  
-##                                        Mean   :  2.646   Mean   : 5.219  
-##                                        3rd Qu.:  1.630   3rd Qu.: 6.722  
-##                                        Max.   :156.000   Max.   :48.920  
-##                                        NA&#39;s   :2275      NA&#39;s   :2344    
-##        Ho              Er               Tm                Yb        
-##  Min.   :0.050   Min.   : 0.080   Min.   : 0.0200   Min.   : 0.000  
-##  1st Qu.:0.585   1st Qu.: 1.538   1st Qu.: 0.2700   1st Qu.: 1.175  
-##  Median :0.890   Median : 2.510   Median : 0.4402   Median : 2.526  
-##  Mean   :1.074   Mean   : 3.051   Mean   : 0.7016   Mean   : 4.102  
-##  3rd Qu.:1.360   3rd Qu.: 3.922   3rd Qu.: 0.7910   3rd Qu.: 5.008  
-##  Max.   :9.010   Max.   :24.235   Max.   :10.3000   Max.   :67.900  
-##  NA&#39;s   :2429    NA&#39;s   :2374     NA&#39;s   :2433      NA&#39;s   :2080    
-##        Lu                Hf                Ta                Pb          
-##  Min.   :-0.1000   Min.   :  0.400   Min.   :-2.0000   Min.   : -0.0018  
-##  1st Qu.: 0.1700   1st Qu.:  3.300   1st Qu.: 0.4583   1st Qu.:  7.4506  
-##  Median : 0.4000   Median :  5.337   Median : 1.6000   Median : 16.0000  
-##  Mean   : 0.6441   Mean   :  9.868   Mean   : 3.6641   Mean   : 21.5464  
-##  3rd Qu.: 0.8400   3rd Qu.:  9.804   3rd Qu.: 3.3000   3rd Qu.: 27.1500  
-##  Max.   : 9.8000   Max.   :406.000   Max.   :49.4000   Max.   :600.0000  
-##  NA&#39;s   :2289      NA&#39;s   :2379      NA&#39;s   :2462      NA&#39;s   :2341      
-##       Th                  U                 Co              Mo           
-##  Length:3050        Min.   : -4.000   Min.   :  1.00   Length:3050       
-##  Class :character   1st Qu.:  1.143   1st Qu.: 21.12   Class :character  
-##  Mode  :character   Median :  3.300   Median : 36.50   Mode  :character  
-##                     Mean   :  5.041   Mean   : 40.94                     
-##                     3rd Qu.:  6.000   3rd Qu.: 58.00                     
-##                     Max.   :252.000   Max.   :224.09                     
-##                     NA&#39;s   :2391      NA&#39;s   :2800                       
-##        W                   Ga              Ge              As           
-##  Min.   :   0.0300   Min.   :12.00   Min.   :0.6930   Length:3050       
-##  1st Qu.:   0.4408   1st Qu.:18.41   1st Qu.:0.9739   Class :character  
-##  Median : 204.9000   Median :20.88   Median :1.1010   Mode  :character  
-##  Mean   : 272.5035   Mean   :22.24   Mean   :1.1378                     
-##  3rd Qu.: 524.0500   3rd Qu.:24.00   3rd Qu.:1.2499                     
-##  Max.   :1115.5000   Max.   :53.00   Max.   :1.9894                     
-##  NA&#39;s   :2835        NA&#39;s   :2651    NA&#39;s   :2966                       
-##        In              Sn                 Sb                 Cd           
-##  Min.   :0.0465   Length:3050        Length:3050        Length:3050       
-##  1st Qu.:0.0906   Class :character   Class :character   Class :character  
-##  Median :0.1098   Mode  :character   Mode  :character   Mode  :character  
-##  Mean   :0.1357                                                           
-##  3rd Qu.:0.1425                                                           
-##  Max.   :0.5244                                                           
-##  NA&#39;s   :2966                                                             
-##        Q               C                Or                Ab       
-##  Min.   : 0.00   Min.   : 0.000   Min.   : 0.1773   Min.   : 0.00  
-##  1st Qu.:19.71   1st Qu.: 0.000   1st Qu.:14.9516   1st Qu.:25.72  
-##  Median :26.84   Median : 0.335   Median :24.4071   Median :30.06  
-##  Mean   :25.07   Mean   : 1.001   Mean   :22.3501   Mean   :31.95  
-##  3rd Qu.:32.41   3rd Qu.: 1.821   3rd Qu.:28.7212   3rd Qu.:36.39  
-##  Max.   :64.42   Max.   :10.394   Max.   :59.9245   Max.   :70.94  
-##  NA&#39;s   :198     NA&#39;s   :198      NA&#39;s   :198       NA&#39;s   :198    
-##        An               Ne                Ns                Ks     
-##  Min.   : 0.000   Min.   : 0.0000   Min.   :0.00000   Min.   :0    
-##  1st Qu.: 3.391   1st Qu.: 0.0000   1st Qu.:0.00000   1st Qu.:0    
-##  Median : 7.800   Median : 0.0000   Median :0.00000   Median :0    
-##  Mean   : 9.827   Mean   : 0.2938   Mean   :0.08615   Mean   :0    
-##  3rd Qu.:14.203   3rd Qu.: 0.0000   3rd Qu.:0.00000   3rd Qu.:0    
-##  Max.   :43.100   Max.   :34.6491   Max.   :5.18595   Max.   :0    
-##  NA&#39;s   :198      NA&#39;s   :198       NA&#39;s   :198       NA&#39;s   :656  
-##        Di                Wo                 Hy                Ol          
-##  Min.   : 0.0000   Min.   : 0.00000   Min.   : 0.0000   Min.   : 0.00000  
-##  1st Qu.: 0.0000   1st Qu.: 0.00000   1st Qu.: 0.7712   1st Qu.: 0.00000  
-##  Median : 0.0000   Median : 0.00000   Median : 1.9950   Median : 0.00000  
-##  Mean   : 0.7892   Mean   : 0.07775   Mean   : 2.9477   Mean   : 0.05012  
-##  3rd Qu.: 0.4299   3rd Qu.: 0.00000   3rd Qu.: 4.6282   3rd Qu.: 0.00000  
-##  Max.   :45.8267   Max.   :10.54889   Max.   :28.9887   Max.   :10.78301  
-##  NA&#39;s   :198       NA&#39;s   :198        NA&#39;s   :198       NA&#39;s   :198       
-##        Il                Tn               Pf               Ru        
-##  Min.   :0.00000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
-##  1st Qu.:0.08557   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
-##  Median :0.12835   Median :0.0000   Median :0.0000   Median :0.1327  
-##  Mean   :0.15674   Mean   :0.4012   Mean   :0.0207   Mean   :0.1887  
-##  3rd Qu.:0.21392   3rd Qu.:0.6718   3rd Qu.:0.0000   3rd Qu.:0.3041  
-##  Max.   :1.59607   Max.   :6.6830   Max.   :2.6410   Max.   :1.8352  
-##  NA&#39;s   :198       NA&#39;s   :198      NA&#39;s   :198      NA&#39;s   :198     
-##        Ap            Sum_CIPW        Orthoclase        Albite      
-##  Min.   :0.0000   Min.   : 83.26   Min.   : 0.00   Min.   : 1.525  
-##  1st Qu.:0.1184   1st Qu.: 94.06   1st Qu.:13.82   1st Qu.:25.834  
-##  Median :0.2842   Median : 96.02   Median :22.73   Median :30.492  
-##  Mean   :0.3640   Mean   : 95.58   Mean   :21.68   Mean   :32.903  
-##  3rd Qu.:0.4737   3rd Qu.: 97.54   3rd Qu.:28.81   3rd Qu.:37.607  
-##  Max.   :6.9401   Max.   :115.81   Max.   :92.64   Max.   :98.252  
-##  NA&#39;s   :198      NA&#39;s   :198      NA&#39;s   :179     NA&#39;s   :179     
-##    Anorthite           Quartz          Apatite          Ilmenite      
-##  Min.   :-53.047   Min.   :-47.37   Min.   :0.0000   Min.   :0.00475  
-##  1st Qu.:  2.439   1st Qu.: 20.56   1st Qu.:0.1180   1st Qu.:0.20900  
-##  Median :  6.501   Median : 27.64   Median :0.2832   Median :0.37050  
-##  Mean   :  7.457   Mean   : 24.89   Mean   :0.3631   Mean   :0.42231  
-##  3rd Qu.: 12.354   3rd Qu.: 33.08   3rd Qu.:0.4720   3rd Qu.:0.57000  
-##  Max.   : 38.308   Max.   : 67.14   Max.   :6.9148   Max.   :2.82150  
-##  NA&#39;s   :179       NA&#39;s   :179      NA&#39;s   :179      NA&#39;s   :179      
-##     Biotite          Amphibole          Corundum             Rest         
-##  Min.   :-67.223   Min.   :  0.000   Min.   :-0.00812   Min.   :-1.43549  
-##  1st Qu.:  0.192   1st Qu.:  0.000   1st Qu.: 0.00000   1st Qu.:-0.29527  
-##  Median :  1.842   Median :  0.000   Median : 0.34186   Median :-0.13624  
-##  Mean   :  1.168   Mean   :  5.896   Mean   : 1.00271   Mean   :-0.18088  
-##  3rd Qu.:  4.735   3rd Qu.:  7.804   3rd Qu.: 1.80983   3rd Qu.:-0.05771  
-##  Max.   : 30.321   Max.   :173.888   Max.   :10.38616   Max.   : 0.59325  
-##  NA&#39;s   :179       NA&#39;s   :179       NA&#39;s   :179        NA&#39;s   :179       
-##     sum_meso            P                K               Ti          
-##  Min.   : 81.34   Min.   :   0.0   Min.   :  249   Min.   :   29.98  
-##  1st Qu.: 94.12   1st Qu.: 261.9   1st Qu.:18736   1st Qu.: 1318.90  
-##  Median : 96.04   Median : 567.4   Median :32292   Median : 2338.05  
-##  Mean   : 95.60   Mean   : 621.9   Mean   :29801   Mean   : 2637.34  
-##  3rd Qu.: 97.53   3rd Qu.: 838.0   3rd Qu.:39348   3rd Qu.: 3537.05  
-##  Max.   :115.79   Max.   :4626.5   Max.   :69648   Max.   :17805.15  
-##  NA&#39;s   :179      NA&#39;s   :656      NA&#39;s   :656     NA&#39;s   :656       
-##      Cr2O3             A.NK            A.CNK           K2O.Na2O      
-##  Min.   :0.0000   Min.   :0.7975   Min.   :0.4902   Min.   : 0.0052  
-##  1st Qu.:0.0015   1st Qu.:1.2686   1st Qu.:0.9310   1st Qu.: 0.5819  
-##  Median :0.0029   Median :1.4540   Median :1.0202   Median : 1.0171  
-##  Mean   :0.0056   Mean   :1.5609   Mean   :1.0350   Mean   : 1.0340  
-##  3rd Qu.:0.0077   3rd Qu.:1.7347   3rd Qu.:1.1339   3rd Qu.: 1.3888  
-##  Max.   :0.0589   Max.   :4.6544   Max.   :1.9648   Max.   :21.8529  
-##  NA&#39;s   :2375     NA&#39;s   :656      NA&#39;s   :656      NA&#39;s   :656</code></pre>
-</div>
-<div id="exercícios" class="section level1">
-<h1>Exercícios</h1>
 </div>
 
 
