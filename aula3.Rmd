@@ -184,13 +184,13 @@ setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional
 #install.packages("readxl")
 library(readxl)
 
-dados.ex <- read_excel("dados_santos2009.xlsx") %>% 
+dados.ex <- read.csv("santos_2009.csv") %>% 
   as_tibble()
 
 dados.ex
 ```
 
-
+#EXCLUIR????????????????????????
 ```{r}
 dados.ex = read_excel("dados_santos2009.xlsx") %>% 
   rename(distance = `Distance from contact (m)`) %>% 
@@ -202,9 +202,10 @@ dados.ex = read_excel("dados_santos2009.xlsx") %>%
            into = c("lower", "upper"),
            sep = "–") %>% 
   relocate(litho, upper, lower, .before = Co) %>% 
-  mutate(across(upper:Tm, as.double))
+  mutate(across(upper:Tm, as.double)) %>% 
+  write.csv("santos_2009.csv")
 
-dados.ex
+
 ```
 
 

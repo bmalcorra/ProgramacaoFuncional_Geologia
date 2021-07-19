@@ -9,23 +9,20 @@ editor_options:
 ---
 # (geo-) Ciência de dados
 
+- dados estratigráficos
+- dados ternários
+
+
+# dados estratigráficos
+
+- pacote tidypaleo
+- abstrações e funções otimizadas
+
+
+
+
+
 ## Estudo de caso 1
-
--- O estudo pioneiro de Elkins, L. T. & Grove, T. L (1990) "Ternary Feldspar Experiments and Thermodynamic Models American Mineralogist"
--- Elkins, L. T. & Grove, T. L. Ternary Feldspar Experiments and Thermodynamic Models American Mineralogist, Mineral Soc America, 1990, 75, 544-559
-
-- 1) Explorar banco de dados "Feldspar"
-- 2) Existe relação entre os teores dos componentes Ab, An e Or em feldspatos com:
-
--- a) Tipos de feldspato?
--- b) Temperatura?
--- c) Pressão?
-
-- 3) Modelar isotermas e isóbaras
-
-
-
-## Estudo de caso 2
 
 - Estudo de caso de petrofísica e petrologia de Bertolini et al. (2021)- busca entender a relação entre diagênese e petrofísica na interface lava-sedimento, com exemplo ns interação entre a Fm. Botucatu em contato e Fm. Serra Geral
 - Estudo de caso em análise de reservatório
@@ -41,60 +38,7 @@ editor_options:
 
 ## Respostas- Estudo de caso 1
 
-```{r}
-library(dplyr)
-library(tidypaleo)
-library(ggtern)
-library(ggplot2)
-library(tidyr)
-library(readr)
-library(readxl)
-```
-
-```{r}
-#1 - Explorar 
-data(Feldspar)
-Feldspar
-
-View(Feldspar)  # Abre janela estilo excel ou então, selecionar objeto-banco de dados e apertar F2
-
-Feldspar %>% str()
-
-Feldspar %>% 
-  group_by(Feldspar) %>% 
-  summarise(mean_Ab=mean(Ab),
-            mean_An=mean(An),
-            mean_Or=mean(Or))
-  
-
-#2a - Tipos de Feldspato
-
-ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) +
-  ggplot2::geom_point(aes(color=Feldspar))
-
-#2b - Temperatura?
-
-ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
-    ggplot2::geom_point(aes(color=T.C))+
-    facet_wrap(~Feldspar)
-
-#2c - Pressão?
-ggtern::ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
-    ggplot2::geom_point(aes(color=P.Gpa))+
-    facet_wrap(~Feldspar)
-
-#3 - Modelo
-
-ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
-    ggtern::geom_crosshair_tern(aes(color=T.C,
-                   shape=Feldspar,
-                   size=P.Gpa))
-
-
-
-```
-
-# Estudo de caso 2
+# Estudo de caso 1
 ```{r}
 #library(devtools)
 #install_version("ggplot2", version = "3.3.0", repos = "http://cran.us.r-project.org")
@@ -246,3 +190,98 @@ lvsd %>%
   facet_wrap(~var,scales="free")
 ```
 
+--- 
+## GGTERN
+
+- Pacote ggtern para plotar diagramas ternários
+- Utiliza a mesma estrutura do ggplot2
+
+```{r}
+#install.packages("ggtern")
+#library(ggtern)
+```
+
+---
+- Vamos explorar o pacote com o banco de dados de granutis Bonin et al., 2020
+
+```{r}
+dados <- read.csv("geoquim_granite.csv", header = TRUE, sep = ";") %>% 
+  as_tibble()
+```
+
+- Qual relação entre tipos de feldspatos os ambientes tectônicos
+
+```{r}
+dados %>% ggtern(aes(x=Ab,y=An,z=Or))+
+  geo_point()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+---
+## Estudo de caso 2
+
+-- O estudo pioneiro de Elkins, L. T. & Grove, T. L (1990) "Ternary Feldspar Experiments and Thermodynamic Models American Mineralogist"
+-- Elkins, L. T. & Grove, T. L. Ternary Feldspar Experiments and Thermodynamic Models American Mineralogist, Mineral Soc America, 1990, 75, 544-559
+
+- 1) Explorar banco de dados "Feldspar"
+- 2) Existe relação entre os teores dos componentes Ab, An e Or em feldspatos com:
+
+-- a) Tipos de feldspato?
+-- b) Temperatura?
+-- c) Pressão?
+
+- 3) Modelar isotermas e isóbaras
+
+---
+```{r}
+#1 - Explorar 
+data(Feldspar)
+Feldspar
+
+View(Feldspar)  # Abre janela estilo excel ou então, selecionar objeto-banco de dados e apertar F2
+
+Feldspar %>% str()
+
+Feldspar %>% 
+  group_by(Feldspar) %>% 
+  summarise(mean_Ab=mean(Ab),
+            mean_An=mean(An),
+            mean_Or=mean(Or))
+  
+
+#2a - Tipos de Feldspato
+
+ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) +
+  ggplot2::geom_point(aes(color=Feldspar))
+
+#2b - Temperatura?
+
+ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
+    ggplot2::geom_point(aes(color=T.C))+
+    facet_wrap(~Feldspar)
+
+#2c - Pressão?
+ggtern::ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
+    ggplot2::geom_point(aes(color=P.Gpa))+
+    facet_wrap(~Feldspar)
+
+#3 - Modelo
+
+ggtern(data=Feldspar,aes(x=An,y=Ab,z=Or)) + 
+    ggtern::geom_crosshair_tern(aes(color=T.C,
+                   shape=Feldspar,
+                   size=P.Gpa))
+
+
+
+```
