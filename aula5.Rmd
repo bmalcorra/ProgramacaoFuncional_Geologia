@@ -31,6 +31,7 @@ View(volcano)
 ```{r}
 library(sf)
 library(tidyverse)
+library(mapview)
 volcano %>% st_as_sf(coords=c("longitude","latitude"))
 # como setar sistema de coordenada?
 
@@ -51,7 +52,10 @@ volcano %>% st_as_sf(coords=c("longitude","latitude"), crs=4326) %>%
 ---
 
 - pacote SF apresenta uma série de funções para lidar com GIS, por exemplo
-  - st_
+  - st_as_sf()
+  - st_read()
+  - st_transform()
+  - st_intersection()
   
 ---
 - Vamos plotar esses dados e ver como ficar..
@@ -74,7 +78,7 @@ mapview(zcol="elevation")
 
 --- 
 # Exercício 1
-- Mapear vulcões com maio georisco associados a populações de 5, 10 e 30 km
+- Mapear vulcões com maior georisco associados a populações de 5, 10 e 30 km
 
 # 5km
 ```{r}
@@ -108,7 +112,8 @@ mapview(zcol="pop_30km")
 # 5km
 ```{r}
 library(stringr)
-volcano %>%  mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
+volcano %>% 
+  mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
          primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
          primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),
          primary_volcano_type = str_replace(primary_volcano_type, "[:punct:]", "")) %>% 
@@ -144,31 +149,88 @@ volca<-volcano %>% pivot_longer(population_within_5_km:population_within_30_km, 
  tm_shape(World) +
   tm_polygons()+
   tm_shape(volca)+
-  tm_dots(col="primary_volcano_type",size=.35,palette = "Set1", n = 17)+
-  tm_compass(type="4star")+
+  tm_dots(col="primary_volcano_type",alpha=0.5,size=.35,palette = "Set1", n = 17)+
+  tm_compass(type="4star",size=1.5)+
   tm_grid(alpha = 0.5)+
   tm_layout(main.title="Types of volcanos",
   legend.outside="T")+
-  tm_scale_bar(position=c("left", "bottom"))+
-  tmap_style("classic")
+  tm_scale_bar(position=c("left", "bottom"),size=.5)+
+  tmap_style("white")
 ```
 
-
+#Exercício 3 (igual ao 1)
+- Mapear vulcões com maior georisco associados a populações de 5, 10 e 30 km
 
 ```{r}
 
   tm_shape(World) +
   tm_polygons("continent")+
   tm_shape(volca)+
-  tm_dots(col="value",size=.2,style="kmeans",palette = "viridis", n = 5, contrast = c(0.29, 1))+
-  tm_compass(type="4star")+
+  tm_dots(col="value",size=.2,style="cont",palette = "viridis")+
+ tm_compass(type="4star",size=1.5)+
   tm_grid(alpha = 0.5)+
   tm_layout(main.title="Evaluation of volcano-eruption geohazard",
-  legend.outside="T")+
-  tm_scale_bar(position=c("left", "bottom"))+
+  legend.outside="T",
+  caption="WGS-84"])+
+   tm_scale_bar(position=c("left", "bottom"),size=.5)+
   tm_facets(by="var")
   
 
 ```
 
+---
+# API de dados
+
+- Pacote geobr (Ver dados disponíveis em https://github.com/ipeaGIT/geobr)
+- Pacote compila diversos bancos oficiais do BR (??geobr::intro_to_geobr)
+- codigo IBGE dos municipios BR (https://www.ibge.gov.br/explica/codigos-dos-municipios.php)
+
+```{r}
+library(geobr)
+# Dados do pacote GEOBR estão no CRS oficial do Brasil SIRGAS 2000 (CRS=4674)
+
+poa <- read_municipality(code_muni= 4314902) %>% 
+  st_transform(crs=32722) %>% 
+  dplyr::select(geom)
+
+```
+
+
+# Exercício 3
+
+- Fazer mapa geológico de alguma cidade do RS usando banco de dados "riograndedosul_lito.shp
+- Exemplo de como importar shapefiles diretamente no R
+- Função sf::st_read()
+
+# Importar dados
+```{r}
+geo_shape<-st_read("./shape/riograndedosul_lito.shp") %>% 
+  st_transform(crs=32722) %>% 
+  st_intersection(.,poa) %>% 
+  mutate(stratigraphy=case_when(SIGLA_UNID=="NP3_gamma_dfe" ~  "Serra",
+                           SIGLA_UNID=="NP2_gamma_1pm" ~  "Metagranitoid",
+                           SIGLA_UNID=="NP3_gamma_dfc" ~  "Cerro",
+                           SIGLA_UNID=="PP2arr" ~  "Arroio",
+                           TRUE~"Quaternary"),
+         stratigraphy=factor(stratigraphy,
+                             levels=c("Quaternary","Metagranitoid","Cerro","Serra","Arroio"),
+                             labels=c("Quaternary","Metagranitoid foliated Neoproterozoic","Cerro Grande Neoproterozoic Granitoids","Serra do Herval Neoproterozoic Granitoids","Arroio dos Ratos Paleoproterozoic gneiss")))
+```
+
+# TMAP
+```{r}
+  tm_shape(geo_shape)+
+  tm_polygons(col="stratigraphy",
+              palette=c(Quaternary="wheat", 
+                        Metagranitoid='red2', 
+                        Cerro='plum4',
+                        Serra='red4',
+                        Arroio='magenta4'),
+              stretch.palette = FALSE)+
+  tm_compass(type="4star",size=2)+
+  tm_grid(alpha = 0.5)+
+  tm_layout(main.title="Geologic Map of Porto Alegre, Brazil",
+  legend.outside="T")+
+   tm_scale_bar(position=c("left", "bottom"))
+```
 
