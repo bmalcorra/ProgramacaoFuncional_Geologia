@@ -84,8 +84,7 @@ knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
 **==** igual a  
 **&** e  
 **|** ou  
-<<<<<<< HEAD
-**!** diferente de 
+**!** diferente de  
 **%in%** faz parte de um grupo  
 **is.na()** é NA  
 
@@ -95,14 +94,6 @@ knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
 - Boa parte da programação está em:
   - 1) consertar erros de sintaxe do seu código  
   - 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
-=======
-**!** diferente de  
-  
-  
-- Boa parte da programação está em:  
- -- 1) consertar erros de sintaxe do seu código  
- -- 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
->>>>>>> bbc25d19e028bc86eb29838526a6f5380aa22bed
 
 ---
 # Pacotes
@@ -188,12 +179,6 @@ names(dados.ex)
 -- Inspecionar tipos de variáveis  
 
 ---
-```{r}
-volcano <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
-volcano %>% write.csv("volcano.csv")
-```
-
----
 # Dados
 
 - "Tidy Tuesday live screencast: Analyzing volcano eruptions in R" by David Robinson
@@ -201,11 +186,10 @@ volcano %>% write.csv("volcano.csv")
 <https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-12/readme.md>
 
 ```{r, message = FALSE, warning = FALSE}
-volcano <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
-eruptions <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/eruptions.csv')
-events <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/events.csv')
-tree_rings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/tree_rings.csv')
-sulfur <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/sulfur.csv')
+volcano = read.csv("volcano.csv", sep = ",") %>% 
+  as_tibble()
+
+volcano
 ```
 
 ---
@@ -409,27 +393,22 @@ volcano %>%
 ---
 # Perguntas:
 
-- 1) Se quisermos gerar médias para uma variávek categórica X, qual a primeira e a segunda função que utilizaremos?
+- 1) Se quisermos gerar médias para uma variável categórica X, qual a primeira função que utilizaremos?
 
-- 2) Se quisermos excluir linhas (criar subsets), qual a função que utilizaremos?
+- 2) E a segunda?
 
-- 3) Se quisermos excluir colunas, qual função utilizaremos?
+- 3) Se quisermos excluir linhas (criar subsets), qual a função que utilizaremos?
+
+- 4) Se quisermos excluir colunas, qual função utilizaremos?
 
 ---
 # Exercícios práticos 2
 
-### Resolvendo problemas..
-<<<<<<< HEAD
+### Resolvendo problemas...
 - 1) Em qual país existem mais vulcões?  
 - 2) Nesse país, qual o tipo de vulcão mais comum?  
 - 3) Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
 - 4) Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Filtre países em que existam mais de 2 vulcões.
-=======
-- Em qual país existem mais vulcões?  
-- Nesse país, qual o tipo de vulcão mais comum?  
-- Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
-- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?  
->>>>>>> bbc25d19e028bc86eb29838526a6f5380aa22bed
 
 ### Funções
 -- select()  
@@ -486,7 +465,6 @@ volcano %>%
   filter(n > 2) %>% #mais de 2 vulcões no país
   arrange(desc(media_pop))
 ```
-
 
 ---
 # tidyr()
@@ -571,24 +549,16 @@ volcano %>%
 
 
 ---
-<<<<<<< HEAD
 # Exercício prático 3
-=======
-# Exercícios 3
->>>>>>> bbc25d19e028bc86eb29838526a6f5380aa22bed
 
-- 
+- 1) 
 
 ---
-# Respostas
+
 
 ```{r}
 volcano %>% 
   select(country, primary_volcano_type, major_rock_1) %>% 
-  mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
-         primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
-         primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),
-         primary_volcano_type = str_replace(primary_volcano_type, "[:punct:]", "")) %>% 
   count(country, primary_volcano_type, sort = TRUE) %>% 
   pivot_wider(names_from = "primary_volcano_type",
               values_from = "n")

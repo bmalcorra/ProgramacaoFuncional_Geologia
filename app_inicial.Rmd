@@ -18,17 +18,15 @@ editor_options:
 ---
 
 ```{r ,include=FALSE }
-
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
+
 library(flipbookr)
-
 ```
-
 
 #<b>Gabriel Bertolini</b>
 
 - Áreas de atuação
-  - Proveniencia Sedimentar 💨💨💨
+  - Proveniência Sedimentar 💨💨💨
   - Sistemas éolicos de grande porte 🐪🏜🏝🐫
   - Diagênese e interação lava-sedimento 🔥
   - Geocronologia U-Pb em zircão 💠💎
