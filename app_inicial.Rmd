@@ -1,7 +1,7 @@
 ---
 title: "Programação Funcional em R na Geologia"
 subtitle: "⚒<br/>Aplicações e Exemplos"
-author: "Gabriel Bertolini"
+author: "Gabriel Bertolini e Bárbara Malcorra"
 institute: "Universidade Federal do Rio Grande do Sul"
 date: '`r Sys.Date()`'
 output:
@@ -18,9 +18,10 @@ editor_options:
 ---
 
 ```{r ,include=FALSE }
-knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
 
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
 library(flipbookr)
+
 ```
 
 
@@ -44,6 +45,54 @@ library(flipbookr)
 -gabertol@gmail.com
 
 ---
+
+#<b>Bárbara Malcorra</b>
+
+- Áreas de atuação
+  - Proveniencia Sedimentar 💨💨💨
+  - Sistemas éolicos de grande porte 🐪🏜🏝🐫
+  - Diagênese e interação lava-sedimento 🔥
+  - Geocronologia U-Pb em zircão 💠💎
+- Pesquisador em projeto de cooperação UFRGS-University of Aberdeen
+  - Bolsista insititucional de Pós-Doutorado PPGGEO-UFRGS - CAPES PrInt
+- Doutor em geociências pela University of Aberdeen e Universidade Federal do Rio Grande do Sul
+  - Bolsista CNPq SWE
+  - Bolsista FAURGS em projeto temático
+- Geólogo pela Universidade do Vale do Sinos- Unisinos
+  - Bolsista CNPq Iniciação Científica
+  - Bolsista CNPq SWB mobilidade internacional com Universitat de Alicante
+
+
+-barbaxxx@gmail.com
+
+---
+# Estrutura do curso
+
+- Aula 1
+  - Funcionalidades (Rstudio)
+  - Sintaxe básica
+
+- Aula 2
+  - Programação funcional
+  - Introdução ao tidyverse
+  - Exercício ciencia de dados I
+
+- Aula 3
+  - Visualização de dados com ggplot2
+  - Exercício ciencia de dados II
+  
+- Aula 4
+  - Visualização de dados com tidypaleo e ggtern
+  - Exercício ciencia de dados III
+  
+- Aula 5
+  - Visualização de dados espaciais SF e TMAP
+  - Exercício ciencia de dados IV
+  
+- Aula 6
+  - Dúvidas, pacotes extras
+  - Fechamento
+---
 #<b>R</b>
 
 -Linguagem livre sob GNU GPL v2..
@@ -64,81 +113,7 @@ IDE (<i>integrated development environment</i>)
 #RStudio
 
 ```{r,echo=FALSE,fig.align='center',out.width="150%"}
-#knitr::include_graphics("figs/Rstudio.png")
-```
-
----
-
-#<b>Sintaxe básica 1</b>
-
-
-```{r}
-2+1  # Operação matemática básica
-
-A<- 2+1 # Atribuindo operação matemática a objeto "A"
-
-A # Rodando objeto A
-
-A<-2
-B<-1
-
-A+B
-
-C<- A+B
-
-C
-
-```
-
-
----
-#<b>Sintaxe básica 2</b>
-
-
-```{r}
-
-A<-2
-B<-1
-
-Soma_A_B<-function(Objeto_1,Objeto_2){
-  Objeto_1+Objeto_2
-}
-
-Soma_A_B(Objeto_1=A,
-         Objeto_2=B)
-
-```
-
-
----
-# Programação funcional
-- Programação funcional segue lógica diferente, baseada numa série de funções
-- Para este exemplo, vamos utilizar 2 pacotes:
-```{r}
-library(tidyverse)
-library(ggpubr)
-
-```
----
-
-`r chunk_reveal("teste")`
-
-```{r teste, warning=FALSE, message=FALSE}
-
-read.csv("petrophysics_bertolini_2020.csv", sep=";") %>% 
-  as_tibble() %>%
-  drop_na(p_wave,s_wave) %>% 
-  ggplot(aes(x=p_wave,
-             y=s_wave)) + 
-  geom_point(aes(col=density,
-                 size=porosity))+
-  geom_smooth(method="lm")+
-  stat_cor(aes(label=paste(..r.label..,..p.label.., sep="~','~")), 
-           method="spearman")+
-  labs(title="",
-      x="P-Wave velocity (km/s)",
-      y="S-Wave velocity (km/s)")+
-  theme_bw()
+ knitr::include_graphics("figs/Rstudio.png")
 ```
 
 ---
