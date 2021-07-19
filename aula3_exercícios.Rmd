@@ -53,24 +53,8 @@ setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional
 
 library(readxl)
 
-dados.ex <- read_excel("dados_santos2009.xlsx") %>% 
+dados.ex <- read.csv("santos_2009.csv") %>% 
   as_tibble()
-
-dados.ex
-```
-
-```{r}
-dados.ex = read_excel("dados_santos2009.xlsx") %>% 
-  rename(distance = `Distance from contact (m)`) %>% 
-  mutate(distance = replace_na(distance, "0"),
-         litho = case_when(Rock == c("sill", "Sill") ~ "volcanic",
-                           Rock == "Black shale" ~ "shale",
-                           TRUE ~ "carbonate")) %>% 
-  separate(distance,
-           into = c("lower", "upper"),
-           sep = "–") %>% 
-  relocate(litho, upper, lower, .before = Co) %>% 
-  mutate(across(upper:Tm, as.double))
 
 dados.ex
 ```
@@ -89,7 +73,9 @@ dados.ex
 
 - 5) Faça um histograma de frequência da variável "Pb".
 
-- 6) Explore a relação entre a distância até o sill e os elementos químicos nas rochas SEDIMENTARES.
+- 6) Explore a relação entre a distância até o sill e elementos químicos nas rochas SEDIMENTARES.
+
+- 7) Explore a relação entre elementos químicos e ambientes geotectônicos? 
 
 ---
 - 1) A partir da base "dados_santos2009", plote um boxplot da variável "Pb" agrupando por "litho". Utilize o pacote ggplot2 e a função "stat_summary".
@@ -204,6 +190,31 @@ dados.ex %>%
        caption = "referência") +
   scale_color_manual(values = c("red", "blue"))
   theme_bw()
+```
+
+
+---
+- 7) A partir do banco de dados "geoquim_granite", explore a relação entre elementos químicos e ambientes geotectônicos? 
+
+```{r}
+setwd("C:/Users/barba/Desktop/ProgramacaoFuncional_Geologia/ProgramacaoFuncional_Geologia/")
+
+read.csv("geoquim_granite.csv", sep = ";") %>% 
+  as_tibble() %>% 
+  select(Tectonic_setting, SiO2:P2O5) %>%
+  drop_na() %>% 
+  group_by(Tectonic_setting) %>% 
+  mutate(across(cols = TiO2:P2O5,
+                .fns = as.double)) %>% 
+  pivot_longer(cols = TiO2:P2O5,
+               names_to = "Major_element",
+               values_to = "values") %>% 
+  ggplot(aes(x = Major_element, y = values,
+             color = Major_element,
+             fill = Major_element)) + 
+  geom_boxplot() +
+  facet_wrap(~Tectonic_setting) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
 

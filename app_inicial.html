@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Intensivão de programação funcional em R aplicado à Geologia</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gabriel Bertolini e Bárbara Malcorra" />
+    <meta name="date" content="2021-07-19" />
+    <script src="libs/header-attrs-2.9/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Intensivão de programação funcional em R aplicado à Geologia
+## ⚒ Abertura
+### Gabriel Bertolini e Bárbara Malcorra
+### UFRGS
+### 2021-07-19
+
+---
+
+
+
+
+# &lt;b&gt;Gabriel Bertolini&lt;/b&gt;
+
+- Áreas de atuação
+  - Proveniência Sedimentar 💨💨💨
+  - Sistemas eólicos de grande porte 🐪🏜🏝🐫
+  - Diagênese e interação lava-sedimento 🔥
+  - Geocronologia U-Pb em zircão 💠💎
+- Pesquisador em projeto de cooperação UFRGS-University of Aberdeen
+  - Bolsista institutional de Pós-Doutorado PPGGEO-UFRGS - CAPES PrInt
+- Doutor em Geociências pela University of Aberdeen e Universidade Federal do Rio Grande do Sul
+  - Bolsista CNPq SWE
+  - Bolsista FAURGS em projeto temático
+- Geólogo pela Universidade do Vale do Rio dos Sinos - Unisinos
+  - Bolsista CNPq Iniciação Científica
+  - Bolsista CNPq SWB mobilidade internacional com Universitat de Alicante
+
+
+- gabertol@gmail.com
+
+---
+# &lt;b&gt;Bárbara Malcorra&lt;/b&gt;
+
+- Áreas de atuação
+  - Neurolinguística
+  - Assessoria linguística
+  - Assessoria estatística e acadêmica
+- Doutoranda em Linguística pela Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS
+- Mestre em Linguística pela PUCRS
+  - Bolsista CNPq
+- Licenciada em Letras pela Universidade do Vale do Rio dos Sinos - Unisinos
+  - Bolsista FAGERS Iniciação Científica
+
+
+- barbaraluz.malcorra@gmail.com
+
+---
+# Estrutura do curso
+
+.pull-left[
+- &lt;b&gt;Aula 1&lt;/b&gt;
+  - Funcionalidades (Rstudio)
+  - Sintaxe básica
+
+- &lt;b&gt;Aula 2&lt;/b&gt;
+  - Programação funcional
+  - Introdução ao Tidyverse
+  - Exercício ciência de dados I
+
+- &lt;b&gt;Aula 3&lt;/b&gt;
+  - Visualização de dados com ggplot2
+  - Exercício ciência de dados II
+]
+
+.pull-right[
+- &lt;b&gt;Aula 4&lt;/b&gt;
+  - Visualização de dados com tidypaleo e ggtern
+  - Exercício ciência de dados III
+  
+- &lt;b&gt;Aula 5&lt;/b&gt;
+  - Visualização de dados espaciais SF e TMAP
+  - Exercício ciência de dados IV
+  
+- &lt;b&gt;Aula 6&lt;/b&gt;
+  - Dúvidas, pacotes extras
+  - Fechamento
+]
+
+---
+# &lt;b&gt;R&lt;/b&gt;
+
+- Linguagem livre sob GNU GPL v2
+  - ou seja, desenvolvida em código aberto e através de esforço coletivo internacional
+
+- Download da linguagem básica e pacotes (CRAN!)
+  - https://www.r-project.org/
+
+IDE (&lt;i&gt;integrated development environment&lt;/i&gt;)
+  - https://www.rstudio.com/
+
+---
+# Principais pacotes que vamos utilizar
+
+
+```r
+# library(tidyverse)
+# library(ggtern)
+# library(tidypaleo)
+# library(mapview)
+# library(sf)
+# library(geobr)
+# library(readxl)
+# library(ggpubr)
+```
+
+---
+#&lt;b&gt;Geologia e programação&lt;/b&gt;
+
+.pull-left[
+- &lt;b&gt;Vantagens&lt;/b&gt;
+
+  - Liberdade
+  - Reprodutibilidade
+  - Gratuito
+  - Desincentiva o uso de aplicações "caixa preta estatística"
+  - Pacotes resolvem os mais variados problemas
+  - Comunidade
+]
+
+.pull-right[
+- &lt;b&gt;Desvantagens&lt;/b&gt;
+
+  - Curva de aprendizado
+  - "travar"
+]
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

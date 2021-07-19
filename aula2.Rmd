@@ -122,7 +122,7 @@ getwd()
 - de um arquivo .csv
 
 ```{r}
-dados <- read.csv("geoquim_granite.csv", header = TRUE, sep = ";") %>% 
+dados <- read.csv("geoquim_granite.csv", sep = ";") %>% 
   as_tibble()
 #espécie de dataframe com particularidades
 #mostra o tipo de variável
@@ -186,7 +186,7 @@ names(dados.ex)
 <https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-12/readme.md>
 
 ```{r, message = FALSE, warning = FALSE}
-volcano = read.csv("volcano.csv", sep = ",") %>% 
+volcano = read.csv("volcano.csv", sep = ";") %>% 
   as_tibble()
 
 volcano
@@ -547,6 +547,14 @@ volcano %>%
   head()
 ```
 
+
+---
+# rename()
+
+```{r}
+volcano %>% 
+  rename(volcano = "volcano_name")
+```
 
 ---
 # Exercício prático 3

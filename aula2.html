@@ -66,8 +66,7 @@ library(tidyverse)
 **==** igual a  
 **&amp;** e  
 **|** ou  
-&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
-**!** diferente de 
+**!** diferente de  
 **%in%** faz parte de um grupo  
 **is.na()** é NA  
 
@@ -77,14 +76,6 @@ library(tidyverse)
 - Boa parte da programação está em:
   - 1) consertar erros de sintaxe do seu código  
   - 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
-=======
-**!** diferente de  
-  
-  
-- Boa parte da programação está em:  
- -- 1) consertar erros de sintaxe do seu código  
- -- 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; bbc25d19e028bc86eb29838526a6f5380aa22bed
 
 ---
 # Pacotes
@@ -120,7 +111,7 @@ getwd()
 
 
 ```r
-dados &lt;- read.csv("geoquim_granite.csv", header = TRUE, sep = ";") %&gt;% 
+dados &lt;- read.csv("geoquim_granite.csv", sep = ";") %&gt;% 
   as_tibble()
 #espécie de dataframe com particularidades
 #mostra o tipo de variável
@@ -361,13 +352,6 @@ names(dados.ex)
 -- Inspecionar tipos de variáveis  
 
 ---
-
-```r
-volcano &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
-volcano %&gt;% write.csv("volcano.csv")
-```
-
----
 # Dados
 
 - "Tidy Tuesday live screencast: Analyzing volcano eruptions in R" by David Robinson
@@ -376,11 +360,34 @@ volcano %&gt;% write.csv("volcano.csv")
 
 
 ```r
-volcano &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/volcano.csv')
-eruptions &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/eruptions.csv')
-events &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/events.csv')
-tree_rings &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/tree_rings.csv')
-sulfur &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-12/sulfur.csv')
+volcano = read.csv("volcano.csv", sep = ";") %&gt;% 
+  as_tibble()
+
+volcano
+```
+
+```
+# A tibble: 958 x 26
+   volcano_number volcano_name  primary_volcano~ last_eruption_y~ country region
+            &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt; 
+ 1         283001 Abu           shield           -6850            Japan   Japan~
+ 2         355096 Acamarachi    stratovolcano    Unknown          Chile   South~
+ 3         342080 Acatenango    stratovolcano    1972             Guatem~ Méxic~
+ 4         213004 Acigol-Nevse~ caldera          -2080            Turkey  Medit~
+ 5         321040 Adams         stratovolcano    950              United~ Canad~
+ 6         283170 Adatarayama   stratovolcano    1996             Japan   Japan~
+ 7         221170 Adwa          stratovolcano    Unknown          Ethiop~ Afric~
+ 8         221110 Afdera        stratovolcano    Unknown          Ethiop~ Afric~
+ 9         284160 Agrigan       stratovolcano    1917             United~ Japan~
+10         342100 Agua          stratovolcano    Unknown          Guatem~ Méxic~
+# ... with 948 more rows, and 20 more variables: subregion &lt;chr&gt;,
+#   latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, elevation &lt;int&gt;, tectonic_settings &lt;chr&gt;,
+#   evidence_category &lt;chr&gt;, major_rock_1 &lt;chr&gt;, major_rock_2 &lt;chr&gt;,
+#   major_rock_3 &lt;chr&gt;, major_rock_4 &lt;chr&gt;, major_rock_5 &lt;chr&gt;,
+#   minor_rock_1 &lt;chr&gt;, minor_rock_2 &lt;chr&gt;, minor_rock_3 &lt;chr&gt;,
+#   minor_rock_4 &lt;chr&gt;, minor_rock_5 &lt;lgl&gt;, population_within_5_km &lt;int&gt;,
+#   population_within_10_km &lt;int&gt;, population_within_30_km &lt;int&gt;,
+#   population_within_100_km &lt;int&gt;
 ```
 
 ---
@@ -409,7 +416,7 @@ volcano %&gt;%
 ```
 # A tibble: 6 x 5
   volcano_name    country       latitude longitude elevation
-  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;int&gt;
 1 Abu             Japan             34.5     132.        641
 2 Acamarachi      Chile            -23.3     -67.6      6023
 3 Acatenango      Guatemala         14.5     -90.9      3976
@@ -431,20 +438,20 @@ volcano %&gt;%
 ```
 # A tibble: 6 x 25
   volcano_number volcano_name  primary_volcano~ last_eruption_y~ country region 
-           &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt;  
-1         283001 Abu           Shield(s)        -6850            Japan   Japan,~
-2         355096 Acamarachi    Stratovolcano    Unknown          Chile   South ~
-3         342080 Acatenango    Stratovolcano(e~ 1972             Guatem~ México~
-4         213004 Acigol-Nevse~ Caldera          -2080            Turkey  Medite~
-5         321040 Adams         Stratovolcano    950              United~ Canada~
-6         283170 Adatarayama   Stratovolcano(e~ 1996             Japan   Japan,~
+           &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt;  
+1         283001 Abu           shield           -6850            Japan   Japan,~
+2         355096 Acamarachi    stratovolcano    Unknown          Chile   South ~
+3         342080 Acatenango    stratovolcano    1972             Guatem~ México~
+4         213004 Acigol-Nevse~ caldera          -2080            Turkey  Medite~
+5         321040 Adams         stratovolcano    950              United~ Canada~
+6         283170 Adatarayama   stratovolcano    1996             Japan   Japan,~
 # ... with 19 more variables: subregion &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;,
-#   elevation &lt;dbl&gt;, evidence_category &lt;chr&gt;, major_rock_1 &lt;chr&gt;,
+#   elevation &lt;int&gt;, evidence_category &lt;chr&gt;, major_rock_1 &lt;chr&gt;,
 #   major_rock_2 &lt;chr&gt;, major_rock_3 &lt;chr&gt;, major_rock_4 &lt;chr&gt;,
 #   major_rock_5 &lt;chr&gt;, minor_rock_1 &lt;chr&gt;, minor_rock_2 &lt;chr&gt;,
-#   minor_rock_3 &lt;chr&gt;, minor_rock_4 &lt;chr&gt;, minor_rock_5 &lt;chr&gt;,
-#   population_within_5_km &lt;dbl&gt;, population_within_10_km &lt;dbl&gt;,
-#   population_within_30_km &lt;dbl&gt;, population_within_100_km &lt;dbl&gt;
+#   minor_rock_3 &lt;chr&gt;, minor_rock_4 &lt;chr&gt;, minor_rock_5 &lt;lgl&gt;,
+#   population_within_5_km &lt;int&gt;, population_within_10_km &lt;int&gt;,
+#   population_within_30_km &lt;int&gt;, population_within_100_km &lt;int&gt;
 ```
 
 ---
@@ -465,7 +472,7 @@ volcano %&gt;%
 ```
 # A tibble: 6 x 4
   population_within_~ population_within_~ population_within~ population_within_~
-                &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;               &lt;dbl&gt;
+                &lt;int&gt;               &lt;int&gt;              &lt;int&gt;               &lt;int&gt;
 1                3597                9594             117805             4071152
 2                   0                   7                294                9092
 3                4329               60730            1042836             7634778
@@ -488,7 +495,7 @@ volcano %&gt;%
 ```
 # A tibble: 6 x 5
   volcano_name     country    latitude longitude elevation
-  &lt;chr&gt;            &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+  &lt;chr&gt;            &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;int&gt;
 1 Andrus           Antarctica    -75.8    -132.       2978
 2 Berlin           Antarctica    -76.0    -136        3478
 3 Buckle Island    Antarctica    -66.8     163.       1239
@@ -511,7 +518,7 @@ volcano %&gt;%
 ```
 # A tibble: 6 x 5
   volcano_name    country       latitude longitude elevation
-  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;int&gt;
 1 Abu             Japan             34.5     132.        641
 2 Acamarachi      Chile            -23.3     -67.6      6023
 3 Acatenango      Guatemala         14.5     -90.9      3976
@@ -534,7 +541,7 @@ volcano %&gt;%
 ```
 # A tibble: 6 x 5
   volcano_name    country       latitude longitude elevation
-  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;int&gt;
 1 Abu             Japan             34.5     132.        641
 2 Acatenango      Guatemala         14.5     -90.9      3976
 3 Acigol-Nevsehir Turkey            38.5      34.6      1683
@@ -557,7 +564,7 @@ volcano %&gt;%
 ```
 # A tibble: 6 x 5
   volcano_name     country latitude longitude elevation
-  &lt;chr&gt;            &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+  &lt;chr&gt;            &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;int&gt;
 1 Abu              Japan       34.5      132.       641
 2 Adatarayama      Japan       37.6      140.      1728
 3 Aira             Japan       31.6      131.      1117
@@ -580,7 +587,7 @@ volcano %&gt;%
 ```
 # A tibble: 6 x 5
   volcano_name     country latitude longitude elevation
-  &lt;chr&gt;            &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+  &lt;chr&gt;            &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;int&gt;
 1 Abu              Japan       34.5      132.       641
 2 Adatarayama      Japan       37.6      140.      1728
 3 Aira             Japan       31.6      131.      1117
@@ -644,7 +651,7 @@ volcano %&gt;%
 ```
 # A tibble: 3 x 6
   country           n media_lat sd_lat   min   max
-  &lt;chr&gt;         &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+  &lt;chr&gt;         &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
 1 Canada           18     1954.  1182. -2050  3160
 2 Mexico           28     2676.  1685.    95  5564
 3 United States    99     1760.  1187. -1535  4392
@@ -687,7 +694,7 @@ volcano %&gt;%
 ```
 # A tibble: 6 x 5
   volcano_name    country       latitude longitude elevation
-  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+  &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;int&gt;
 1 Abu             Japan             34.5     132.        641
 2 Acamarachi      Chile            -23.3     -67.6      6023
 3 Acatenango      Guatemala         14.5     -90.9      3976
@@ -761,7 +768,7 @@ volcano %&gt;%
 ```
 # A tibble: 6 x 8
   volcano_name country latitude longitude elevation last_eruption_y~   var  var1
-  &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;            &lt;int&gt; &lt;int&gt;
+  &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;            &lt;int&gt; &lt;int&gt;
 1 Abu          Japan       34.5     132.        641 -6850              958   342
 2 Acamarachi   Chile      -23.3     -67.6      6023 Unknown            958   342
 3 Acatenango   Guatem~     14.5     -90.9      3976 1972               958   342
@@ -773,27 +780,22 @@ volcano %&gt;%
 ---
 # Perguntas:
 
-- 1) Se quisermos gerar médias para uma variávek categórica X, qual a primeira e a segunda função que utilizaremos?
+- 1) Se quisermos gerar médias para uma variável categórica X, qual a primeira função que utilizaremos?
 
-- 2) Se quisermos excluir linhas (criar subsets), qual a função que utilizaremos?
+- 2) E a segunda?
 
-- 3) Se quisermos excluir colunas, qual função utilizaremos?
+- 3) Se quisermos excluir linhas (criar subsets), qual a função que utilizaremos?
+
+- 4) Se quisermos excluir colunas, qual função utilizaremos?
 
 ---
 # Exercícios práticos 2
 
-### Resolvendo problemas..
-&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+### Resolvendo problemas...
 - 1) Em qual país existem mais vulcões?  
 - 2) Nesse país, qual o tipo de vulcão mais comum?  
 - 3) Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
 - 4) Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)? Filtre países em que existam mais de 2 vulcões.
-=======
-- Em qual país existem mais vulcões?  
-- Nesse país, qual o tipo de vulcão mais comum?  
-- Na América do Sul, quantos e quais vulcões entraram em erupção em 2020?  
-- Quais os países nos quais os vulcões apresentam maior risco para a população local (até 5 km)?  
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; bbc25d19e028bc86eb29838526a6f5380aa22bed
 
 ### Funções
 -- select()  
@@ -845,24 +847,19 @@ volcano %&gt;%
 ```
 
 ```
-# A tibble: 15 x 2
+# A tibble: 10 x 2
    primary_volcano_type     n
    &lt;chr&gt;                &lt;int&gt;
- 1 Stratovolcano           32
- 2 Shield                  15
- 3 Volcanic field          13
- 4 Stratovolcano(es)        8
- 5 Submarine                6
- 6 Pyroclastic cone(s)      5
- 7 Shield(s)                5
- 8 Lava dome(s)             4
- 9 Caldera                  3
-10 Maar(s)                  3
-11 Caldera(s)               1
-12 Complex                  1
-13 Pyroclastic cone         1
-14 Stratovolcano?           1
-15 Tuff cone(s)             1
+ 1 stratovolcano           41
+ 2 shield                  20
+ 3 volcanicfield           13
+ 4 pyroclasticcone          6
+ 5 submarine                6
+ 6 caldera                  4
+ 7 lavadome                 4
+ 8 maar                     3
+ 9 complex                  1
+10 tuffcone                 1
 ```
 
 ---
@@ -909,7 +906,7 @@ volcano %&gt;%
 ```
 # A tibble: 52 x 5
    country          n media_pop   sd_pop max_pop
-   &lt;chr&gt;        &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+   &lt;chr&gt;        &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;   &lt;int&gt;
  1 Armenia          3   432210   721521. 1265153
  2 Vietnam          3   376222   537303.  991688
  3 Italy           12   292554.  662546. 2234109
@@ -922,7 +919,6 @@ volcano %&gt;%
 10 Cameroon         3   122298.  117445.  234623
 # ... with 42 more rows
 ```
-
 
 ---
 # tidyr()
@@ -1058,25 +1054,17 @@ volcano %&gt;%
 
 
 ---
-&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 # Exercício prático 3
-=======
-# Exercícios 3
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; bbc25d19e028bc86eb29838526a6f5380aa22bed
 
-- 
+- 1) 
 
 ---
-# Respostas
+
 
 
 ```r
 volcano %&gt;% 
   select(country, primary_volcano_type, major_rock_1) %&gt;% 
-  mutate(primary_volcano_type = str_to_lower(primary_volcano_type),
-         primary_volcano_type = str_replace(primary_volcano_type, " ", "_"),
-         primary_volcano_type = str_replace(primary_volcano_type, "\\s*\\([^\\)]+\\)", ""),
-         primary_volcano_type = str_replace(primary_volcano_type, "[:punct:]", "")) %&gt;% 
   count(country, primary_volcano_type, sort = TRUE) %&gt;% 
   pivot_wider(names_from = "primary_volcano_type",
               values_from = "n")
