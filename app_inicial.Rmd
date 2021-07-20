@@ -47,13 +47,15 @@ library(flipbookr)
 
 - Áreas de atuação
   - Neurolinguística
+  - Processamento da linguagem no envelhecimento típico e na Doença de Alzheimer
   - Assessoria linguística
   - Assessoria estatística e acadêmica
 - Doutoranda em Linguística pela Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS
-- Mestre em Linguística pela PUCRS
   - Bolsista CNPq
-- Licenciada em Letras pela Universidade do Vale do Rio dos Sinos - Unisinos
-  - Bolsista FAGERS Iniciação Científica
+- Mestre em Linguística pela PUCRS
+  - Bolsista CAPES
+- Licenciada em Letras Português/Inglês pela Universidade do Vale do Rio dos Sinos - Unisinos
+  - Bolsista FAPERGS Iniciação Científica
 
 
 - barbaraluz.malcorra@gmail.com
