@@ -89,13 +89,6 @@ knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
 **is.na()** é NA  
 
 ---
-# Lembrete
-
-- Boa parte da programação está em:
-  - 1) consertar erros de sintaxe do seu código  
-  - 2) pesquisar por soluções no Google (você vai cair no StackOverflow)  
-
----
 # Pacotes
 
 Compilado de funções especiais  
