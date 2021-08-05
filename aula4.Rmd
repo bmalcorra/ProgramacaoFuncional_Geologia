@@ -1,5 +1,5 @@
 ---
-title: "Aula 5"
+title: "Aula 4"
 author: "Gabriel Bertolini"
 date: "05/07/2021"
 subtitle: "Reproduzindo Geociência"
@@ -34,7 +34,7 @@ distance <- read.csv("santos_2009.csv") %>%
   as_tibble()
 ```
 
-- Pergunta 1: qual relação do V em função da distância ate o sill?
+- Pergunta 1: qual relação do Ni em função da distância ate o sill?
 
 ```{r}
 distance %>%
@@ -70,32 +70,6 @@ distance %>%
 ```
 
 
-
-  geom_rect(mapping = aes(ymin = 283.45, 
-                          ymax = 298.10, 
-                          xmin = -Inf, 
-                          xmax = Inf), 
-            alpha = 0.2,
-            alpha=0.5,
-            fill = "gray",
-            inherit.aes = FALSE)+
-  geom_rect(mapping = aes(ymin = 298.10, 
-                          ymax = 340, 
-                          xmin = -Inf, 
-                          xmax = Inf), 
-            alpha = 0.2,
-            alpha=0.3,
-            fill = "lightyellow",
-            inherit.aes = FALSE)+
-  geom_hline(yintercept = c(283.45,298.10,340), col = "red", lty = 2, alpha = 0.7)+
-  geom_lineh() +
-  geom_point() +
-  scale_y_reverse() +
-  facet_geochem_gridh(vars(var), scales = "free") +
-  
-```
-
-
 ---
 ## Estudo de caso 1
 
@@ -109,6 +83,7 @@ distance %>%
 - 5) qual a relação entre a distancia até a lava e porosidade? e ondas sismicas?
 - 6) qual relação da diagênese e distância até a lava?
 - 7) e da provêniencia?
+
 ---
 
 ```{r}
@@ -158,7 +133,7 @@ lvsd %>% group_by(well) %>%
   summarise(across(starts_with("Por"), ~ mean(.x, na.rm = TRUE)))
   
 lvsd %>% group_by(well) %>% 
-  summarise(across(starts_with("Comp"), ~ mean(.x, na.rm = TRUE))) %>% 
+  summarise(across(starts_with("Comp"), ~ mean(.x, na.rm = TRUE)))
   
   
 

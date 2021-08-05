@@ -111,7 +111,7 @@ dados.ex %>%
 
 
 ---
-- 3) Faça um gráfico de pontos (scatter plot) da razão La/Tm por distance. Utilize a função "geom_smooth" para plotar o modelo.
+- 3) Faça um gráfico de pontos (scatter plot) da razão La/Lu por distance. Utilize a função "geom_smooth" para plotar o modelo.
 
 `r chunk_reveal("point")`
 
@@ -119,10 +119,10 @@ dados.ex %>%
 library(ggpubr)
 
 dados.ex %>% 
-  dplyr::select(lower, La, Tm) %>% 
-  ggplot(aes(x = lower, y = La/Tm)) +
-  geom_point(size = 3) + #aes aqui também
-  scale_x_log10() + #altera a escala
+  dplyr::select(lower, La, Lu) %>% 
+  ggplot(aes(x = lower, y = La/Lu)) +
+  geom_point(size = 3) + 
+  scale_x_log10() + 
   geom_smooth(method = "lm") +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "spearman") +
@@ -140,9 +140,9 @@ dados.ex %>%
 library(ggpubr)
 
 dados.ex %>% 
-  ggplot(aes(x = lower, y = La/Eu, color = litho)) +
-  geom_point(size = 3) + #aes aqui também
-  scale_x_log10() + #altera a escala
+  ggplot(aes(x = lower, y = La/Lu, color = litho)) +
+  geom_point(size = 3) +
+  scale_x_log10() + 
   geom_smooth(method = "lm", se = FALSE, aes(color = litho)) +
   stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~")),
            method = "spearman",

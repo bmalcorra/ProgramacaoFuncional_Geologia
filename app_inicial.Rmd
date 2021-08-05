@@ -61,7 +61,7 @@ library(flipbookr)
 - barbaraluz.malcorra@gmail.com
 
 ---
-# Estrutura do curso
+# <b>Estrutura do curso</b>
 
 .pull-left[
 - <b>Aula 1</b>
@@ -105,7 +105,7 @@ IDE (<i>integrated development environment</i>)
   - https://www.rstudio.com/
 
 ---
-# Principais pacotes que vamos utilizar
+# <b>Principais pacotes que vamos utilizar</b>
 
 ```{r}
 # library(tidyverse)
@@ -119,7 +119,7 @@ IDE (<i>integrated development environment</i>)
 ```
 
 ---
-#<b>Geologia e programação</b>
+# <b>Geologia e programação</b>
 
 .pull-left[
 - <b>Vantagens</b>
@@ -140,3 +140,15 @@ IDE (<i>integrated development environment</i>)
   - Curva de aprendizado
   - "travar"
 ]
+
+---
+# <b>Antes de começar...</b>
+
+- O material do curso está disponível em:
+  - https://drive.google.com/drive/folders/1XGno03v-ZFX2eNpHBxPO160ZMKS2nZHO?usp=sharing
+
+
+
+
+
+

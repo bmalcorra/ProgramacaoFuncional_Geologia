@@ -168,23 +168,54 @@ pre code {
 </div>
 
 
-<p>Como trabalhar no Rstudio - Console vs. Rstudio - Criando projeto “Intensivão R” - Script file - Rmarkdown file Comentários “##” Chunk Atalho: Ctrl + Alt + I Atalho &lt;- : Alt- Knit</p>
+<div id="como-trabalhar-no-rstudio" class="section level1">
+<h1>Como trabalhar no Rstudio</h1>
+<ul>
+<li><p>Console vs. Rstudio</p>
+<ul>
+<li>R = linguagem desenvolvida para computação estatística</li>
+<li>Rstudio = editor/ambiente para R
+<ul>
+<li>inúmeros recursos adicionais</li>
+<li>o que vamos ver no curso é apenas uma fração minúscula do que ele oferece</li>
+<li>desde análise estatística até escrita de uma tese</li>
+<li>documentos, sites, apresentações, etc.</li>
+<li>fundo preto</li>
+</ul></li>
+</ul></li>
+<li><p>Painéis</p>
+<ul>
+<li><p>Script</p></li>
+<li><p>Console = respostas do que a gente pergunta para o R - o output</p></li>
+<li><p>File = navegador dos arquivos do computador</p></li>
+<li><p>Plot = salvar, dar zoom</p></li>
+<li><p>Help</p></li>
+</ul></li>
+<li><p>Criando projeto “Intensivão R”</p></li>
+<li><p>Rmarkdown file</p>
+<ul>
+<li>Knit</li>
+<li>Chunk</li>
+<li>Atalho: Ctrl + Alt + I</li>
+<li>Comentários “##”</li>
+<li>Atalho &lt;- : Alt-</li>
+</ul></li>
+</ul>
+</div>
 <div id="r-como-calculadora" class="section level1">
 <h1>R como calculadora</h1>
 <pre class="r"><code>5 + 2 #soma</code></pre>
 <pre><code>## [1] 7</code></pre>
-<pre class="r"><code>5 * 2 #multiplicação</code></pre>
-<pre><code>## [1] 10</code></pre>
-<pre class="r"><code>8.2 / 2 #divisão</code></pre>
-<pre><code>## [1] 4.1</code></pre>
 <pre class="r"><code>10 - 8 #subtração</code></pre>
 <pre><code>## [1] 2</code></pre>
+<pre class="r"><code>8.2 / 2 #divisão</code></pre>
+<pre><code>## [1] 4.1</code></pre>
+<pre class="r"><code>5 * 2 #multiplicação</code></pre>
+<pre><code>## [1] 10</code></pre>
 <pre class="r"><code>5 ** 3 #elevado ao cubo</code></pre>
 <pre><code>## [1] 125</code></pre>
 <pre class="r"><code>5 ^ 3</code></pre>
 <pre><code>## [1] 125</code></pre>
-<pre class="r"><code>pi</code></pre>
-<pre><code>## [1] 3.141593</code></pre>
 <pre class="r"><code>sqrt(81) #raiz quadrada</code></pre>
 <pre><code>## [1] 9</code></pre>
 <pre class="r"><code>exp(8) </code></pre>
@@ -193,34 +224,41 @@ pre code {
 <pre><code>## [1] 1.609438</code></pre>
 <pre class="r"><code>log10(5)</code></pre>
 <pre><code>## [1] 0.69897</code></pre>
+<pre class="r"><code>pi</code></pre>
+<pre><code>## [1] 3.141593</code></pre>
 <pre class="r"><code>5 + (3 * 5 / 2) #operações mais elaboradas</code></pre>
 <pre><code>## [1] 12.5</code></pre>
 </div>
-<div id="tipos-e-atribuição-de-objetos" class="section level1">
-<h1>Tipos e atribuição de objetos</h1>
+<div id="criar-variáveis" class="section level1">
+<h1>Criar variáveis</h1>
+<div id="tipos-e-atribuição-de-objetos" class="section level2">
+<h2>Tipos e atribuição de objetos</h2>
+<p>numeric ou double - decimal integer - inteiro factor - categórica character - texto boleano - binário</p>
 <pre class="r"><code>myNumber &lt;- 5 #Camel case - prática de escrever palavras ou frase, onde cada palavra é iniciada com maiúsculas e unidas sem espaços
 
 myNumber</code></pre>
 <pre><code>## [1] 5</code></pre>
-<pre class="r"><code>myNumber &lt;- 7
+<pre class="r"><code>myNumber &lt;- 7.1
 
+calculo &lt;- 5 + (3 * 5 / 2)
+myNumber * calculo</code></pre>
+<pre><code>## [1] 88.75</code></pre>
+<pre class="r"><code># tipos de variáveis
 myInteger &lt;- as.integer(myNumber)
 myInteger</code></pre>
 <pre><code>## [1] 7</code></pre>
-<pre class="r"><code>calculo &lt;- 5 + (3 * 5 / 2)
-myNumber * calculo</code></pre>
-<pre><code>## [1] 87.5</code></pre>
-<pre class="r"><code>#myWord = geologia #erro
-myWord &lt;- &quot;geologia&quot;
+<pre class="r"><code>#myWord = &quot;7&quot; #erro
+#myWord * 2
+myWord &lt;- &quot;geologia&quot; #string- texto puro
 myWord</code></pre>
 <pre><code>## [1] &quot;geologia&quot;</code></pre>
-<pre class="r"><code>myFactor &lt;- factor(myWord)
-myFactor</code></pre>
-<pre><code>## [1] geologia
-## Levels: geologia</code></pre>
 <pre class="r"><code>mySentence &lt;- &quot;esta é a minha frase&quot;
 mySentence</code></pre>
 <pre><code>## [1] &quot;esta é a minha frase&quot;</code></pre>
+<pre class="r"><code>myFactor &lt;- factor(myWord) #valor categórica, com vários níveis
+myFactor</code></pre>
+<pre><code>## [1] geologia
+## Levels: geologia</code></pre>
 <pre class="r"><code>#o R também trabalha com classes lógicas, TRUE or FALSE
 #variável boleana (binária, lógica)
 
@@ -241,13 +279,16 @@ class(myNumber) #variável numérica - qualquer número DECIMAL</code></pre>
 <pre class="r"><code>class(myTRUE) #variável lógica</code></pre>
 <pre><code>## [1] &quot;logical&quot;</code></pre>
 </div>
+</div>
 <div id="vetores-objetos-que-contêm-uma-sequência-de-elementosvariáveis" class="section level1">
 <h1>Vetores: objetos que contêm uma sequência de elementos/variáveis</h1>
-<pre class="r"><code>myNumbers &lt;- c(1, 2, 3, 4, 5) #vetor
-myNumbers &lt;- 1:5
-myNumbers &lt;- seq(1, 5, by = 1)
+<pre class="r"><code>myNumbers &lt;- c(1, 2, 3, 4, 5) #vetor - forma de concatenar uma serie de dados
+myNumbers2 &lt;- 1:5
+myNumbers3 &lt;- seq(1, 5, by = 1.4)
 
-myNumbers[myNumbers &gt; 3]</code></pre>
+myNumbers3[3]</code></pre>
+<pre><code>## [1] 3.8</code></pre>
+<pre class="r"><code>myNumbers[myNumbers &gt; 3]</code></pre>
 <pre><code>## [1] 4 5</code></pre>
 <pre class="r"><code>myNumbers[myNumbers &gt;= 3]</code></pre>
 <pre><code>## [1] 3 4 5</code></pre>
@@ -260,7 +301,9 @@ myWords</code></pre>
 <pre><code>## [1] &quot;estratigrafia&quot;</code></pre>
 <pre class="r"><code>myWords[4]</code></pre>
 <pre><code>## [1] NA</code></pre>
-<pre class="r"><code>meuVetor &lt;- c(1, 2, 3, 4, 5)
+<pre class="r"><code>#Operações em vetores
+
+meuVetor &lt;- seq(85, 274, by = pi)
 
 dp &lt;- sd(meuVetor) #indica o grau de variação de um conjunto de elementos
 #quanto menor o desvio padrão, mais homogênea é a amostra
@@ -268,7 +311,7 @@ n &lt;- length(meuVetor)
 
 SE &lt;- dp / sqrt(n)
 SE #medida de variação de uma média amostral em relação à média da população</code></pre>
-<pre><code>## [1] 0.7071068</code></pre>
+<pre><code>## [1] 7.140935</code></pre>
 <pre class="r"><code>#desvio padrão trata de um índice de dispersão da amostra em relação à média
 #erro padrão é uma medida que ajuda a avaliar a confiabilidade da média calculada</code></pre>
 </div>
@@ -348,6 +391,8 @@ myLists[[1]][3,2]</code></pre>
 </div>
 <div id="funções" class="section level1">
 <h1>Funções</h1>
+<p>maneira útil para automatizar processo</p>
+<p>função para verificar se um dado valor é maior do que outro</p>
 <pre class="r"><code>maior = function(parametro1, parametro2) {
   if (parametro1 &lt; parametro2) {
     return(parametro2)
@@ -359,7 +404,9 @@ myLists[[1]][3,2]</code></pre>
 a = 4
 b = 10
 
-maior(parametro1 = b, parametro2 = a)</code></pre>
+maior(parametro1 = 4, parametro2 = 10)</code></pre>
+<pre><code>## [1] 10</code></pre>
+<pre class="r"><code>maior(parametro1 = b, parametro2 = a)</code></pre>
 <pre><code>## [1] 10</code></pre>
 <pre class="r"><code>maior(b, a)</code></pre>
 <pre><code>## [1] 10</code></pre>

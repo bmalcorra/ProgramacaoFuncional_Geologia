@@ -22,6 +22,8 @@ dados
 
 # Box plot
 
+Qual a distribuição do Titânio em diferentes ambientes tectônicos?
+
 ```{r}
 library(viridis)
 
@@ -41,9 +43,11 @@ dados %>%
 
 # Violine
 
+Qual a distribuição da sílica em diferentes ambientes tectônicos?
+
 ```{r}
 dados %>% 
-  ggplot(aes(x = TiO2, y = Tectonic_setting, fill = Tectonic_setting)) +
+  ggplot(aes(x = SiO2, y = Tectonic_setting, fill = Tectonic_setting)) +
   geom_violin() +
   stat_summary(color = "red") +
   theme_bw()
@@ -51,6 +55,8 @@ dados %>%
 
 
 # Density plot
+
+Qual a distribuição do Césio em diferentes séries geoquímicas de granito?
 
 ```{r}
 dados %>% 
@@ -62,6 +68,8 @@ dados %>%
 
 # Histograma
 
+Verificar normalidade do Césio em granitos orogênicos?
+
 ```{r}
 dados %>% 
   filter(Tectonic_setting == "OROGENIC BELT") %>% 
@@ -70,6 +78,8 @@ dados %>%
   scale_x_log10()
 #distribuição normal?
 
+
+# Qual a série magmática mais interessante para prospecção de Níquel?
 
 dados %>% 
   ggplot(aes(x = Ni, fill = Group)) +
@@ -93,7 +103,10 @@ dados %>%
 ```
 
 
-# Scatter plot()
+# Scatter plot() 1
+
+Qual a relação entre magnésio e sílica em granitos peraluminosos?
+Modelar a diferença entre os subgrupos.
 
 ```{r}
 library(ggpubr)
@@ -110,7 +123,17 @@ dados %>%
   scale_y_log10() +
   theme(legend.position = "bottom") +
   scale_fill_viridis(discrete = TRUE)
+```
 
+
+# Scatter plot() 2
+
+Qual a distribuição das séries de granitos utilizando o diagrama P-Q (Debon & Fort, 1983, 1988)
+
+P = K - (Na + Ca)
+Q = Si/3 - (K + Na + 2*(Ca/3))
+
+```{r}
 # Reprodução de Bonin et al. (2020)
 dados %>% 
   mutate(Q = SiO2/3 - (K2O + Na2O + 2*(CaO/3)),
@@ -120,19 +143,24 @@ dados %>%
   geom_point(alpha = 0.5, size = 2) +
   scale_fill_viridis(discrete = TRUE, option = "B") +
   facet_wrap(~Group) + #painéis - útil para ver os dados de forma separada
-  theme_light()
+  theme_light() + 
+  labs(x = "P = K - (Na + Ca)",
+       y = "Q = Si/3 - (K + Na + 2*(Ca/3))")
 ```
 
 
 # Gráfico de barras
 
+Qual a diferença entre os valores de elementos terras raras em séries geoquímicas de granitos?
+
 ```{r}
 dados %>%
-  dplyr::select(Group, Apatite, La:Lu) %>% 
+  dplyr::select(Group, La:Lu) %>% 
   mutate(across(La:Lu, as.numeric)) %>% 
   pivot_longer(cols = La:Lu,
                names_to = "variable",
                values_to = "value") %>% 
+  mutate(variable = factor(variable, levels = c("La", "Ce", "Pr", "Nd", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu"))) %>% 
   ggplot(aes(x = Group, y = value, fill = Group)) +
   stat_summary(geom = "bar") + #gráfico simples e pouco informativo
   stat_summary() + #sem a barra de erro, a média é muito pouco informativa
@@ -142,7 +170,36 @@ dados %>%
 
 # Gráfico de linhas
 
+Qual a distribuição da média e desvio padrão de elementos terras raras em séries geoquímicas de granitos?
+
 ```{r}
+dados %>% 
+  dplyr::select(Group, La:Lu) %>% 
+  mutate(across(La:Lu, as.numeric)) %>% 
+  group_by(Group) %>% 
+  summarise(across(La:Lu, ~mean(., na.rm = TRUE))) %>% 
+  pivot_longer(cols = La:Lu,
+               names_to = "variable",
+               values_to = "value") %>% 
+  mutate(element = factor(variable, levels = c("La", "Ce", "Pr", "Nd", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu"))) %>% 
+  ggplot(aes(x = element, y = value, group = Group)) +
+  geom_line(aes(color = Group), size = 1.5, alpha = 0.5, lty = 2) +
+  geom_point(aes(color = Group), size = 3) +
+  scale_y_log10() +
+  labs(title = "Distribuição de elementos terras raras em granitóides",
+       subtitle = "",
+       color = "Tipos de granitos",
+       caption = "Bonin et al. (2020)",
+       x = "",
+       y = "") +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, face = "italic"))
+```
+
+
+```{r}
+# se quisermos complicar um pouco mais
 dados %>% 
   dplyr::select(Group, La:Lu) %>% 
   mutate(across(La:Lu, as.numeric)) %>% 
@@ -192,6 +249,8 @@ dados.ex
 
 # Correlação
 
+Correlação entre elementos químicos e distância até o sill
+
 ```{r}
 library(corrplot)
 
@@ -213,7 +272,8 @@ dados.ex %>%
 
 
 ```{r}
-# para calcular correlação
+library(correlation)
+
 dados.ex %>% 
   dplyr::select(lower, Co:Tm) %>% 
   correlation::correlation()

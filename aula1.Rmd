@@ -20,7 +20,6 @@ editor_options:
   - Script
 
   - Console = respostas do que a gente pergunta para o R - o output
-  
   - File = navegador dos arquivos do computador
   - Plot = salvar, dar zoom
   - Help
@@ -28,11 +27,12 @@ editor_options:
 - Criando projeto "Intensivão R"
   
 - Rmarkdown file
-  - Comentários "##"
+  - Knit
   - Chunk
   - Atalho: Ctrl + Alt + I
+  - Comentários "##"
   - Atalho <- : Alt-
-  - Knit
+
 
 # R como calculadora
 
@@ -65,28 +65,37 @@ pi
 # Criar variáveis
 ## Tipos e atribuição de objetos
 
+numeric ou double - decimal
+integer - inteiro
+factor - categórica
+character - texto
+boleano - binário
+
+
 ```{r}
 myNumber <- 5 #Camel case - prática de escrever palavras ou frase, onde cada palavra é iniciada com maiúsculas e unidas sem espaços
 
 myNumber
 
-myNumber <- 7
-
-myInteger <- as.integer(myNumber)
-myInteger
+myNumber <- 7.1
 
 calculo <- 5 + (3 * 5 / 2)
 myNumber * calculo
 
-#myWord = geologia #erro
-myWord <- "geologia"
-myWord
+# tipos de variáveis
+myInteger <- as.integer(myNumber)
+myInteger
 
-myFactor <- factor(myWord)
-myFactor
+#myWord = "7" #erro
+#myWord * 2
+myWord <- "geologia" #string- texto puro
+myWord
 
 mySentence <- "esta é a minha frase"
 mySentence
+
+myFactor <- factor(myWord) #valor categórica, com vários níveis
+myFactor
 
 #o R também trabalha com classes lógicas, TRUE or FALSE
 #variável boleana (binária, lógica)
@@ -107,9 +116,11 @@ class(myTRUE) #variável lógica
 # Vetores: objetos que contêm uma sequência de elementos/variáveis
 
 ```{r}
-myNumbers <- c(1, 2, 3, 4, 5) #vetor
-myNumbers <- 1:5
-myNumbers <- seq(1, 5, by = 1)
+myNumbers <- c(1, 2, 3, 4, 5) #vetor - forma de concatenar uma serie de dados
+myNumbers2 <- 1:5
+myNumbers3 <- seq(1, 5, by = 1.4)
+
+myNumbers3[3]
 
 myNumbers[myNumbers > 3]
 myNumbers[myNumbers >= 3]
@@ -120,8 +131,9 @@ myWords
 myWords[3]
 myWords[4]
 
+#Operações em vetores
 
-meuVetor <- c(1, 2, 3, 4, 5)
+meuVetor <- seq(85, 274, by = pi)
 
 dp <- sd(meuVetor) #indica o grau de variação de um conjunto de elementos
 #quanto menor o desvio padrão, mais homogênea é a amostra
@@ -184,6 +196,10 @@ myLists[[1]][3,2]
 
 # Funções
 
+maneira útil para automatizar processo
+
+função para verificar se um dado valor é maior do que outro
+
 ```{r}
 maior = function(parametro1, parametro2) {
   if (parametro1 < parametro2) {
@@ -196,6 +212,7 @@ maior = function(parametro1, parametro2) {
 a = 4
 b = 10
 
+maior(parametro1 = 4, parametro2 = 10)
 maior(parametro1 = b, parametro2 = a)
 maior(b, a)
 ```

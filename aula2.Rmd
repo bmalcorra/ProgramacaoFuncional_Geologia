@@ -40,55 +40,6 @@ knitr::opts_chunk$set(fig.width = 6,
 ```
 
 
-# Tidyverse
-
-```{r}
-#install.packages("tidyverse")
-library(tidyverse)
-```
-
-- Família de pacote recente
-
-
-.pull-left[
-```{r, echo = FALSE, fig.align = 'center', out.width = "70%"}
-knitr::include_graphics("https://tidyverse.tidyverse.org/articles/tidyverse-logo.png")
-```
-
-]
-
-.pull-right[
-```{r, echo = FALSE, fig.align = 'center', out.width = "100%"}
-knitr::include_graphics("https://education.rstudio.com/blog/2020/07/teaching-the-tidyverse-in-2020-part-1-getting-started/img/tidyverse-packages.png")
-```
-]
-
----
-# Pipe %>%
-
-- Analisa o código do lado esquerdo e passa o resultado como o primeiro argumento do código do lado direito
-
-- Atalho Ctrl + Shift + M
-
-```{r, echo = FALSE, fig.align = 'center', out.width = "30%"}
-knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
-```
-
----
-# Comandos lógicos
-
-**<** menor que  
-**>** maior que  
-**<=** menor igual a  
-**>=** maior igual a  
-**==** igual a  
-**&** e  
-**|** ou  
-**!** diferente de  
-**%in%** faz parte de um grupo  
-**is.na()** é NA  
-
----
 # Pacotes
 
 Compilado de funções especiais  
@@ -99,6 +50,7 @@ Nos ajudam a desenvolver códigos mais robustos, além de facilitarem resoluçõ
 library(tidyverse)
 ??tidyverse
 ```
+
 
 ---
 # Estabelecendo um diretório de trabalho
@@ -117,8 +69,6 @@ getwd()
 ```{r}
 dados <- read.csv("geoquim_granite.csv", sep = ";") %>% 
   as_tibble()
-#espécie de dataframe com particularidades
-#mostra o tipo de variável
 
 dados
 ```
@@ -172,6 +122,73 @@ names(dados.ex)
 -- Inspecionar tipos de variáveis  
 
 ---
+# Tidyverse
+
+```{r}
+#install.packages("tidyverse")
+library(tidyverse)
+```
+
+- Família de pacote recente
+
+
+.pull-left[
+```{r, echo = FALSE, fig.align = 'center', out.width = "70%"}
+knitr::include_graphics("https://tidyverse.tidyverse.org/articles/tidyverse-logo.png")
+```
+
+]
+
+.pull-right[
+```{r, echo = FALSE, fig.align = 'center', out.width = "100%"}
+knitr::include_graphics("https://education.rstudio.com/blog/2020/07/teaching-the-tidyverse-in-2020-part-1-getting-started/img/tidyverse-packages.png")
+```
+]
+
+---
+# Pipe %>%
+
+- Analisa o código do lado esquerdo e passa o resultado como o primeiro argumento do código do lado direito
+
+- Atalho Ctrl + Shift + M
+
+```{r, echo = FALSE, fig.align = 'center', out.width = "30%"}
+knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
+```
+
+
+---
+# Comparação
+
+```{r}
+#bancoDeDados$variavel[is.na(bancoDeDados$variavel)] <- mean(bancoDeDados$variavel, na.rm = TRUE)
+
+#bancoDeDados %>% 
+#  replace_na(variavel, mean(variavel))
+
+#BDSaudaveisMacro = subset(BDSaudaveis, select = c(2,3,6,7,9,10,38,39,40,41,63,57,58,37))
+
+#BDSaudaveisMacro %>% 
+# filter()
+```
+
+
+
+---
+# Comandos lógicos
+
+**<** menor que  
+**>** maior que  
+**<=** menor igual a  
+**>=** maior igual a  
+**==** igual a  
+**&** e  
+**|** ou  
+**!** diferente de  
+**%in%** faz parte de um grupo  
+**is.na()** é NA  
+
+---
 # Dados
 
 - "Tidy Tuesday live screencast: Analyzing volcano eruptions in R" by David Robinson
@@ -181,6 +198,8 @@ names(dados.ex)
 ```{r, message = FALSE, warning = FALSE}
 volcano = read.csv("volcano.csv", sep = ";") %>% 
   as_tibble()
+#espécie de dataframe com particularidades
+#mostra o tipo de variável
 
 volcano
 ```
@@ -257,7 +276,7 @@ volcano %>%
 ```{r}
 volcano %>% 
   select(volcano_name, country, latitude:elevation) %>% 
-  filter(country == "Antarctica" | latitude > 10) %>% 
+  filter(country == "Antarctica" | latitude < 10) %>% 
   head()
 ```
 
@@ -286,12 +305,15 @@ volcano %>%
 
 - Modifica e cria colunas
 
+Quantos anos desde a última erupção?
+
 ```{r}
 volcano %>% 
   select(volcano_name, country, last_eruption_year) %>% 
   filter(!country == "Antarctica") %>% 
   mutate(last_eruption_year = as.numeric(last_eruption_year),
-         years_ago = 2020 - last_eruption_year) %>% 
+         years_ago = 2021 - last_eruption_year) %>% 
+  arrange(years_ago) %>% 
   head()
 ```
 
@@ -552,10 +574,10 @@ volcano %>%
 ---
 # Exercício prático 3
 
-- 1) 
+- 1) Quais são os tipos de vulcões presentes em cada país?
 
 ---
-
+- 1) Quais são os tipos de vulcões presentes em cada país?
 
 ```{r}
 volcano %>% 
